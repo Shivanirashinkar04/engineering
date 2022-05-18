@@ -28,7 +28,7 @@ SECRET_KEY = 'tv6p6zifk#hv)3s@-!hrl06+)k@gw6y&^5e)$6vcco4(58$-y)'
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = [config('ALLOWED_HOST_1')]
+ALLOWED_HOSTS = [config('ALLOWED_HOST_1'),config('ALLOWED_HOST_2'), config('ALLOWED_HOST_3')]
 # , config('ALLOWED_HOST_2'), config('ALLOWED_HOST_3')]
 
 
