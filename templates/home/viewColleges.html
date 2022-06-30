@@ -1,8 +1,39 @@
+
+<link rel=”stylesheet” href=”css/bootstrap.css”>
+<link rel=”stylesheet” href=”css/bootstrap-responsive.css”>
 {% extends 'home/base_map.html'%}
 {% load static %}
 {% block extra_resources%}
+    <!-- Bootstrap CSS -->
+    <link
+      href=
+"https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity=
+"sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet"
+          href="style.css" />
+    <link rel="preconnect" 
+          href="https://fonts.gstatic.com" />
+    <link
+      href=
+"https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+<link rel="stylesheet" href="{% static 'css/leaflet.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/L.Control.Pan.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/L.Control.Zoomslider.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/L.Control.MousePosition.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/L.Control.Sidebar.css' %}">
+<script src="{% static 'static1/plugins/L.Control.Sidebar.js' %}"></script>
+<script src="{% static 'static1/plugins/easy-button.js' %}"></script>
+<script src="{% static 'static1/plugins/L.Control.Pan.js' %}"></script>
 
 <style>
+
   .popupimage {
     height: 200px;
     width: 300px;
@@ -14,46 +45,295 @@
     width: 100%; 
     position: absolute
 }
+.leaflet-popup-content{
+    background: rgb(255 255 255 / 90%);
+    color: #000000;
+    width: auto;
+    font-size: 16px;
+}
+
+
+label{
+    font-size: 15px; 
+    
+
+}
+.multiselect {
+  width: 200px;
+}
+
+.selectBox {
+  position: relative;
+}
+
+.selectBox select {
+  width: 100%;
+  font-weight: bold;
+}
+
+.overSelect {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+/* #checkboxes {
+  display: none;
+  border: 1px #dadada solid;
+} */
+footer{
+      position: relative;
+      bottom: 0;
+      font-size: 18px;
+      text-align: center;
+      width: 100%;
+      height: 13%;
+      opacity: 1.0;
+      z-index: 1000;
+    }
+#checkboxes label {
+  display: block;
+}
+
+#checkboxes label:hover {
+  background-color: #1e90ff;
+}
+
+
+#checkboxes1 {
+  display: none;
+  border: 1px #dadada solid;
+}
+
+#checkboxes1 label {
+  display: block;
+}
+
+#checkboxes1 label:hover {
+  background-color: #1e90ff;
+}
+#ward122 {
+  display: none;
+  border: 1px #dadada solid;
+}
+
+#ward122 label {
+  display: block;
+}
+#wardSdiv {
+  display: none;
+  border: 1px #dadada solid;
+  
+}
+
+#wardSdiv label {
+  display: block;
+}
+
+#wardGSdiv {
+  display: none;
+  border: 1px #dadada solid;
+}
+
+#wardGSdiv label {
+  display: block;
+}
+
+#wardLdiv {
+  display: none;
+  border: 1px #dadada solid;
+}
+
+#wardkwestdiv label {
+  display: block;
+}
+#wardkwestdiv {
+  display: none;
+  border: 1px #dadada solid;
+}
+
+#wardLdiv label {
+  display: block;
+}
+.border {
+        padding: 6px 8px;
+        border-style: groove;
+        border-radius: 5px;
+        margin: 20px;
+        
+    }
+    
+    
+    table,
+    th,
+    td {
+        border-bottom: 1px solid #ddd;
+        border-collapse: collapse;
+        padding: 2px 3px;
+        text-align: center;
+    }
+    
+    th {
+        font-weight: bold;
+    }
+    
+    tr:hover {
+        background-color: #c9dbe6;
+    }
+
+    
+    .table {
+        border-collapse: collapse;
+        padding: 50px;
+        font-weight: bold;
+        /* background:rgba(191, 149, 233, 0.473); */
+    }
+    /* css to customize Leaflet default styles  */
+    
+    .leaflet-popup-content-wrapper {
+        background: rgba(0, 0, 0, 0.4);
+        color: #ffffff;
+        width: auto;
+    }
+    
+    .leaflet-popup-content {
+        font-weight: bold;
+        width: fit-content;
+        border: 2px;
+    }
+    
+    h6 {
+        color: blue;
+    }
 
 </style>
 {% endblock %}
 
 {% block map %}
+<meta name=”viewport” content=”width=device-width, initial-scale=1.0">
+<link rel=”stylesheet” href=”css/bootstrap.css”>
+<link rel=”stylesheet” href=”css/bootstrap-responsive.css”>
 <div id="mapid" style="width: 100%; height: 100%;"></div>
+<div id="sidebar" style="background-color: rgba(255, 255, 255); height: 80%;">                <!-- Main container -->
 
-  <!-- Modal Structure -->
-  <div id="demo-modal" class="modal bottom-sheet"> 
-    <div id="content" class="modal-content"> 
-    </div> 
-    <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
-      </div>
-</div> 
+<div class="border">
 
-<div id="demo-modal1" class="modal bottom-sheet"> 
-  <div class="modal-header" style="text-align: right;">
-    <a href="#!" class="modal-close waves-effect waves-green btn-flat" style="color: white; text-align: right; font-weight: bold; font-size: 20px;">X</a>
-  </div>
-  <div id="content1" class="modal-content"> 
-  </div> 
+  <form>
+    <div class="form-group col-md-4 multiselect">
+      <label for="inputDistrict">District</label>
+      <select class="form-control" id="inputDistrict">
+                          <option value="SelectState">Select District</option>
+                          <option value="Raigad">Raigad</option>
+                          <option value="Ratnagiri">Ratnagiri</option>
+                          <option value="Mumbai_Suburban_District">MumbaiSuburban District</option>
+                          <option value="Mumbai City">Mumbai City</option>
+                          <option value="Thane"> Thane</option>
+                          <option value="Palghar">Palghar</option>
+                          <option value="Nashik">Nashik</option>
+                          <option value="Nandurbar">Nandurbar</option>
+                          <option value="Dhule">Dhule</option>
+                          <option value="Jalgaon">Jalgaon</option>
+                          <option value="Buldhana">Buldhana</option>
+                          <option value="Akola">Akola</option>
+                          <option value="Washim">Washim</option>
+                          <option value="Amravati">Amravati</option>
+                          <option value="Wardha">Wardha</option>
+                          <option value="Nagpur">Nagpur</option>
+                          <option value="Bhandara">Bhandara</option>
+                          <option value="Gondia">Gondia</option>
+                          <option value="Gadchiroli">Gadchiroli</option>
+                          <option value="Chandrapur">Chandrapur</option>
+                          <option value="Yavatmal">Yavatmal</option>
+                          <option value="Nanded">Nanded</option>
+                          <option value="Hingoli">Hingoli</option>
+                          <option value="Parbhani">Parbhani</option>
+                          <option value="Jalna">Jalna</option>
+                          <option value="Aurangabad">Aurangabad</option>
+                          <option value="Beed">Beed</option>
+                          <option value="Latur">Latur</option>
+                          <option value="Osmanabad">Osmanabad</option>
+                          <option value="Solapur North">Solapur North</option>
+                          <option value="Ahmednagar">Ahmednagar</option>
+                          <option value="Pune">Pune</option>
+                          <option value="Satara">Satara</option>
+                          <option value="Sangli">Sangli</option>
+                          <option value="Kolhapur">Kolhapur</option>
+                        </select>
+    </div>
+    <div class="form-group col-md-4 multiselect">
+      <label for="inputTaluka">Taluka</label>
+      <select class="form-control" id="inputTaluka">
+          <option value="">-- select one -- </option>
+      </select>
+    </div>
   
-</div> 
-<div id="map_canvas"></div>
-<!-- <input type ="button" onclick='window.open("{{ i.commpendium.url }}", "width=5,height=5,top=1,left=5", "_self")' value="Open Compendium"> -->
+  </form>
 
+<div class="border">
+  <button class="btn btn-primary" onclick="plotColleges()" >Plot Colleges</button>
+</div>
+
+<div class="border">
+  <button class="btn btn-primary" onclick="clearMap()" >Clear Map</button>
+</div>
+<button class="btn btn-primary" id="loc" style="text-align: 5px" type="button" onclick="getLocation()">Get My Location</button>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<br>
+<br>
+
+<!-- ======= Footer ======= -->
+   
+  <!-- <footer class="text-center text-white " style="background-color: #21081a;bottom: 0px;"> -->
+      <!-- <footer class="text-center text-white fixed-bottom" style="background-color: #21081a;bottom: 0px;"> -->
+ <!-- <footer class="text-center sticky h-20 bottom-0 text-white" style="background-color:#853d28;bottom: 0px; height: auto;"> -->
+   <footer class="text-center h-20 bottom-0 text-white" style="background-color:#853d28;bottom: 0px; height: auto;">
+
+     <div class="h-full p-2" style="background-color: rgba(0, 0, 0, 0.2);">
+          <!-- <img class="logo" style="margin-top: 5px; height: 80px; width: 120px;" src="{% static 'images/Logo-Unit_SWK.jpg' %}" alt="My image"> -->
+          <a class="text-white"><p>This prototype is developed for UMA Project <b><a href = 'https://www.ctara.iitb.ac.in/en/uma'><br><b>UMA PROJECT</a></b> At IITB using FOSS By Communitygis Team in GISE Hub<b><a href = 'https://www.ctara.iitb.ac.in'><br><b>CTARA IITB</a></b></p>
+              <p>Software Developer  Team: Monika Shah (CTARA, IITB), Shivani Rashinkar(IITB)</p>
+          
+          </a>
+      </div>
+      <!-- Copyright -->
+      </footer>
+      <!-- End #footer -->
+  
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+  
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+
+  
+        
+  </div>
+ 
+<script src="{% static 'static1/plugins/L.Control.Sidebar.js' %}"></script>
+<script src="{% static 'static1/plugins/easy-button.js' %}"></script>
+<script src="{% static 'static1/plugins/L.Control.Pan.js' %}"></script>
+<script src="{% static 'static1/plugins/L.Control.Pan.ie.css' %}"></script>
+<script src="{% static 'static1/plugins/L.Control.Pan.css' %}"></script>
 <script>
     let isClicked = false
-    var mymap = L.map('mapid').setView([19.7515-1,75.7139-1], 4.5);
+    var mymap = L.map('mapid').setView([19.7515-1,75.7139-1], 4.5, { animate: true });
     
     var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
 			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
-	//var grayscale   = L.tileLayer(mbUrl, {id: 'mapbox/light-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr}),
-  //      streets  = L.tileLayer(mbUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
-        
-    // const url = 'https://geonode.communitygis.net/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:diet_data8jan';
-    const url = 'https://geoserver2.communitygis.net/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&typename=geonode%3Aposhan_dummy&outputFormat=json&srs=EPSG%3A4326&srsName=EPSG%3A4326&access_token=3r7XCeWunHUOfoyqPxnUNt7XY7ZWHu'
+ const url = 'https://geoserver2.communitygis.net/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&typename=geonode%3Aposhan_dummy&outputFormat=json&srs=EPSG%3A4326&srsName=EPSG%3A4326&access_token=3r7XCeWunHUOfoyqPxnUNt7XY7ZWHu'
     const url1 = 'https://geoserver2.communitygis.net/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&typename=geonode%3AOrganization_wise_Compendium&outputFormat=json&srs=EPSG%3A4326&srsName=EPSG%3A4326&access_token=3r7XCeWunHUOfoyqPxnUNt7XY7ZWHu'
 
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -65,429 +345,292 @@
 		zoomOffset: -1
     }).addTo(mymap);
     
-    console.log('l/tilelayer');
-    var wms = L.tileLayer.wms('https://geoserver2.communitygis.net/geoserver/wms', {
-				//layer: layer,
-        layers: 'geonode:states_in_india',
-				format: 'image/png',
-				transparent: 'true',
-			});
-      wms.addTo(mymap);
-      //console.log(layers);
-      console.log(wms);
 
-    // var baseLayers = {
-		//"Grayscale": grayscale,
-		//"Streets": streets
-    //};
-    var baseLayers = {};
-    let indiaState = L.tileLayer.wms("https://geoserver2.communitygis.net/geoserver/wms", {
-            layers: "geonode:states_in_india",
-            format: "image/png",
-            transparent: "true",
-            tiled: "true",
-            opacity: 0.7,
-            }
-        );
-    let indiaDistrict = L.tileLayer.wms("https://geoserver2.communitygis.net/geoserver/wms", {
-        layers: "geonode:all_india_districts_11june2020",
-        format: "image/png",
-        transparent: "true",
-        tiled: "true",
-        opacity: 0.7,
-        }
-    );
+    var sidebar = L.control.sidebar('sidebar', {
+      position: 'left'
+    });
 
-    let mahaHighways = L.tileLayer.wms("https://geoserver2.communitygis.net/geoserver/wms", {
-        layers: "geonode:osm_highways",
-        format: "image/png",
-        transparent: "true",
-        tiled: "true",
-        opacity: 0.7,
-        }
-    );
+    mymap.addControl(sidebar);
 
-    let mahaSchools = L.tileLayer.wms("https://geoserver2.communitygis.net/geoserver/wms", {
-        layers: "geonode:school_16_17_11april",
-        format: "image/png",
-        transparent: "true",
-        tiled: "true",
-        opacity: 0.7,
-        }
-    );
-</script>
-	
-   <style>
-       .another-popup .leaflet-popup-content-wrapper .leaflet-popup-content{
-          width: 200px;
-          height:400px;
-        }
+    var ctlEasybutton = L.easyButton('fa fa fa-bars', function () {
+				sidebar.toggle();
+			}).addTo(mymap);
+			// sidebar.show();
 
-  /* .another-popup .leaflet-popup-content-wrapper {
-  background: beige;
-  color: #eee;
-  border-radius: 5%;
-  border-radius: 0px;
-} */
-/* .another-popup .leaflet-popup-content-wrapper a {
-  color: rgba(200, 200, 200, 0.1);
+
+var Raigad = [ 'choose',  'Pen','Alibag','Murud','Panvel','Uran','Karjat','Khalapur','Mangaon ','Tala','Roha ','Sudhagad (Pali) ','Mahad','Poladpur','Shrivardhan ','Mhasla ']
+var  Ratnagiri = ['choose', 'Ratnagiri','Sangameshwar','Lanja','Rajapur ','Chiplun','Guhagar','Dapoli','Mandangad','Khed']
+var Mumbai_Suburban_District = ['choose', 'Kurla','Mulund','Andheri','Borivali']
+var Mumbai_City=['choose', 'Mumbai']
+var Thane = ['choose', 'Thane','Kalyan','Murbad ','Bhiwandi','Shahapur','Ulhasnagar','Ambarnath']
+var Palghar = ['choose', 'Palghar','Vasai','Dahanu','Talasari','Jawhar','Mokhada','Vada','Vikramgad']
+var Nashik  = ['choose', 'Nashik','Igatpuri','Dindori','Peth','Trimbakeshwar','Kalwan','Deola','Surgana','Baglan(Satana)','Malegaon','Nandagaon','Chandwad','Niphad','Sinnar','Yeola']
+var Nandurbar = ['choose', 'Nandurbar','Navapur','Shahada','Talode','Akkalkuwa','Akrani(Dhadgaon)']
+var Dhule= ['choose', 'Dhule','Sakri','Sindkheda','Shirpur']
+var Jalgaon = ['choose', 'Jalgaon','Jamner','Erandol','Dharangaon','Bhusawal','Raver','Muktainagar','Yawal','Amalner','Parola','Chopda','Pachora','Bhadgaon','Chalisgaon']
+var Buldhana = ['choose', 'Buldhana','Chikhli','Deulgaon','Jalgaon Jamod','Sangrampur','Malkapur','Motala','Nandura','Khamgaon','Shegaon','Mehkar','Sindkhed Raja','Lonar']
+var Akola = ['choose', 'Akola','Akot','Telhara','Patur','Murtajapur','Barshitakli']
+var Washim = ['choose', 'Wahim','Malegaon','Risod','Mangrulpir','Karanja','Manora']
+var Amravati = ['choose', 'Amravati','Bhatukali','Nandgaon Khandeshwar','Dharni (Amravati)','Chikhaldara','Achalpur','Chandurbazar','Morshi','Warud','Daryapur','Anjangaon-Surji ','Chandur','Dhamangaon','Tiosa']
+var Wardha = ['choose', '	Wardha','Deoli','Seloo','Arvi','Ashti','Karanja','Hinganghat','Samudrapur']
+var Nagpur = ['choose', 'Nagpur (Urban)','Nagpur (Rural)','Kamptee','Hingna','Katol','Narkhed','Savner','Kalameshwar','Ramtek','Mouda','Parseoni','Umred','Kuhi','Bhiwapur']
+var Bhandara = ['choose', 'Bhandara','Tumsar','Pauni ','Mohadi','Sakoli','Lakhni','Lakhandur']
+var Gondia = ['choose', 'Gondia','Tiroda','Goregaon','Arjuni Morgaon','Amgaon','Salekasa','Sadak Arjuni ','Deori']
+var Gadchiroli = ['choose', 'Gadchiroli','Dhanora','Chamorshi','Mulchera','Desaiganj (Vadasa)','Armori','Kurkheda ','Korchi','Korchi','Bhamragad','Sironcha']
+var Chandrapur = ['choose', 'Chandrapur','Saoli','Mul','Ballarpur','Pombhurna','Gondpimpri','Warora','Chimur','Bhadravati','Bramhapuri','Nagbhid ','Sindewahi','Rajura','Korpana','Jivati']
+var Yavatmal = ['choose', 'Yavatmal','Arni','Babhulgaon','Kalamb','Darwha','Digras','Ner','Pusad','Umarkhed','Mahagaon','Kelapur (Pandharkawada) ','Ralegaon','Ghatanji','Wani','Maregaon ','Zari Jamani']
+var Nanded = ['choose', 'Nanded','Ardhapur','Mudkhed','Bhokar','Umri','Loha','Kandhar','Kinwat','Himayatnagar','Hadgaon','Mahur','Deglur','Mukhed','Dharmabad ','Biloli','Naigaon (Khairgaon)']
+var Hingoli = ['choose', 'Hingoli','Sengaon','Kalamnuri ','Basmath','Aundha Nagnath']
+var Parbhani = ['choose', 'Parbhani','Sonpeth','Gangakhed','Palam','Purna','Sailu','Jintur','Manwath','Pathri ']
+var Jalna = ['choose', 'Jalna','Bhokardan','Jafrabad ','Badnapur','Ambad','Ghansawangi ','Partur','Mantha']
+var Aurangabad = ['choose', 'Aurangabad','Kannad','Soegaon','Sillod','Phulambri ','Khuldabad','Vaijapur','Gangapur','Paithan ']
+var Beed= ['choose', 'Beed','Ashti','Patoda','Shirur-Kasar','Georai','Majalgaon','Wadwani','Kaij','Dharur','Parli ','Ambejogai']
+var Latur = ['choose', 'Latur','Renapur','Ahmedpur','Jalkot','Chakur','Shirur Anantpal','Ausa','Nilanga','Deoni','	Udgir',]
+var Osmanabad = ['choose', 'Osmanabad','Tuljapur','Bhum','Paranda','Washi','Kalamb','Lohara','Umarga']
+var Solapur_North = ['choose', 'Solapur North','Barshi','Solapur South','Akkalkot','Madha','Karmala','Pandharpur','Mohol','Malshiras','Sangole','Mangalvedhe']
+var Ahmednagar = ['choose', 'nagar','Shevgaon','Pathardi','Parner','Sangamner','Kopargaon ','Akole ','Shrirampur','Nevasa','Rahata','Rahuri','Shrigonda ','Karjat','Jamkhed']
+var Pune = ['choose', 'Pune City','Haveli','Haveli - PCMC, PCMC','Khed (Rajgurunagar)','Junnar','Ambegaon (Ghodegaon) ','Maval (Vadgaon) ','Mulshi (Paud)','Shirur','Purandhar (Saswad)','Velhe','Bhor','Baramati ','Indapur','Daund ']
+var Satara = ['choose', 'Satara','Jaoli ','Koregaon ','Wai','Mahabaleshwar','Khandala ','Phaltan ','Maan (Dahiwadi)','Khatav (Vaduj)','Patan','Karad ']
+var Sangli = ['choose', 'Miraj','Kavathe-Mahankal ','Tasgaon','Jat','Walwa (Islampur) ','Shirala','Khanapur-Vita ','Atpadi','Palus','Kadegaon']
+var Kolhapur = ['choose', 'Karvir','Panhala ','Shahuwadi','Kagal','Hatkanangale','Shirol','Radhanagari ','Gaganbawada','Bhudargad','Gadhinglaj','Chandgad','Ajra']
+
+
+var wmsLayer;
+var DistrictSelected;
+var TalukaSelected;
+var collegeLayer;
+var talukaLayer;
+$("#inputDistrict").change(function(){
+  DistrictSelected = $(this).val();
+  var optionsList;
+  var htmlString = "";
+
+  wmsLayer = L.tileLayer.wms('https://geoserver2.communitygis.net/geoserver/wms', {
+          layers: '	geonode:maharashtra_districts',
+          format: 'image/png',
+          transparent: 'true',  
+          cql_filter:`district='${DistrictSelected}'`,                      
+        }); 
+        wmsLayer.addTo(mymap);
+
+
+  // fetch('http://geoserver2.communitygis.net/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Amaharashtra_districts&maxFeatures=10000000&outputFormat=application%2Fjson')
+  //   .then(result=>result.json())
+  //   .then((output)=>{
+  //     wmsLayer = L.geoJson(output,{
+  //       // onEachFeature: function(feature, layer){
+  //       //   layer.bindPopup(`<div>Location of Observation: ${feature.properties.Location_o}<br>Model System: ${feature.properties.model_syst}<br>Flowering: ${feature.properties.details_2}</div>`)
+  //       // },
+  //       filter:function(feature,layer){
+  //         return feature.properties.district == DistrictSelected;
+  //       }
+  //     })
+  //     wmsLayer.addTo(mymap)
+  //     mymap.fitBounds(wmsLayer.getBounds())
+  //   })
+
+
+  switch (DistrictSelected) {
+    case "Raigad":
+        optionsList = Raigad;
+        break;
+    case "Ratnagiri":
+        optionsList = Ratnagiri;
+        break;
+    case "Mumbai_Suburban_District":
+        optionsList = Mumbai_Suburban_District;
+        break;
+    case "Mumbai City":
+        optionsList = Mumbai_City;
+        break;
+    case "Thane":
+        optionsList = Thane;
+        break;
+    case "Palghar":
+        optionsList = Palghar;
+        break;
+    case "Nashik":
+        optionsList = Nashik;
+        break;
+    case "Nandurbar":
+        optionsList = Nandurbar;
+        break;
+    case  "Dhule":
+        optionsList = Dhule;
+        break;
+    case "Jalgaon":
+        optionsList = Jalgaon;
+        break;
+    case "Buldhana":
+        optionsList = Buldhana;
+        break;
+    case "Akola":
+        optionsList = Akola;
+        break;
+    case "Washim":
+        optionsList = Washim;
+        break;
+    case  "Amravati":
+        optionsList = Amravati;
+        break;
+    case "Wardha":
+        optionsList = Wardha;
+        break;
+    case  "Nagpur":
+        optionsList = Nagpur;
+        break;
+    case "Bhandara":
+        optionsList = Bhandara;
+        break;
+    case  "Gondia":
+        optionsList = Gondia;
+        break;
+    case "Gadchiroli":
+        optionsList = Gadchiroli ;
+        break;
+    case  "Chandrapur":
+        optionsList = Chandrapur;
+        break;
+    case "Yavatmal":
+        optionsList = Yavatmal;
+        break;
+    case  "Nanded":
+        optionsList = Nanded;
+        break;
+    case "Hingoli":
+        optionsList = Hingoli;
+        break;
+    case  "Parbhani":
+        optionsList = Parbhani;
+        break;
+    case "Jalna":
+        optionsList = Jalna;
+        break;
+    case  "Aurangabad":
+        optionsList = Aurangabad;
+        break;
+    case  "Beed":
+        optionsList = Beed;
+        break;
+    case "Latur":
+        optionsList = Latur ;
+        break;
+    case  "Osmanabad":
+        optionsList = Osmanabad;
+        break;
+    case  "Solapur_North":
+        optionsList = Solapur_North;
+        break;
+    case "Ahmednagar":
+        optionsList = Ahmednagar;
+        break;
+    case  "Pune":
+        optionsList = Pune;
+        break;
+    case "Satara":
+        optionsList = Satara;
+        break;
+    case  "Sangli":
+        optionsList = Sangli;
+        break;
+    case "Kolhapur":
+        optionsList = Kolhapur;
+        break;
+    
 }
-.another-popup .leaflet-popup-tip-container {
-  width: 10px;
-  height: 105px;
-
-}
-.another-popup .leaflet-popup-tip {
-  background: beige;
-  border: none;
-  box-shadow: none;
-} */
-   </style>
-         
 
 
-<!-- coal -->
+  for(var i = 0; i < optionsList.length; i++){
+    htmlString = htmlString+"<option value='"+ optionsList[i] +"'>"+ optionsList[i] +"</option>";
+  }
+  $("#inputTaluka").html(htmlString);
 
-<script>
-  
-  var pvIcon = L.icon({
-         iconUrl: "{% static 'map/images/Coal_India_Logo.png' %}",
-         iconSize:     [40, 40], // size of the icon
-         //shadowSize:   [50, 64], // size of the shadow
-         iconAnchor:   [25,10], // point of the icon which will correspond to marker's location
-         // shadowAnchor: [4, 62],  // the same for the shadow
-         popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
-     });
-
-   var collegeGroup = L.layerGroup();
-</script>
-  
-
-
-
-
-<!-- coal form -->
-
-<script>
-  
-  var pvIcon1 = L.icon({
-         iconUrl: "{% static 'map/images/e-logo.jpg' %}",
-         iconSize:     [20, 20], // size of the icon
-         //shadowSize:   [50, 64], // size of the shadow
-         iconAnchor:   [25,10], // point of the icon which will correspond to marker's location
-         // shadowAnchor: [4, 62],  // the same for the shadow
-         popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
-     });
-
-   var collegeGroup1 = L.layerGroup();
-</script>
-  
-{% for i in enggdata %}
-
-<script>
-    // alert("in vatikas -" +i+"- "+ +i.nutri_nm) 
-
- var table4 = 
-      
-      `<table class="w3-table" id="popup" style="font-size:12px; align:center;" >
-        <tbody>
-      
-        {% if i.project_name %}
-        <tr>
-            <th><b>Project name</b></th>
-            <th><b>{{ i.project_name}}</b></th>
-        </tr>
-        {% endif %}
-        
-        {% if i.inputState %}
-        <tr>
-          <td>State</td>
-          <td>{{ i.inputState}}</td>
-        </tr>
-        {% endif %}
-
-        {% if i.inputDistrict %}
-        <tr>
-          <td>District</td>
-          <td>{{ i.inputDistrict }}</td>
-        </tr>
-        {% endif %}
-        {% if i.agencytype %}
-        <tr>
-          <td>Implementing Agency</td>
-          <td>{{ i.agencytype}}</td>
-        </tr>
-        {% endif %}
-        
-        {% if i.Projectstatus %}
-        <tr>
-          <td>Project Status</td>
-          <td>{{ i.Projectstatus }}</td>
-        </tr>
-        {% endif %}
-        <tr>
-          {% if i.commpendium %}
-            <td><a href="{{ i.commpendium.url }}" target = "_app"><img src="../static/map/images/icons8-pdf-40.png"/></a></td>
-            
-             
-          {% endif %}
-          {% if i.picture %}
-            <td><a href="{{ i.picture.url }}" class = "popupimage2" target = "_app"><img src="../static/map/images/icons8-image-48.png"/></a></td>
-          {% else %}
-            <td><img src="../static/map/images/icons8-image-48.png"/></td>
-          
-          
-            {% endif %}  
-          
-            <td><a href="export/{{i.institutecode}}"><img src="../static/map/images/icons8-microsoft-excel-48.png" /></a></td>
-             
-          
-          {% if i.files %}
-          <button onclick="exportData()">
-            <span class="glyphicon glyphicon-download"></span>
-            Download list</button><br><br>
-             
-          {% endif %}
-          </tr>  
-      </tbody>
- </table>
-
- 
- </br>`
-
-
- var table5 = 
-      
-      `<table class="w3-table" id="popup1" style="font-size:12px; align:center;" >
-        <tbody>
-      
-        {% if i.project_name %}
-        <tr>
-            <th><b>Project name</b></th>
-            <th><b>{{ i.project_name}}</b></th>
-        </tr>
-        {% endif %}
-        
-        {% if i.sector %}
-        <tr>
-            <th><b>Sector</b></th>
-            <th><b>{{ i.sector}}</b></th>
-        </tr>
-        {% endif %}
-        {% if i.inputState %}
-        <tr>
-          <td>State</td>
-          <td>{{ i.inputState}}</td>
-        </tr>
-        {% endif %}
-
-        {% if i.inputDistrict %}
-        <tr>
-          <td>District</td>
-          <td>{{ i.inputDistrict }}</td>
-        </tr>
-        {% endif %}
-        {% if i.lat %}
-        <tr>
-          <td>Latitude</td>
-          <td>{{ i.lat }}</td>
-        </tr>
-        {% endif %}
-        {% if i.lng %}
-        <tr>
-          <td>Longitude</td>
-          <td>{{ i.lng }}</td>
-        </tr>
-        {% endif %}
-        fy
-        {% if i.fy %}
-        <tr>
-          <td>FY</td>
-          <td>{{ i.fy }}</td>
-        </tr>
-        {% endif %}
-        {% if i.Projectstatus %}
-        <tr>
-          <td>Project Status</td>
-          <td>{{ i.Projectstatus }}</td>
-        </tr>
-        {% endif %}
-        {% if i.agencytype %}
-        <tr>
-          <td>Implementing Agency</td>
-          <td>{{ i.agencytype}}</td>
-        </tr>
-        {% endif %}
-        
-        {% if i.organisation_name %}
-        <tr>
-          <td>Implementing Agency Name</td>
-          <td>{{ i.organisation_name}}</td>
-        </tr>
-        {% endif %}
-        {% if i.request_amount %}
-        <tr>
-          <td>Requested Amount</td>
-          <td>{{ i.request_amount}}</td>
-        </tr>
-        {% endif %}
-        {% if i.approved_amount %}
-        <tr>
-          <td>Approved Amount</td>
-          <td>{{ i.approved_amount}}</td>
-        </tr>
-        {% endif %}
-        
-        <tr>
-          {% if i.commpendium %}
-          <td>Compendium</td>
-            <td>{{ i.commpendium.url }}</td>
-            
-             
-          {% endif %}
-          {% if i.picture %}
-            <td>Picture</td>
-            <td>{{ i.picture.url }}</td>
-          
-            {% endif %}  
-          
-            
-          </tr>  
-      </tbody>
- </table>
- </br>`
-
-    var popupOptions =
-     {
-       'maxWidth': '500',
-       'className' : 'another-popup' // classname for another popup
-     }
-
-     var link = $('<a href="#" class="speciallink">TestLink</a>').click(function() {
-    alert("test");
-})[0]
-    //  var marker = L.marker(["{{ i.latitude }}", "{{ i.longitude }}"], {icon:pvIcon1}).addTo(mymap).bindPopup(table4, popupOptions);
-    var marker = L.marker(["{{ i.field_latitude_field }}", "{{ i.field_longitude_field }}"], {icon:pvIcon1}).addTo(mymap).bindPopup(table4, popupOptions); 
-    collegeGroup1.addLayer(marker);
-     // Added  hover to open popups
-    //  marker.on('mouseover', function (e) {
-    //        this.openPopup(e.latlng);
-    //    });
-    //  marker.on('mouseout', function (e) {
-    //        this.openPopup(e.latlng);
-    //  });
-     marker.on('click', function (e) {
-           this.openPopup(e.latlng);
-     });
-
-     mymap.on ({
-         click: function() {
-             isClicked = false
-         },
-         popupclose: function () {
-             isClicked = false
-         }
-     })
-
-     
-
- </script>
-{% endfor %}
-
-
-
-  <style>
-  .another-popup .leaflet-popup-content-wrapper .leaflet-popup-content{
-      width: 400px;
-      height:auto;
-    }
-
-  </style>
-  
-
-
-<script>
-  
-  var overlays = {
-        //"States":indiaState,
-        "Districts":indiaDistrict,
-        "Maharashtra Highways":mahaHighways,
-        "Maharashtra Schools":mahaSchools,
-        "Engineering Colleges":collegeGroup,
-        // "Coal Form":collegeGroup1
-	};
-
-	L.control.layers(baseLayers, overlays).addTo(mymap);
-  //L.control.layers(overlays).addTo(mymap);
-
-document.addEventListener('DOMContentLoaded', () => {
-    var elems = document.querySelectorAll('.modal');
-    var instances = M.Modal.init(elems, {opacity:.3});
 });
+      
 
-</script>
+$("#inputTaluka").change(function(){
+  TalukaSelected = $(this).val()
+  console.log(TalukaSelected)
 
-
-<script>
-            
-  $(document).ready(function() {
-
-      });
-  function exportData(){
-      /* Get the HTML data using Element by Id */
-      var table = document.getElementById("popup");
+  talukaLayer = L.tileLayer.wms('https://geoserver2.communitygis.net/geoserver/wms', {
+          layers: 'geonode:maha_taluka_13march2021',
+          format: 'image/png',
+          transparent: 'true',  
+          cql_filter:`taluka_nam like '${TalukaSelected}%'`,                      
+        }); 
+        talukaLayer.addTo(mymap);
   
-      /* Declaring array variable */
-      var rows =[];
-  
-      //iterate through rows of table
-      for(var i=0,row; row = table.rows[i];i++){
-          //rows would be accessed using the "row" variable assigned in the for loop
-          //Get each cell value/column from the row
-          column1 = row.cells[0].innerText;
-          
-          // column1 = document.getElementById("comment[i]").value;
-          // alert(column1);
-          column2 = row.cells[1].innerText;
-          // column3 = row.cells[2].innerText;
-          // column4 = row.cells[3].innerText;
-          // alert(column1);
-          // column15 = row.cells[14].innerText;
-          // column16 = row.cells[15].innerText;
-          // column17 = row.cells[16].innerText;
-      /* add a new records in the array */  
-          // column11 = column11.replace(/,/g, '.') 
 
-          rows.push(
-              [
-                  column1,
-                  column2,
-                  // column3,
-                  // column4,
-                  // column5,
-                  // column6,
-                  // column7,column8,column9,column10,column11,column12,column13,column14
-                  // // column15,column16,column17
-              ]
-          );
-  
-      }
-      csvContent = "data:text/csv;charset=utf-8,";
-      /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
-      rows.forEach(function(rowArray){
-          row = rowArray.join(",");
-          csvContent += row + "\r\n";
-      });
+})
 
-      /* create a hidden <a> DOM node and set its download attribute */
-      var encodedUri = encodeURI(csvContent);
-      var link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", "Download.csv");
-      document.body.appendChild(link);
-      /* download the data file named "Stock_Price_Report.csv" */
-      link.click();
+
+
+function plotColleges(){
+  
+console.log(TalukaSelected)
+  // collegeLayer = L.tileLayer.wms('https://geonode.communitygis.in/geoserver/geonode/wms',{
+  //   layers:'geonode:engineering_new',
+  //   format:'image/png',
+  //   transparent:'true',
+  //   cql_filter: `talukanam = "'Shegaon'"`,
+  // }).addTo(mymap)
+
+  fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Aengineering&outputFormat=application%2Fjson')
+    .then(result=>result.json())
+    .then((output)=>{
+      collegeLayer = L.geoJson(output,{
+        onEachFeature: function(feature, layer){
+          layer.bindPopup(`<div>Institute Name: ${feature.properties.instituten}<br> institutecode: ${feature.properties.institutec}<br> regionname: ${feature.properties.regionname} <br>talukaname: ${feature.properties.talukaname}<br>  institute address: ${feature.properties.institutea} <br> institute pincode: ${feature.properties.institutep} <br>   		
+institute website: ${feature.properties.institutew} <br> institute mail: ${feature.properties.institut_1} <br>principal name: ${feature.properties.principaln} <br> principal number: ${feature.properties.principalo} <br> institute_establishment_year: ${feature.properties.institutee} <br>  longitude: ${feature.properties.longitude} <br> latitude : ${feature.properties.latitude} <br> boyshostel: ${feature.properties.boyshostel} <br> girlshostel: ${feature.properties.girlshoste} <br>institut_2: ${feature.properties.institut_2}<br>institut_3: ${feature.properties.institut_3} <br> institut_4: ${feature.properties.institut_4}<br> naacstatus: ${feature.properties.naacstatus}<br>  lettergrad: ${feature.properties.lettergrad}</div>`)
+        },
+        filter:function(feature,layer){
+          // console.log(`${feature.properties.talukanam}:${TalukaSelected}`)
+          return feature.properties.talukaname == TalukaSelected;
+        }
+      })
+      collegeLayer.addTo(mymap)
+    })
 }
 
-</script> 
+function clearMap(){
+  mymap.setView([19.7515-1,75.7139-1], 4.2,  { animate: true } )
+  if(wmsLayer) mymap.removeLayer(wmsLayer);
+  if(talukaLayer) mymap.removeLayer(talukaLayer);
+  if(collegeLayer) mymap.removeLayer(collegeLayer);
+  if(DistrictSelected) mymap.removeLayer(DistrictSelected)
+}
+var marker
+var showL=false
+function getLocation() {
+
+  if(!showL){
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(pos) {
+      //You have your locaton here
+        // console.log("Latitude: " + pos.coords.latitude +
+        // "Longitude: " + pos.coords.longitude);
+        mymap.setView([pos.coords.latitude, pos.coords.longitude],13);
+        marker = L.marker([pos.coords.latitude, pos.coords.longitude],{
+          // icon: L.icon({
+          //   iconUrl:"{% static 'images/marker.png' %}"
+          // })
+        }).addTo(mymap);
+      });
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+    document.getElementById('loc').innerHTML = 'Remove My Location';
+    showL = true;
+  }else{
+    mymap.removeLayer(marker)
+    mymap.setView([19.076, 72.8777],5);
+    document.getElementById('loc').innerHTML = 'Get My Location';
+    showL = false
+  }
+
+
+}
+
+</script>
+ 
 {% endblock map%}
