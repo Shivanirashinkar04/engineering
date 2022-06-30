@@ -278,15 +278,23 @@ footer{
 <div class="border">
   <button class="btn btn-primary" onclick="clearMap()" >Clear Map</button>
 </div>
+
+<button class="btn btn-primary" id="loc" style="display:block ;text-align: center;margin: auto"  type="button" onclick="getLocation()">Get My Location</button>
+
+
 </div>
 <br>
 <br>
 <br>
 <br>
 <br>
+
+
+
 <br>
 <br>
 <br>
+
 <br>
 <br>
 
@@ -307,14 +315,26 @@ footer{
       <!-- Copyright -->
       </footer>
       <!-- End #footer -->
+
   
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+
   
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+
+
+
+  
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
 
 
   
@@ -346,6 +366,293 @@ footer{
 		zoomOffset: -1
     }).addTo(mymap);
     
+
+var sidebar = L.control.sidebar('sidebar', {
+      position: 'left'
+    });
+
+    mymap.addControl(sidebar);
+
+    var ctlEasybutton = L.easyButton('fa fa fa-bars', function () {
+				sidebar.toggle();
+			}).addTo(mymap);
+			// sidebar.show();
+
+
+var Raigad = [ 'choose',  'Pen','Alibag','Murud','Panvel','Uran','Karjat','Khalapur','Mangaon ','Tala','Roha ','Sudhagad (Pali) ','Mahad','Poladpur','Shrivardhan ','Mhasla ']
+var  Ratnagiri = ['choose', 'Ratnagiri','Sangameshwar','Lanja','Rajapur ','Chiplun','Guhagar','Dapoli','Mandangad','Khed']
+var Mumbai_Suburban_District = ['choose', 'Kurla','Mulund','Andheri','Borivali']
+var Mumbai_City=['choose', 'Mumbai']
+var Thane = ['choose', 'Thane','Kalyan','Murbad ','Bhiwandi','Shahapur','Ulhasnagar','Ambarnath']
+var Palghar = ['choose', 'Palghar','Vasai','Dahanu','Talasari','Jawhar','Mokhada','Vada','Vikramgad']
+var Nashik  = ['choose', 'Nashik','Igatpuri','Dindori','Peth','Trimbakeshwar','Kalwan','Deola','Surgana','Baglan(Satana)','Malegaon','Nandagaon','Chandwad','Niphad','Sinnar','Yeola']
+var Nandurbar = ['choose', 'Nandurbar','Navapur','Shahada','Talode','Akkalkuwa','Akrani(Dhadgaon)']
+var Dhule= ['choose', 'Dhule','Sakri','Sindkheda','Shirpur']
+var Jalgaon = ['choose', 'Jalgaon','Jamner','Erandol','Dharangaon','Bhusawal','Raver','Muktainagar','Yawal','Amalner','Parola','Chopda','Pachora','Bhadgaon','Chalisgaon']
+var Buldhana = ['choose', 'Buldhana','Chikhli','Deulgaon','Jalgaon Jamod','Sangrampur','Malkapur','Motala','Nandura','Khamgaon','Shegaon','Mehkar','Sindkhed Raja','Lonar']
+var Akola = ['choose', 'Akola','Akot','Telhara','Patur','Murtajapur','Barshitakli']
+var Washim = ['choose', 'Wahim','Malegaon','Risod','Mangrulpir','Karanja','Manora']
+var Amravati = ['choose', 'Amravati','Bhatukali','Nandgaon Khandeshwar','Dharni (Amravati)','Chikhaldara','Achalpur','Chandurbazar','Morshi','Warud','Daryapur','Anjangaon-Surji ','Chandur','Dhamangaon','Tiosa']
+var Wardha = ['choose', '	Wardha','Deoli','Seloo','Arvi','Ashti','Karanja','Hinganghat','Samudrapur']
+var Nagpur = ['choose', 'Nagpur (Urban)','Nagpur (Rural)','Kamptee','Hingna','Katol','Narkhed','Savner','Kalameshwar','Ramtek','Mouda','Parseoni','Umred','Kuhi','Bhiwapur']
+var Bhandara = ['choose', 'Bhandara','Tumsar','Pauni ','Mohadi','Sakoli','Lakhni','Lakhandur']
+var Gondia = ['choose', 'Gondia','Tiroda','Goregaon','Arjuni Morgaon','Amgaon','Salekasa','Sadak Arjuni ','Deori']
+var Gadchiroli = ['choose', 'Gadchiroli','Dhanora','Chamorshi','Mulchera','Desaiganj (Vadasa)','Armori','Kurkheda ','Korchi','Korchi','Bhamragad','Sironcha']
+var Chandrapur = ['choose', 'Chandrapur','Saoli','Mul','Ballarpur','Pombhurna','Gondpimpri','Warora','Chimur','Bhadravati','Bramhapuri','Nagbhid ','Sindewahi','Rajura','Korpana','Jivati']
+var Yavatmal = ['choose', 'Yavatmal','Arni','Babhulgaon','Kalamb','Darwha','Digras','Ner','Pusad','Umarkhed','Mahagaon','Kelapur (Pandharkawada) ','Ralegaon','Ghatanji','Wani','Maregaon ','Zari Jamani']
+var Nanded = ['choose', 'Nanded','Ardhapur','Mudkhed','Bhokar','Umri','Loha','Kandhar','Kinwat','Himayatnagar','Hadgaon','Mahur','Deglur','Mukhed','Dharmabad ','Biloli','Naigaon (Khairgaon)']
+var Hingoli = ['choose', 'Hingoli','Sengaon','Kalamnuri ','Basmath','Aundha Nagnath']
+var Parbhani = ['choose', 'Parbhani','Sonpeth','Gangakhed','Palam','Purna','Sailu','Jintur','Manwath','Pathri ']
+var Jalna = ['choose', 'Jalna','Bhokardan','Jafrabad ','Badnapur','Ambad','Ghansawangi ','Partur','Mantha']
+var Aurangabad = ['choose', 'Aurangabad','Kannad','Soegaon','Sillod','Phulambri ','Khuldabad','Vaijapur','Gangapur','Paithan ']
+var Beed= ['choose', 'Beed','Ashti','Patoda','Shirur-Kasar','Georai','Majalgaon','Wadwani','Kaij','Dharur','Parli ','Ambejogai']
+var Latur = ['choose', 'Latur','Renapur','Ahmedpur','Jalkot','Chakur','Shirur Anantpal','Ausa','Nilanga','Deoni','	Udgir',]
+var Osmanabad = ['choose', 'Osmanabad','Tuljapur','Bhum','Paranda','Washi','Kalamb','Lohara','Umarga']
+var Solapur_North = ['choose', 'Solapur North','Barshi','Solapur South','Akkalkot','Madha','Karmala','Pandharpur','Mohol','Malshiras','Sangole','Mangalvedhe']
+var Ahmednagar = ['choose', 'nagar','Shevgaon','Pathardi','Parner','Sangamner','Kopargaon ','Akole ','Shrirampur','Nevasa','Rahata','Rahuri','Shrigonda ','Karjat','Jamkhed']
+var Pune = ['choose', 'Pune City','Haveli','Haveli - PCMC, PCMC','Khed (Rajgurunagar)','Junnar','Ambegaon (Ghodegaon) ','Maval (Vadgaon) ','Mulshi (Paud)','Shirur','Purandhar (Saswad)','Velhe','Bhor','Baramati ','Indapur','Daund ']
+var Satara = ['choose', 'Satara','Jaoli ','Koregaon ','Wai','Mahabaleshwar','Khandala ','Phaltan ','Maan (Dahiwadi)','Khatav (Vaduj)','Patan','Karad ']
+var Sangli = ['choose', 'Miraj','Kavathe-Mahankal ','Tasgaon','Jat','Walwa (Islampur) ','Shirala','Khanapur-Vita ','Atpadi','Palus','Kadegaon']
+var Kolhapur = ['choose', 'Karvir','Panhala ','Shahuwadi','Kagal','Hatkanangale','Shirol','Radhanagari ','Gaganbawada','Bhudargad','Gadhinglaj','Chandgad','Ajra']
+
+
+var wmsLayer;
+var DistrictSelected;
+var TalukaSelected;
+var collegeLayer;
+var talukaLayer;
+$("#inputDistrict").change(function(){
+  DistrictSelected = $(this).val();
+  var optionsList;
+  var htmlString = "";
+
+  wmsLayer = L.tileLayer.wms('https://geoserver2.communitygis.net/geoserver/wms', {
+          layers: '	geonode:maharashtra_districts',
+          format: 'image/png',
+          transparent: 'true',  
+          cql_filter:`district='${DistrictSelected}'`,                      
+        }); 
+        wmsLayer.addTo(mymap);
+
+
+  // fetch('http://geoserver2.communitygis.net/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Amaharashtra_districts&maxFeatures=10000000&outputFormat=application%2Fjson')
+  //   .then(result=>result.json())
+  //   .then((output)=>{
+  //     wmsLayer = L.geoJson(output,{
+  //       // onEachFeature: function(feature, layer){
+  //       //   layer.bindPopup(`<div>Location of Observation: ${feature.properties.Location_o}<br>Model System: ${feature.properties.model_syst}<br>Flowering: ${feature.properties.details_2}</div>`)
+  //       // },
+  //       filter:function(feature,layer){
+  //         return feature.properties.district == DistrictSelected;
+  //       }
+  //     })
+  //     wmsLayer.addTo(mymap)
+  //     mymap.fitBounds(wmsLayer.getBounds())
+  //   })
+
+
+  switch (DistrictSelected) {
+    case "Raigad":
+        optionsList = Raigad;
+        break;
+    case "Ratnagiri":
+        optionsList = Ratnagiri;
+        break;
+    case "Mumbai_Suburban_District":
+        optionsList = Mumbai_Suburban_District;
+        break;
+    case "Mumbai City":
+        optionsList = Mumbai_City;
+        break;
+    case "Thane":
+        optionsList = Thane;
+        break;
+    case "Palghar":
+        optionsList = Palghar;
+        break;
+    case "Nashik":
+        optionsList = Nashik;
+        break;
+    case "Nandurbar":
+        optionsList = Nandurbar;
+        break;
+    case  "Dhule":
+        optionsList = Dhule;
+        break;
+    case "Jalgaon":
+        optionsList = Jalgaon;
+        break;
+    case "Buldhana":
+        optionsList = Buldhana;
+        break;
+    case "Akola":
+        optionsList = Akola;
+        break;
+    case "Washim":
+        optionsList = Washim;
+        break;
+    case  "Amravati":
+        optionsList = Amravati;
+        break;
+    case "Wardha":
+        optionsList = Wardha;
+        break;
+    case  "Nagpur":
+        optionsList = Nagpur;
+        break;
+    case "Bhandara":
+        optionsList = Bhandara;
+        break;
+    case  "Gondia":
+        optionsList = Gondia;
+        break;
+    case "Gadchiroli":
+        optionsList = Gadchiroli ;
+        break;
+    case  "Chandrapur":
+        optionsList = Chandrapur;
+        break;
+    case "Yavatmal":
+        optionsList = Yavatmal;
+        break;
+    case  "Nanded":
+        optionsList = Nanded;
+        break;
+    case "Hingoli":
+        optionsList = Hingoli;
+        break;
+    case  "Parbhani":
+        optionsList = Parbhani;
+        break;
+    case "Jalna":
+        optionsList = Jalna;
+        break;
+    case  "Aurangabad":
+        optionsList = Aurangabad;
+        break;
+    case  "Beed":
+        optionsList = Beed;
+        break;
+    case "Latur":
+        optionsList = Latur ;
+        break;
+    case  "Osmanabad":
+        optionsList = Osmanabad;
+        break;
+    case  "Solapur_North":
+        optionsList = Solapur_North;
+        break;
+    case "Ahmednagar":
+        optionsList = Ahmednagar;
+        break;
+    case  "Pune":
+        optionsList = Pune;
+        break;
+    case "Satara":
+        optionsList = Satara;
+        break;
+    case  "Sangli":
+        optionsList = Sangli;
+        break;
+    case "Kolhapur":
+        optionsList = Kolhapur;
+        break;
+    
+}
+
+
+  for(var i = 0; i < optionsList.length; i++){
+    htmlString = htmlString+"<option value='"+ optionsList[i] +"'>"+ optionsList[i] +"</option>";
+  }
+  $("#inputTaluka").html(htmlString);
+
+});
+      
+
+$("#inputTaluka").change(function(){
+  TalukaSelected = $(this).val()
+  console.log(TalukaSelected)
+
+  talukaLayer = L.tileLayer.wms('https://geoserver2.communitygis.net/geoserver/wms', {
+          layers: 'geonode:maha_taluka_13march2021',
+          format: 'image/png',
+          transparent: 'true',  
+          cql_filter:`taluka_nam like '${TalukaSelected}%'`,                      
+        }); 
+        talukaLayer.addTo(mymap);
+  
+
+})
+
+
+
+function plotColleges(){
+  
+console.log(TalukaSelected)
+  // collegeLayer = L.tileLayer.wms('https://geonode.communitygis.in/geoserver/geonode/wms',{
+  //   layers:'geonode:engineering_new',
+  //   format:'image/png',
+  //   transparent:'true',
+  //   cql_filter: `talukanam = "'Shegaon'"`,
+  // }).addTo(mymap)
+
+  fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Aengineering&outputFormat=application%2Fjson')
+    .then(result=>result.json())
+    .then((output)=>{
+      collegeLayer = L.geoJson(output,{
+        onEachFeature: function(feature, layer){
+          layer.bindPopup(`<div>Institute Name: ${feature.properties.instituten}<br> institutecode: ${feature.properties.institutec}<br> regionname: ${feature.properties.regionname} <br>talukaname: ${feature.properties.talukaname}<br>  institute address: ${feature.properties.institutea} <br> institute pincode: ${feature.properties.institutep} <br>   		
+institute website: ${feature.properties.institutew} <br> institute mail: ${feature.properties.institut_1} <br>principal name: ${feature.properties.principaln} <br> principal number: ${feature.properties.principalo} <br> institute_establishment_year: ${feature.properties.institutee} <br>  longitude: ${feature.properties.longitude} <br> latitude : ${feature.properties.latitude} <br> boyshostel: ${feature.properties.boyshostel} <br> girlshostel: ${feature.properties.girlshoste} <br>institut_2: ${feature.properties.institut_2}<br>institut_3: ${feature.properties.institut_3} <br> institut_4: ${feature.properties.institut_4}<br> naacstatus: ${feature.properties.naacstatus}<br>  lettergrad: ${feature.properties.lettergrad}</div>`)
+        },
+        filter:function(feature,layer){
+          // console.log(`${feature.properties.talukanam}:${TalukaSelected}`)
+          return feature.properties.talukaname == TalukaSelected;
+        }
+      })
+      collegeLayer.addTo(mymap)
+    })
+}
+
+function clearMap(){
+  mymap.setView([19.7515-1,75.7139-1], 4.2,  { animate: true } )
+  if(wmsLayer) mymap.removeLayer(wmsLayer);
+  if(talukaLayer) mymap.removeLayer(talukaLayer);
+  if(collegeLayer) mymap.removeLayer(collegeLayer);
+  if(DistrictSelected) mymap.removeLayer(DistrictSelected)
+}
+var marker
+var showL=false
+function getLocation() {
+
+  if(!showL){
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(pos) {
+      //You have your locaton here
+        // console.log("Latitude: " + pos.coords.latitude +
+        // "Longitude: " + pos.coords.longitude);
+        mymap.setView([pos.coords.latitude, pos.coords.longitude],13);
+        marker = L.marker([pos.coords.latitude, pos.coords.longitude],{
+          // icon: L.icon({
+          //   iconUrl:"{% static 'images/marker.png' %}"
+          // })
+        }).addTo(mymap);
+      });
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+    document.getElementById('loc').innerHTML = 'Remove My Location';
+    showL = true;
+  }else{
+    mymap.removeLayer(marker)
+    mymap.setView([19.076, 72.8777],5);
+    document.getElementById('loc').innerHTML = 'Get My Location';
+    showL = false
+  }
+
+
+}
+
+
 
     var sidebar = L.control.sidebar('sidebar', {
       position: 'left'
@@ -600,6 +907,7 @@ function clearMap(){
   if(collegeLayer) mymap.removeLayer(collegeLayer);
   if(DistrictSelected) mymap.removeLayer(DistrictSelected)
 }
+
 
 </script>
  
