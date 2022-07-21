@@ -865,7 +865,7 @@ $("#inputDistrict").change(function(){
   //       districtLayer.addTo(mymap);
 
 
-  fetch('http://geoserver2.communitygis.net/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Amaharashtra_districts&maxFeatures=10000000&outputFormat=application%2Fjson')
+  fetch('http://geoserver2.communitygis.net/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Amaharashtra_districts&outputFormat=application%2Fjson')
     .then(result=>result.json())
     .then((output)=>{
       districtLayer = L.geoJson(output,{
