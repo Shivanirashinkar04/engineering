@@ -13,11 +13,21 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-<script src="{% static 'static1/plugins/easy-button.js' %}"></script>
 <script src="{% static 'static1/plugins/L.Control.Pan.js' %}"></script>
-<link rel="stylesheet" href="{% static 'static1/plugins/L.Control.Sidebar.css' %}"/>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <style>
+
+  datalist {
+    display: flex;
+    justify-content: space-between;
+    color: black;
+  }
+  
+  input {
+    width: 50%;
+  }
 
   .popupimage {
     height: 200px;
@@ -36,7 +46,16 @@
     width: auto;
     font-size: 16px;
 }
-
+footer{
+      position: relative;
+      bottom: 0;
+      font-size: 18px;
+      text-align: center;
+      width: 100%;
+      height: 13%;
+      opacity: 1.0;
+      z-index: 1000;
+    }
 
 label{
     font-size: 15px;
@@ -231,25 +250,41 @@ footer{
 {% endblock %}
 
 {% block map %}
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 
 <div id="mapid" style="width: 100%; height: 100%; z-index: 100%;"></div>
-<div id="sidebar" style="background-color: rgba(255, 255, 255); height: 80% ;z-index: 100%;">                <!-- Main container -->
-  <form method="post" action="college" z-index="auto">
+<div id="sidebar" style="background-color: rgba(255, 255, 255); height: 80% ;z-index: 100%;">             
+  <script>
+    var mymap = L.map('mapid').setView([19.7515-1,75.7139-1], 4.5);
+  
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap'
+    }).addTo(mymap);
+  
+    var sidebar = L.control.sidebar('sidebar',{
+      position:'left'
+    })
+    mymap.addControl(sidebar);
+    sidebar.show()
+  
+    easybutton = L.easyButton('fa fa-bars',function(){
+      sidebar.toggle()
+    }).addTo(mymap)
+  </script>
+
 
 
 
     <div class="border">
+
+      <center><button type="button" class="btn btn-primary" onclick="alll()" style="background-color: #000009 ;align-content: center;z-index: auto;display: block;" >Maharashtra Colleges  </button></center>
+      <br>
       <div class="form-group col-md-5 multiselect">
         <label for="inputRegion">regionname</label>
         <select class="form-control" id="inputRegion" name="region" z-index="auto">
                             <option value="SelectState">Select Region</option>
-                            <!-- <option value="Amravati">Amravati</option>
-                            <option value="Aurangabad">Aurangabad</option>
-                            <option value="Mumbai">Mumbai</option>
-                            <option value="Nagpur">Nagpur</option>
-                            <option value="Pune">Pune</option>
-                            <option value="Nashik">Nashik</option> -->
+                            
                             {% for i in region %}
                             <option value="{{i.regionname}}">{{i.regionname}}</option>
                             {% endfor %}
@@ -331,24 +366,7 @@ footer{
         <label for="Minority">Institute Status Minority</label>
         <select class="form-control" id="Minority" >
                             <option value="SelectState">Select</option>
-                            <!-- <option value="Autonomous">Non-Minority</option>
-                            <option value="Linguistic Minority - Marwadi">Linguistic Minority - Marwadi</option>
-                            <option value="Linguistic Minority - Hindi">Linguistic Minority - Hindi</option>
-                            <option value="Religious Minority - Jain">Religious Minority - Jain</option>
-                            <option value="Religious Minority - Buddhist">Religious Minority - Buddhist</option>
-                            <option value="Religious Minority - Muslim">Religious Minority - Muslim</option>
-                            <option value="Linguistic Minority - Marwadi">Linguistic Minority - Marwadi</option>
-                            <option value="Linguistic Minority - Gujarathi ">Linguistic Minority - Gujarathi </option>
-                            <option value="Religious Minority - Christian ">Religious Minority - Christian </option>
-                            <option value="Linguistic Minority - Sindhi">Linguistic Minority - Sindhi</option>
-                            <option value="Linguistic Minority - Tamil">Linguistic Minority - Tamil</option>
-                            <option value="Linguistic Minority - Malyalam">Linguistic Minority - Malyalam</option>
-                            <option value="Religious Minority - Sikh ">Religious Minority - Sikh </option>
-                            <option value="Religious Minority - Roman Catholics">Religious Minority - Roman Catholics</option>
-                            <option value="Linguistic Minority - Gujar">Linguistic Minority - Gujar </option>
-                            <option value="Linguistic Minority - Konkani">Linguistic Minority - Konkani </option>
-                            <option value="Linguistic Minority - Kannada">Linguistic Minority - Kannada</option> -->
-                            <!-- <option value="Relogious Minority Muslim & Linguistic Minority Urdu">Relogious Minority Muslim & Linguistic Minority Urdu</option> -->
+                            
                             {% for i in minority %}
                             <option value="{{i.institutestatusminority}}">{{i.institutestatusminority}}</option>
                             {% endfor %}
@@ -363,14 +381,6 @@ footer{
           <label for="InstituteStatus">InstituteStatus</label>
           <select class="form-control" id="InstituteStatus" >
                               <option value="SelectState">Select</option>
-                              <!-- <option value="Government">Government</option>
-                              <option value="University Department">University Department</option>
-                              <option value="Government-Aided">Government-Aided </option>
-                              <option value="Un-Aided">Un-Aided </option>
-                              <option value="University Department">University Department </option>
-                              <option value="University Managed">University Managed</option>
-                              <option value="Deemed University">Deemed University </option>
-                              <option value="University Managed (Un-Aided)"> University Managed (Un-Aided)</option> -->
                               {% for i in status %}
                               <option value="{{i.institutestatus}}">{{i.institutestatus}}</option>
                               {% endfor %}
@@ -383,9 +393,6 @@ footer{
             <label for="Course">Course Level Name</label>
             <select class="form-control" id="Course" >
                                 <option value="SelectState">Select</option>
-                                <!-- <option value="Diploma Courses">Diploma Courses</option>
-                                <option value="Degree Courses">Degree Courses</option>
-                                <option value="Post Graudate Degree Courses">Post Graudate Degree Courses </option> -->
                                 {% for i in courselevel %}
                                 <option value="{{i.courselevelname}}">{{i.courselevelname}}</option>
                                 {% endfor %}
@@ -398,22 +405,7 @@ footer{
                 <label for="Program">Program Name</label>
                 <select class="form-control" id="Program" onchange="program(this.value)">
                                     <option value="SelectState">Select</option>
-                                    <!-- <option value="Bachelor of Engineering (B. E.) / Bachelor of Technology (B. Tech.)">Bachelor of Engineering (B. E.) / Bachelor of Technology (B. Tech.)</option>
-                                    <option value="Master of Engineering (M. E.) / Master of Technology (M. Tech.)"> Master of Engineering (M. E.) / Master of Technology (M. Tech.)</option>
-                                    <option value="Master in Computer Application (M.C.A.)">Master in Computer Application (M.C.A.)</option>
-                                    <option value="Bachelor of Architecture"> Bachelor of Architecture</option>
-                                    <option value="Master of Architecture"> Master of Architecture</option>
-                                    <option value="Master of H.M.C.T.">Master of H.M.C.T.</option>
-                                    <option value="Master of Pharmacy">Master of Pharmacy</option>
-                                    <option value="M.B.A./M.M.S.">M.B.A./M.M.S.</option>
-                                    <option value="Bachelor of Pharmacy">Bachelor of Pharmacy</option>
-                                    <option value="Pharma D">Pharma D</option>
-                                    <option value="Post S.S.C. Diploma in Engineering (Polytechnics)">Post S.S.C. Diploma in Engineering (Polytechnics)</option>
-                                    <option value="Post H.S.C. Diploma in Pharmacy (D. Pharm.)">Post H.S.C. Diploma in Pharmacy (D. Pharm.)</option>
-                                    <option value="Post H.S.C. Diploma in Pharmacy (D. Pharm.)">Post H.S.C. Diploma in Pharmacy (D. Pharm.)</option>
-                                    <option value="Pharm.D. (Post Baccalaureate)">Pharm.D. (Post Baccalaureate) </option>
-                                    <option value="Pharm.D. (Post Baccalaureate)">Pharm.D. (Post Baccalaureate) </option>
-                                    <option value="Post H.S.C. Diploma in H.M.C.T.">Post H.S.C. Diploma in H.M.C.T.</option> -->
+                                    
                                     {% for i in program %}
                                     <option value="{{i.programname}}">{{i.programname}}</option>
                                     {% endfor %}
@@ -424,224 +416,23 @@ footer{
         <div class="form-group col-md-5 multiselect">
               <label for="CourseName">Course Name </label>
                 <select class="form-control" id="CourseName" >
-                                      <option value="SelectState">Select</option>
-                                      <!-- <option value="Architectural Conservation">Architectural Conservation</option>
-                                      <option value="Architecture">Architecture</option>
-                                      <option value="Artificial Intelligence">Artificial Intelligence</option>
-                                      <option value="Artificial Intelligence and Data Science">Artificial Intelligence and Data Science </option>
-                                      <option value="Artificial Intelligence and Machine Learning">Artificial Intelligence and Machine Learning</option>
-                                      <option value="Automobile Engineering">Automobile Engineering</option>
-                                      <option value="Automation and Robotics">Automation and Robotics</option>
-                                      <option value="Automotive Technology">Automotive Technology</option>
-                                      <option value="Bio Medical Engineering">Bio Medical Engineering</option>
-                                      <option value="Bio Chemical Engineering and Bio Technology">Bio Chemical Engineering and Bio Technology</option>
-                                      <option value="CAD-CAM">CAD-CAM</option>
-                                      <option value="Bio Medical Engineering">Bio Medical Engineering</option>
-                                      <option value="CAD/CAM/CAE">CAD/CAM/CAE</option>
-                                      <option value="Bio Medical Instrumentation">Bio Medical Instrumentation</option>
-                                      <option value="Chemical Engineering">Chemical Engineering</option>
-                                      <option value="Civil Engineering">Civil Engineering</option>
-                                      <option value="Civil and Structural Engineering">Civil and Structural Engineering</option>
-                                      <option value="Civil - Environmental Engineering">Civil - Environmental Engineering</option>
-                                      <option value="Civil - Structural Engineering">Civil - Structural Engineering</option>
-                                      <option value="Civil Engineering (Water Management)">Civil Engineering (Water Management)</option>
-                                      <option value="Civil Engineering (Infrastructure Engineering and Management)">Civil Engineering (Infrastructure Engineering and Management)</option>
-                                      <option value="Civil Environmental Engineering">Civil Environmental Engineering</option>
-                                      <option value="Civil Engineering (Construction Management)">Civil Engineering (Construction Management)</option>
-                                      <option value="Civil Engineering (Computer Aided Structural Engineering)">Civil Engineering (Computer Aided Structural Engineering)</option>
-                                      <option value="Computer Engineering">Computer Engineering</option>
-                                      <option value="Communication Engineering">Communication Engineering</option>
-                                      <option value="Computer Aided Structural Analysis and Design">Computer Aided Structural Analysis and Design</option>
-                                      <option value="Clinical Pharmacy">Clinical Pharmacy</option>
-                                      <option value="Computer Engineering(Artificial Intelligence and Data Science)">Computer Engineering(Artificial Intelligence and Data Science)</option>
-                                      <option value="Computer Applications">Computer Applications</option>
-                                      <option value="Computer Science and Engineering">Computer Science and Engineering</option>
-                                      <option value="Computer Networks and Information Security">Computer Networks and Information Security</option>
-                                      <option value="Computer Networks">Computer Networks</option>
-                                      <option value="Computer Science and Engineering (Data Science)">Computer Science and Engineering (Data Science)</option>
-                                      <option value="Computer Science and Information Technology">Computer Science and Information Technology</option>
-                                      <option value="Computer Science & Technology">Computer Science & Technology</option>
-                                      <option value="Construction Management">Construction Management</option>
-                                      <option value="Constructional Technology and Management ">Constructional Technology and Management </option>
-                                      <option value="Construction Engg and Management">Construction Engg and Management</option>
-                                      <option value="Control System">Control System</option>
-                                      <option value="Defence Technology">Defence Technology</option>
-                                      <option value="Data Sciences">Data Sciences</option>
-                                      <option value="Control System Engineering">Control System Engineering</option>
-                                      <option value="Cyber Security">Cyber Security</option>
-                                      <option value="Design Engineering">Design Engineering </option>
-                                      <option value="Digital Systems">Digital Systems</option>
-                                      <option value="Digital Architecture">Digital Architecture</option>
-                                      <option value="Digital Communications">Digital Communications</option>
-                                      <option value="Digital Electronics">Digital Electronics</option>
-                                      <option value="Electrical Engineering">Electrical Engineering</option>
-                                      <option value="Electrical (Industrial Drives and Control)">Electrical (Industrial Drives and Control)</option>
-                                      <option value="Electrical Instrumentation & Control Engineering">Electrical Instrumentation & Control Engineering</option>
-                                      <option value="Electrical Drives and Control">Electrical Drives and Control</option>
-                                      <option value="Electrical - Power System Engineering">Electrical - Power System Engineering</option>
-                                      <option value="Electrical - Control System Engineering">Electrical - Control System Engineering</option>
-                                      <option value="Drugs & Pharmaceuticals">Drugs & Pharmaceuticals</option>
-                                      <option value="Electrical (Power Electronics and Power System)">Electrical (Power Electronics and Power System)</option>
-                                      <option value="Electrical Engineering [Electronics & Power]">Electrical Engineering [Electronics & Power]</option>
-                                      <option value="Electrical Power System">Electrical Power System</option>
-                                      <option value="Electrical (Industrial Drives and Control)">Electrical (Industrial Drives and Control)</option>
-                                      <option value="Electronic and Telecommunication Engg. (Digital System)">Electronic and Telecommunication Engg. (Digital System)</option>
-                                      <option value="Electrical Instrumentation & Control Engineering">Electrical Instrumentation & Control Engineering</option>
-                                      <option value="Electrical Drives and Control">Electrical Drives and Control</option>
-                                      <option value="Electrical (Power Electronics and Power System)">Electrical (Power Electronics and Power System)</option>
-                                      <option value="Electrical Machine and Drive">Electrical Machine and Drive</option>
-                                      <option value="Electrical Engineering [Electronics & Power]">Electrical Engineering [Electronics & Power]</option>
-                                      <option value="Electronic and Telecommunication Engg. (Digital System)">Electronic and Telecommunication Engg. (Digital System)</option>
-                                      <option value="Electronic Technology">Electronic Technology</option>
-                                      <option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
-                                      <option value="Electronics and Communication (Wireless Communication Technology)">Electronics and Communication (Wireless Communication Technology)</option>
-                                      <option value="Electronics and Telecommunication">Electronics and Telecommunication</option>
-                                      <option value="Electronic System and Communication">Electronic System and Communication</option>
-                                      <option value="Electronics and Telecommunication Engg">Electronics and Telecommunication Engg</option>
-                                      <option value="Electronics Engineering">Electronics Engineering</option>
-                                      <option value="Electronics and Telecommunication (VLSI & Embedded Systems)">Electronics and Telecommunication (VLSI & Embedded Systems)</option>
-                                      <option value="Electronics and_x000D_Telecommunication Engineering_x000D_with_x000D_specialization in _x000D_Artificial _x000D_Intelligence">Electronics and_x000D_Telecommunication Engineering_x000D_with_x000D_specialization in _x000D_Artificial _x000D_Intelligence</option>
-                                      <option value="Energy Technology">Energy Technology</option>
-                                      <option value="Energy Systems and Management">Energy Systems and Management</option>
-                                      <option value="Electronics Engineering (VLSI)">Electronics Engineering (VLSI)</option>
-                                      <option value="Embedded System">Embedded System</option>
-                                      <option value="Electronics and Telecommunication (VLSI & Embedded Systems)">Electronics and Telecommunication (VLSI & Embedded Systems)</option>
-                                      <option value="Embedded System and Computing">Embedded System and Computing</option>
-                                      <option value="Embedded Control Systems">Embedded Control Systems</option>
-                                      <option value="Electronics Engineering (Communication)">Electronics Engineering (Communication)</option>
-                                      <option value="Environmental Science and Technology">Environmental Science and Technology</option>
-                                      <option value="Energy Technology">Energy Technology</option>
-                                      <option value="Environmental Engineering">Environmental Engineering</option>
-                                      <option value="Environmental Architecture">Environmental Architecture</option>
-                                      <option value="Environmental and Water Resources Engineering">Environmental and Water Resources Engineering</option>
-                                      <option value="Food Processing Technology">Food Processing Technology</option>
-                                      <option value="Heat Power Engineering">Heat Power Engineering</option>
-                                      <option value="Food Technology">Food Technology</option>
-                                      <option value="Industrial Design">Industrial Design</option>
-                                      <option value="Industrial  Pharmacy">Industrial  Pharmacy</option>
-                                      <option value="Geo Technical Engineering">Geo Technical Engineering</option>
-                                      <option value="Industrial Engineering">Industrial Engineering</option>
-                                      <option value="Information Technology">Information Technology</option>
-                                      <option value="Information Security">Information Security</option>
-                                      <option value="Instrumentation Engineering">Instrumentation Engineering</option>
-                                      <option value="Integrated Power Systems">Integrated Power Systems</option>
-                                      <option value="Instrumentation and Control Engineering">Instrumentation and Control Engineering</option>
-                                      <option value="Information Security">Information Security</option>
-                                      <option value="Internet of Things">Internet of Things</option>
-                                      <option value="Landscape Architecture">Landscape Architecturev</option>
-                                      <option value="Machine Design">Machine Design</option>
-                                      <option value="IOT and Sensor Systems">IOT and Sensor Systems</option>
-                                      <option value="Manufacturing Engineering">Manufacturing Engineering</option>
-                                      <option value="Master in Computer Application">Master in Computer Application</option>
-                                      <option value="Manufacturing Processing Engineering">Manufacturing Processing Engineering</option>
-                                      <option value="Master in HMCT">Master in HMCT</option>
-                                      <option value="Manufacturing Engineering and Automation">Manufacturing Engineering and Automation</option>
-                                      <option value="Mechanical [Computer Aided Design, Manufacture & Engineering]">Mechanical [Computer Aided Design, Manufacture & Engineering]</option>
-                                      <option value="Mechanical - Product Life Cycle Management">Mechanical - Product Life Cycle Management</option>
-                                      <option value="Materials Engineering">Materials Engineering</option>
-                                      <option value="Mechanical - Heat Power Engineering">Mechanical - Heat Power Engineering</option>
-                                      <option value="Mechanical - Production Engineering">Mechanical - Production Engineering</option>
-                                      <option value="Mechanical - Design Engineering">Mechanical - Design Engineering</option>
-                                      <option value="Mechanical Engineering">Mechanical Engineering</option>
-                                      <option value="Mechanical Engineering (CAD/CAM)">Mechanical Engineering (CAD/CAM)</option>
-                                      <option value="Mechanical CAD ME">Mechanical CAD ME</option>
-                                      <option value="Mechanical Design">Mechanical Design</option>
-                                      <option value="Mechanical Engineering (Heat Power)">Mechanical Engineering (Heat Power)</option>
-                                      <option value="Mechanical Engineering (CAD/CAM, Robotics)">Mechanical Engineering (CAD/CAM, Robotics)</option>
-                                      <option value="Mechanical CAD/CAM">Mechanical CAD/CAM</option>
-                                      <option value="Mechanical Engineering(Production)">Mechanical Engineering(Production)</option>
-                                      <option value="Mechanical Engineering Design">Mechanical Engineering Design</option>
-                                      <option value="Mechanical Engineering(Product Design & Dev.)">Mechanical Engineering(Product Design & Dev.)</option>
-                                      <option value="Mechanical Engineering (Thermal)">Mechanical Engineering (Thermal)</option>
-                                      <option value="Mechanical Engineering(Production)">Mechanical Engineering(Production)</option>
-                                      <option value="Mechanical Engineering (Machine Design)">Mechanical Engineering (Machine Design)</option>
-                                      <option value="Microwave Engineering">Microwave Engineering</option>
-                                      <option value="Mechatronics">Mechatronics</option>
-                                      <option value="Mechanical Manufacturing Engineering">Mechanical Manufacturing Engineering</option>
-                                      <option value="Mining Engineering">Mining Engineering</option>
-                                      <option value="Oil">Oil</option>
-                                      <option value="Network Infrastructure Management">Network Infrastructure Management</option>
-                                      <option value="Pharmacognosy and Physochemistry">Pharmacognosy and Physochemistry</option>
-                                      <option value="Pharmaceutics">Pharmaceutics</option>
-                                      <option value="Pharmaceutical Quality Assurance">Pharmaceutical Quality Assurance</option>
-                                      <option value="Pharmacology">Pharmacology</option>
-                                      <option value="Power Electronics and Drives">Power Electronics and Drives</option>
-                                      <option value="Pharmacognosy">Pharmacognosy</option>
-                                      <option value="Pharmaceutical Chemistry">Pharmaceutical Chemistry</option>
-                                      <option value="Pharmaceutical Analysis">Pharmaceutical Analysis</option>
-                                      <option value="Pharma Technology">Pharma Technology</option>
-                                      <option value="Pharmaceutical Biotechnology">Pharmaceutical Biotechnology</option>
-                                      <option value="Pharmacy">Pharmacy</option>
-                                      <option value="Paint Technology">Paint Technology</option>
-                                      <option value="Paints">Paints</option>
-                                      <option value="Petro Chemical Engineering">Petro Chemical Engineering</option>
-                                      <option value="Phytopharmacy and Phytomedicine">Phytopharmacy and Phytomedicine</option>
-                                      <option value="Power Systems">Power Systems</option>
-                                      <option value="Printing Technology">Printing Technology</option>
-                                      <option value="Power System and Power Electronics">Power System and Power Electronics</option>
-                                      <option value="Process Instrumentation">Process Instrumentation</option>
-                                      <option value="Process Metallurgy">Process Metallurgy</option>
-                                      <option value="Power Electronics and Machine Drives">Power Electronics and Machine Drives</option>
-                                      <option value="Power Electronics and Systems">Power Electronics and Systems</option>
-                                      <option value="Phytopharmacy and Phytomedicine">Phytopharmacy and Phytomedicine</option>
-                                      <option value="Quality Assurance">Quality Assurance</option>
-                                      <option value="Signal Processing">Signal Processing</option>
-                                      <option value="Quality Assurance Techniques">Quality Assurance Techniques</option>
-                                      <option value="Robotics and Automation">Robotics and Automation</option>
-                                      <option value="Project Mangement">Project Mangement</option>
-                                      <option value="Robotics and Artificial Intelligence">Robotics and Artificial Intelligence</option>
-                                      <option value="Regulatory Affairs">Regulatory Affairs </option>
-                                      <option value="Robotics and Automation">Robotics and Automation </option>
-                                      <option value="Project Management">Project Management</option>
-                                      <option value="Structural Engineering">Structural Engineering</option>
-                                      <option value="Textile Technology">Textile Technology</option>
-                                      <option value="Thermal Engineering">Thermal Engineering</option>
-                                      <option value="Textile Engineering">Textile Engineering</option>
-                                      <option value="Textile Engineering / Technology">Textile Engineering / Technology</option>
-                                      <option value="Software Engineering">Software Engineering</option>
-                                      <option value="Project Mangement">Project Mangement</option>
-                                      <option value="Software System">Software System</option>
-                                      <option value="Thermal Power Engineering">Thermal Power Engineering</option>
-                                      <option value="Thermal and Fluid Engineering">Thermal and Fluid Engineering</option>
-                                      <option value="VLSI and Embeded Systems">VLSI and Embeded Systems</option>
-                                      <option value="VLSI">VLSI</option>
-                                      <option value="VLSI and Embedded Systems Design">VLSI and Embedded Systems Design</option>
-                                      <option value="Transportation Engineering">Transportation Engineering</option>
-                                      <option value="Transportation Engineering and Management">Transportation Engineering and Management</option>
-                                      <option value="Urban Design">Urban Design</option>
-                                      <option value="Water Resource Engineering">Water Resource Engineering</option>
-                                      <option value="Urban Conservation">Urban Conservation</option>
-                                      <option value="Water Resources and Environmental Engineering">Water Resources and Environmental Engineering</option>
-                                      <option value="Wired and Wireless Communication">Wired and Wireless Communication</option>
-                                      <option value="Advanced Mfg & Mechanical System design"> Advanced Mfg & Mechanical System design</option> -->
-                                        {% for i in course %}
-                                      <option value="{{i.coursename}}">{{i.coursename}}</option>
-                                      {% endfor %}
-
-                                    </select>
-                                    <div class="border">
-                                      <button class="btn btn-primary" type="button" onclick="plotC()">Plot Colleges</button>
-                                    </div>
-
-                                  </form>
-
-
-
+                  <option value="SelectState">Select</option>           
+                    {% for i in course %}
+                  <option value="{{i.coursename}}">{{i.coursename}}</option>
+                  {% endfor %}
+              </select>
+        </div>
+<center><button class="btn btn-success m-4" type="button" onclick="plotC()">Plot Colleges</button></center>
 <button class="btn btn-primary" id="loc" type="button"  style="display:block ;text-align: center;margin: auto" onclick="getLocation()">Get My Location</button>
-</div>
-<br>
-<!-- <br>
-<br>
-<br>
 <br>
 
-<br>
-<br> -->
-<div class="">
-  <input id="trickmarks" type="range" value="1" min="0" max="100" onchange="circlec()" list=mapsettings>
-  <datalist id=mapsettings>
-    <option value="">0</option>
-      <option label="10">10</option>
+<div class="text-center">
+  
+  <input id="trickmarks" type="range" value="1" min="0" class="slider" max="100" onchange="circlec()" list='tickmarks'>
+  
+  <datalist id='tickmarks' inputmode="range" min="1" max="20">
+      <option>0</option>
+      <option>10</option>
       <option>20</option>
       <option>30</option>
       <option>40</option>
@@ -651,24 +442,15 @@ footer{
       <option>80</option>
       <option>90</option>
       <option>100</option>
-
-  </datalist>
-  <br>
-  <button type="button" class="btn btn-primary" onclick="getNearest()">Get Nearest Colleges</button>
-  <div class="border">
-  <button class="btn btn-primary" type="button" onclick="clearMap()" >Clear Map</button>
+    </datalist>
+    Unit(Km) <br>
+  <button type="button" class="btn btn-primary m-4" onclick="getNearest()">Get Nearest Colleges</button>
+  <button class="btn btn-danger" type="button" onclick="clearMap()" >Clear Map</button>
 </div>
 </div>
+</div>
 
 
-
-<!-- ======= Footer ======= -->
-
-  <!-- <footer class="text-center text-white " style="background-color: #21081a;bottom: 0px;"> -->
-      <!-- <footer class="text-center text-white fixed-bottom" style="background-color: #21081a;bottom: 0px;"> -->
- <!-- <footer class="text-center sticky h-20 bottom-0 text-white" style="background-color:#853d28;bottom: 0px; height: auto;"> -->
-
-      <!-- End #footer -->
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
@@ -681,45 +463,15 @@ footer{
 
 
 
-  </div>
+  
 
-<script src="{% static 'static1/plugins/L.Control.Sidebar.js' %}"></script>
 
-<script src="{% static 'static1/plugins/easy-button.js' %}"></script>
 
 <script>
-    let isClicked = false
-    var mymap = L.map('mapid').setView([19.7515-1,75.7139-1], 4.5, { animate: true });
 
-    var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-		mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+  
 
- const url = 'https://geoserver2.communitygis.net/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&typename=geonode%3Aposhan_dummy&outputFormat=json&srs=EPSG%3A4326&srsName=EPSG%3A4326&access_token=3r7XCeWunHUOfoyqPxnUNt7XY7ZWHu'
-    const url1 = 'https://geoserver2.communitygis.net/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&typename=geonode%3AOrganization_wise_Compendium&outputFormat=json&srs=EPSG%3A4326&srsName=EPSG%3A4326&access_token=3r7XCeWunHUOfoyqPxnUNt7XY7ZWHu'
-
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-		maxZoom: 18,
-		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-		id: 'mapbox/streets-v11',
-		tileSize: 512,
-		zoomOffset: -1
-    }).addTo(mymap);
-
-
-    var sidebar = L.control.sidebar('sidebar', {
-      position: 'left'
-    });
-
-    mymap.addControl(sidebar);
-
-    var ctlEasybutton = L.easyButton('fa fa fa-bars', function () {
-				sidebar.toggle();
-			}).addTo(mymap);
-			// sidebar.show()
-      console.log('l/tilelayer');
-      mymap.setView([19.7515, 75.7139],7);
+  
 
       
     var wms = L.tileLayer.wms('https://geoserver2.communitygis.net/geoserver/wms', {
@@ -755,6 +507,7 @@ $("#inputRegion").change(function(){
   regionlayer = $(this).val();
   var optionsList;
   var htmlString = "";
+  
 
   // wmsLayer = L.tileLayer.wms('https://geonode.communitygis.in/geoserver/geonode/wms', {
   //          layers: 'geonode:maharashtra_final_regions',
@@ -855,7 +608,7 @@ $("#inputDistrict").change(function(){
   DistrictSelected = $(this).val();
   var optionsList;
   var htmlString = "";
-
+  // if(districtLayer)mymap.removeLayer(districtLayer);
   // districtLayer = L.tileLayer.wms('https://geoserver2.communitygis.net/geoserver/wms', {
   //         layers: '	geonode:maharashtra_districts',
   //         format: 'image/png',
@@ -864,13 +617,15 @@ $("#inputDistrict").change(function(){
   //       });
   //       districtLayer.addTo(mymap);
 
+
   fetch('http://geoserver2.communitygis.net/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Amaharashtra_districts&maxFeatures=10000000&outputFormat=application%2Fjson')
     .then(result=>result.json())
     .then((output)=>{
       districtLayer = L.geoJson(output,{
-        // onEachFeature: function(feature, layer){
-        //   layer.bindPopup(`<div>Location of Observation: ${feature.properties.Location_o}<br>Model System: ${feature.properties.model_syst}<br>Flowering: ${feature.properties.details_2}</div>`)
-        // },
+        onEachFeature: function(feature, layer){
+          layer.setStyle({fillColor :'#00ff00'}); 
+          // layer.bindPopup(`<div>Location of Observation: ${feature.properties.Location_o}<br>Model System: ${feature.properties.model_syst}<br>Flowering: ${feature.properties.details_2}</div>`)
+        },
         filter:function(feature,layer){
           return feature.properties.district == DistrictSelected;
         }
@@ -1004,29 +759,14 @@ $("#inputDistrict").change(function(){
 $("#inputTaluka").change(function(){
   TalukaSelected = $(this).val()
   console.log(TalukaSelected)
-
+  if (talukaLayer)mymap.removeLayer(talukaLayer);
   talukaLayer = L.tileLayer.wms('https://geoserver2.communitygis.net/geoserver/wms', {
           layers: 'geonode:maha_taluka_13march2021',
-          format: 'image/png',
-          transparent: 'true',
+          format: 'image/png', 
+          transparent: 'true',  
           cql_filter:`taluka_nam like '${TalukaSelected}%'`,
         });
         talukaLayer.addTo(mymap);
-  // fetch('geoserver2.communitygis.net/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Amaha_taluka_13march2021&outputFormat=application%2Fjson')
-  //   .then(result=>result.json())
-  //   .then((output)=>{
-  //     talukaLayer = L.geoJson(output,{
-  //       // onEachFeature: function(feature, layer){
-  //       //   layer.bindPopup(`<div>Location of Observation: ${feature.properties.Location_o}<br>Model System: ${feature.properties.model_syst}<br>Flowering: ${feature.properties.details_2}</div>`)
-  //       // },
-  //       filter:function(feature,layer){
-  //         return feature.properties.taluka_nam == TalukaSelected;
-  //       }
-  //     })
-  //     talukaLayer.addTo(mymap)
-  //     mymap.fitBounds(talukaLayer.getBounds())
-  //   })
-
 
 
 })
@@ -1084,11 +824,10 @@ function plotC(){
     arr.push(programm)
   }
   if(coursename!='SelectState') {
-    cn=true
+    cn=true;
     arr.push(coursename)
   }
 
-  // console.log(arr)
   arr.forEach(e=>{
 
     if(r){
@@ -1105,7 +844,7 @@ function plotC(){
                 }
             }
             // console.log('{{i}}')
-            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode:{{i.institutepin}} <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>")
+            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br> pincode: '{{i.institutepin}}'<br> districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}'  <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
             points.push(marker)
             // points_data.push((parseFloat('{{i.latitude}}'),parseFloat('{{i.longitude}}')))
           }
@@ -1132,55 +871,8 @@ function plotC(){
           }
         })
 
-      }}
-    //   console.log(points) if(points.length==0){
-    //     // rePlot()
-    //     '{% for i in engg %}'
-    //     if(e=='{{i.regionname}}'){
-    //       if('{{i.latitude}}'!='None'){
-    //         marker = L.marker([parseFloat('{{i.latitude}}'),parseFloat('{{i.longitude}}')])
-    //         marker.addTo(mymap)
-    //         marker.feature={
-    //           properties:{
-    //             'lat':parseFloat('{{i.latitude}}'),'lng':parseFloat('{{i.longitude}}'),'Institute_Name':'{{i.institutenameenglish}}','institutecode':'{{i.institutecode}}','address':'{{i.instituteaddressenglish}}','pincode':'{{i.institutepin}}','institute_emailid':'{{i.instituteemailid}}','Principal_Name':'{{i.principalnameenglish}}','Principal_Phone_Number':'{{i.principalofficephoneno}}','institute_stdcode':'{{i.institutestdcode}}','Establisment_Year':'{{i.instituteestablishmentyear}}','Website':'{{i.institutewebaddress}}','region':'{{i.regionname}}','district':'{{i.districtname}}','taluka':'{{i.talukaname}}','status':'{{i.institutestatus}}','lettergrade':'{{i.lettergrade}}','Institue_Minority':'{{i.institutestatusminority}}','Institue_Autonomy':'{{i.institutestatusautonomy}}','status':'{{i.institutestatus}}','girlshostelcapacitytotal':'{{i.girlshostelcapacitytotal}}','boyshostelcapacitytotal':'{{i.boyshostelcapacitytotal}}','nacc_status':'{{i.naccstatus}}',
-    //             }
-    //         }
-    //         marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>")
-    //         points.push(marker)
-    //         // points_data.push((parseFloat('{{i.latitude}}'),parseFloat('{{i.longitude}}')))
-    //       }
-    //     }
-    //     '{% endfor %}'
-    //     r=false
-
-    //   }else{
-    //     var l=points.slice(0);
-    //     rePlot()
-    //     l.forEach(e=>{
-    //       // console.log(`dddd:${l.length}`)
-    //       if(e.feature.properties.region==region){
-    //         console.log(e.feature.properties.lng)
-    //         marker = L.marker([e.feature.properties.lat,e.feature.properties.lng])
-    //         marker.addTo(mymap)
-    //         marker.feature={
-    //           properties:{
-    //             'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutecode,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
-    //             }
-    //         }
-    //         marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
-    //         points.push(marker)
-    //       }
-    //     })
-
-    //   }
-    //   console.log(points)
-    //   arr.shift()
-    //   document.getElementById('inputRegion').selectedIndex='SelectState'
-    // }
-
-    //   arr.shift()
-    //   document.getElementById('inputRegion').selectedIndex='SelectState'
-    // }
+      }
+    }
   
     if(d){
       if(points.length==0){
@@ -1196,7 +888,7 @@ function plotC(){
                 'lat':parseFloat('{{i.latitude}}'),'lng':parseFloat('{{i.longitude}}'),'Institute_Name':'{{i.institutenameenglish}}','institutecode':'{{i.institutecode}}','address':'{{i.instituteaddressenglish}}','pincode':'{{i.institutepin}}','institute_emailid':'{{i.instituteemailid}}','Principal_Name':'{{i.principalnameenglish}}','Principal_Phone_Number':'{{i.principalofficephoneno}}','institute_stdcode':'{{i.institutestdcode}}','Establisment_Year':'{{i.instituteestablishmentyear}}','Website':'{{i.institutewebaddress}}','region':'{{i.regionname}}','district':'{{i.districtname}}','taluka':'{{i.talukaname}}','status':'{{i.institutestatus}}','lettergrade':'{{i.lettergrade}}','Institue_Minority':'{{i.institutestatusminority}}','Institue_Autonomy':'{{i.institutestatusautonomy}}','status':'{{i.institutestatus}}','girlshostelcapacitytotal':'{{i.girlshostelcapacitytotal}}','boyshostelcapacitytotal':'{{i.boyshostelcapacitytotal}}','nacc_status':'{{i.naccstatus}}',
                 }
             }
-            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>")
+            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
             points.push(marker)
   
           }
@@ -1239,7 +931,7 @@ function plotC(){
                 'lat':parseFloat('{{i.latitude}}'),'lng':parseFloat('{{i.longitude}}'),'Institute_Name':'{{i.institutenameenglish}}','institutecode':'{{i.institutecode}}','address':'{{i.instituteaddressenglish}}','pincode':'{{i.institutepin}}','institute_emailid':'{{i.instituteemailid}}','Principal_Name':'{{i.principalnameenglish}}','Principal_Phone_Number':'{{i.principalofficephoneno}}','institute_stdcode':'{{i.institutestdcode}}','Establisment_Year':'{{i.instituteestablishmentyear}}','Website':'{{i.institutewebaddress}}','region':'{{i.regionname}}','district':'{{i.districtname}}','taluka':'{{i.talukaname}}','status':'{{i.institutestatus}}','lettergrade':'{{i.lettergrade}}','Institue_Minority':'{{i.institutestatusminority}}','Institue_Autonomy':'{{i.institutestatusautonomy}}','status':'{{i.institutestatus}}','girlshostelcapacitytotal':'{{i.girlshostelcapacitytotal}}','boyshostelcapacitytotal':'{{i.boyshostelcapacitytotal}}','nacc_status':'{{i.naccstatus}}',
                 }
             }
-            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>")
+            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
           points.push(marker)
         }
         '{% endfor %}'
@@ -1285,7 +977,7 @@ function plotC(){
           // console.log(`${typeof '{{i.latitude}}'}: {{i.latitude}}`)
           if('{{i.latitude}}'!='None'){
             marker = L.marker([parseFloat('{{i.latitude}}'),parseFloat('{{i.longitude}}')])
-            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>autonomy: '{{i.talukaname}}'<br>  institute address: '{{i.instituteeebaddress}}' <br> institute pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostel: '{{i.boyshostelcapacitytotal}}' <br> girlshostel: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>institut_3: '{{i.institutestatusautonomy}}' <br> institut_4: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>")
+            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>autonomy: '{{i.talukaname}}'<br>  institute address: '{{i.instituteeebaddress}}' <br> institute pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostel: '{{i.boyshostelcapacitytotal}}' <br> girlshostel: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>institut_3: '{{i.institutestatusautonomy}}' <br> institut_4: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
             marker.feature={
               properties:{
                 'lat':parseFloat('{{i.latitude}}'),'lng':parseFloat('{{i.longitude}}'),'Institute_Name':'{{i.institutenameenglish}}','institutecode':'{{i.institutecode}}','address':'{{i.instituteaddressenglish}}','pincode':'{{i.institutepin}}','institute_emailid':'{{i.instituteemailid}}','Principal_Name':'{{i.principalnameenglish}}','Principal_Phone_Number':'{{i.principalofficephoneno}}','institute_stdcode':'{{i.institutestdcode}}','Establisment_Year':'{{i.instituteestablishmentyear}}','Website':'{{i.institutewebaddress}}','region':'{{i.regionname}}','district':'{{i.districtname}}','taluka':'{{i.talukaname}}','status':'{{i.institutestatus}}','lettergrade':'{{i.lettergrade}}','Institue_Minority':'{{i.institutestatusminority}}','Institue_Autonomy':'{{i.institutestatusautonomy}}','status':'{{i.institutestatus}}','girlshostelcapacitytotal':'{{i.girlshostelcapacitytotal}}','boyshostelcapacitytotal':'{{i.boyshostelcapacitytotal}}','nacc_status':'{{i.naccstatus}}',
@@ -1293,7 +985,7 @@ function plotC(){
             }
             
             marker.addTo(mymap)
-            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>")
+            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br> <form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
             points.push(marker)
           }
         }
@@ -1342,12 +1034,14 @@ function plotC(){
                 'lat':parseFloat('{{i.latitude}}'),'lng':parseFloat('{{i.longitude}}'),'Institute_Name':'{{i.institutenameenglish}}','institutecode':'{{i.institutecode}}','address':'{{i.instituteaddressenglish}}','pincode':'{{i.institutepin}}','institute_emailid':'{{i.instituteemailid}}','Principal_Name':'{{i.principalnameenglish}}','Principal_Phone_Number':'{{i.principalofficephoneno}}','institute_stdcode':'{{i.institutestdcode}}','Establisment_Year':'{{i.instituteestablishmentyear}}','Website':'{{i.institutewebaddress}}','region':'{{i.regionname}}','district':'{{i.districtname}}','taluka':'{{i.talukaname}}','status':'{{i.institutestatus}}','lettergrade':'{{i.lettergrade}}','Institue_Minority':'{{i.institutestatusminority}}','Institue_Autonomy':'{{i.institutestatusautonomy}}','status':'{{i.institutestatus}}','girlshostelcapacitytotal':'{{i.girlshostelcapacitytotal}}','boyshostelcapacitytotal':'{{i.boyshostelcapacitytotal}}','nacc_status':'{{i.naccstatus}}',
                 }
             }
-            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>")
+            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
             points.push(marker)
           }
         }
         '{% endfor %}'
         m=false;
+      document.getElementById('Minority').selectedIndex='SelectState'
+
 
       }else{
         var l=points.slice(0);
@@ -1387,7 +1081,7 @@ function plotC(){
                 'lat':parseFloat('{{i.latitude}}'),'lng':parseFloat('{{i.longitude}}'),'Institute_Name':'{{i.institutenameenglish}}','institutecode':'{{i.institutecode}}','address':'{{i.instituteaddressenglish}}','pincode':'{{i.institutepin}}','institute_emailid':'{{i.instituteemailid}}','Principal_Name':'{{i.principalnameenglish}}','Principal_Phone_Number':'{{i.principalofficephoneno}}','institute_stdcode':'{{i.institutestdcode}}','Establisment_Year':'{{i.instituteestablishmentyear}}','Website':'{{i.institutewebaddress}}','region':'{{i.regionname}}','district':'{{i.districtname}}','taluka':'{{i.talukaname}}','status':'{{i.institutestatus}}','lettergrade':'{{i.lettergrade}}','Institue_Minority':'{{i.institutestatusminority}}','Institue_Autonomy':'{{i.institutestatusautonomy}}','status':'{{i.institutestatus}}','girlshostelcapacitytotal':'{{i.girlshostelcapacitytotal}}','boyshostelcapacitytotal':'{{i.boyshostelcapacitytotal}}','nacc_status':'{{i.naccstatus}}',
                 }
             }
-            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>")
+            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
             points.push(marker)
           }
         }
@@ -1420,24 +1114,9 @@ function plotC(){
     }
 
     if(cl){
+ 
       if(points.length==0){
         rePlot()
-        // '{% for i in courselevelengg %}'
-        // if(courselevel=='{{i.courselevelname}}'){
-        //   console.log('{{i.courselevelname}}')
-        //   if('{{i.latitude}}'!='None'){
-        //     marker = L.marker([parseFloat('{{i.latitude}}'),parseFloat('{{i.longitude}}')])
-        //     marker.addTo(mymap)
-        //     marker.feature={
-        //       properties:{
-        //         'lat':parseFloat('{{i.latitude}}'),'lng':parseFloat('{{i.longitude}}'),'Institute_Name':'{{i.institutenameenglish}}','institutecode':'{{i.institutecode}}','address':'{{i.instituteaddressenglish}}','pincode':'{{i.institutepin}}','institute_emailid':'{{i.instituteemailid}}','Principal_Name':'{{i.principalnameenglish}}','Principal_Phone_Number':'{{i.principalofficephoneno}}','institute_stdcode':'{{i.institutestdcode}}','Establisment_Year':'{{i.instituteestablishmentyear}}','Website':'{{i.institutewebaddress}}','region':'{{i.regionname}}','district':'{{i.districtname}}','taluka':'{{i.talukaname}}','status':'{{i.institutestatus}}','lettergrade':'{{i.lettergrade}}','Institue_Minority':'{{i.institutestatusminority}}','Institue_Autonomy':'{{i.institutestatusautonomy}}','status':'{{i.institutestatus}}','girlshostelcapacitytotal':'{{i.girlshostelcapacitytotal}}','boyshostelcapacitytotal':'{{i.boyshostelcapacitytotal}}','nacc_status':'{{i.naccstatus}}',
-        //         }
-        //     }
-        //     marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>")
-        //     points.push(marker)
-        //   }
-        // }
-        // '{% endfor %}'
         fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Acourse_level&outputFormat=application%2Fjson')
         .then(result=>result.json())
         .then((output)=>{
@@ -1449,15 +1128,12 @@ function plotC(){
               // console.log(e.properties.latitude)
               marker = L.marker([e.properties.latitude,e.properties.longitude])
               marker.addTo(mymap)
-              
               marker.feature={
                 properties:{
                   'lat':e.properties.latitude,'lng':e.properties.longitude,'Institute_Name':e.properties.instituten,'institutecode':e.properties.institutec,'address':e.properties.institutea,'pincode':e.properties.institutepi,'institute_emailid':e.properties.institut_2,'Principal_Name':e.properties.principaln,'Principal_Phone_Number':e.properties.principalo,'institute_stdcode':e.properties.institutes,'Establisment_Year':e.properties.institutee,'Website':e.properties.institutew,'region':e.properties.regionname,'district':e.properties.districtna,'taluka':e.properties.talukaname,'status':e.properties.institut_3,'lettergrade':e.properties.lettergrad,'Institue_Minority':e.properties.institut_5,'Institue_Autonomy':e.properties.institut_4,'girlshostelcapacitytotal':e.properties.girlshoste,'boyshostelcapacitytotal':e.properties.boyshostel,'nacc_status':e.properties.naccstatus,
                   }
               }
-              marker.bindPopup(`<div>Institute Name: ${e.properties.instituten}<br> institutecode: ${e.properties.institutec}<br> regionname: ${e.properties.regionname} <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>`)
-
-              // marker.bindPopup(`<div>Institute Name: ${e.properties.instituten}<br> institutecode: ${e.properties.institutec}<br> regionname: ${e.properties.regionname} <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>`)
+              marker.bindPopup(`<div>Institute Name: ${e.properties.instituten}<br> institutecode: ${e.properties.institutec}<br> regionname: ${e.properties.regionname} <br>talukaname: ${e.properties.talukaname}<br>  districtname: ${e.properties.districtna}<br>institute_address: ${e.properties.institutea} <br> institute_pincode: ${e.properties.institutepi} <br>institute website: <a href="https://'{feature.properties.institutew}">${e.properties.institutew}</a> <br> institute mail: ${e.properties.institut_2} <br>principal name: ${e.properties.principaln} <br> principal number: ${e.properties.principalo} <br> institute_establishment_year: ${e.properties.institutee}<br>  longitude: ${e.properties.longitude} <br> latitude : ${e.properties.latitude} <br> boyshostelcapacitytotal: ${e.properties.boyshostel} <br> girlshostelcapacitytotal: ${e.properties.girlshoste} <br>institutestatus: ${e.properties.institut_3}<br>Institue_Autonomy: ${e.properties.institut_4} <br> Institue_Minority: ${e.properties.institut_5}<br> naacstatus: ${e.properties.naccstatus}<br>  lettergrad: ${e.properties.lettergrad}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
               points.push(marker)
               
             }
@@ -1465,56 +1141,42 @@ function plotC(){
 
             // console.log(e)
           })
-          // collegeLayer = L.geoJson(output,{
-          //   onEachFeature: function(feature, layer){
-          //     layer.bindPopup(`<div>Institute Name: ${feature.properties.instituten}<br> institutecode: ${feature.properties.institutec}<br> regionname: ${feature.properties.regionname} <br>talukaname: ${feature.properties.talukaname}<br>  institute address: ${feature.properties.institutea} <br> institute pincode: ${feature.properties.institutep} <br>institute website: <a href="https://'{feature.properties.institutew}"> ${feature.properties.institutew}</a><br> institute mail: ${feature.properties.institut_1} <br>principal name: ${feature.properties.principaln} <br> principal number: ${feature.properties.principalo} <br> institute_establishment_year: ${feature.properties.institutee} <br>  longitude: ${feature.properties.longitude} <br> latitude : ${feature.properties.latitude} <br> boyshostel: ${feature.properties.boyshostel} <br> girlshostel: ${feature.properties.girlshoste} <br>institut_2: ${feature.properties.institut_2}<br>institut_3: ${feature.properties.institut_3} <br> institut_4: ${feature.properties.institut_4}<br> naacstatus: ${feature.properties.naacstatus}<br>  lettergrad: ${feature.properties.lettergrad}</div>`)
-          //   },
-          //   filter:function(feature,layer){
-          //     // console.log(`${feature.properties.talukanam}:${TalukaSelected}`)
-          //     properties=feature.properties;
-          //     return feature.properties.regionname == region;
-          //   }
-          // })
-          // console.log(collegeLayer)
-          // collegeLayer.addTo(mymap)
+
         })
+      
 
       }else{
-        // var l=points.slice(0);
-        // rePlot()
-        // console.log(`lsize:${l.length}`)
-        // l.forEach(e=>{
-        //   console.log(`${status}`)
-        //   if(e.feature.properties.Course==Course){
-        //     console.log(e.feature.properties.district)
-        //     marker = L.marker([e.feature.properties.lat,e.feature.properties.lng])
-        //     marker.addTo(mymap)
-        //     marker.feature={
-        //       properties:{
-        //         'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutecode,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
-        //         }
-        //     }
-        //     marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
-        //     points.push(marker)
-        //   }
-        // })
-        // s=false;
-        var l = points.slice(0);
+    
+      var l = points.slice(0);
         rePlot()
         l.forEach(e=>{
 
+          '{% for i in cl %}'
+          if('{{ i.institutecode }}'==e.feature.properties.institutecode && courselevel=='{{ i.courselevelname }}'){
+            marker = L.marker([e.feature.properties.lat,e.feature.properties.lng])
+              marker.addTo(mymap)
+              marker.feature={
+                properties:{
+                  'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutecode,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
+                  }
+              }
+              marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{ i.institutecode }}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+              // marker.bindPopup(`<div>Institute Name: ${e1.properties.courseleve}<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>`)
+              points.push(marker)
+          }
+
+          '{% endfor %}'
+
+/*
           fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Acourse_level&outputFormat=application%2Fjson')
           .then(result=>result.json())
           .then((output)=>{
             // console.log(output)
             output.features.forEach(e1=>{
               // console.log(e.feature.properties.institutecode)
-          if(e.feature.properties.institutecode == e1.properties.institutec){
-            // console.log(e.properties.courseleve==courselevel)
-            if(e1.properties.courseleve==courselevel){
-              // console.log(e1.properties.courseleve==courselevel)
-            if(e1.properties.latitude!=null){
-              // console.log(e.properties.latitude)
+          //if(e.feature.properties.institutecode == e1.properties.institutec && e1.properties.courseleve==courselevel && e1.properties.latitude!=null){
+          if(e.feature.properties.institutecode == e1.properties.institutec && e1.properties.courseleve==courselevel && e1.properties.latitude!=null){
+            
               marker = L.marker([e1.properties.latitude,e1.properties.longitude])
               marker.addTo(mymap)
               marker.feature={
@@ -1522,27 +1184,26 @@ function plotC(){
                   'lat':e1.properties.latitude,'lng':e1.properties.longitude,'Institute_Name':e1.properties.instituten,'institutecode':e1.properties.institutec,'address':e1.properties.institutea,'pincode':e1.properties.institutepi,'institute_emailid':e1.properties.institut_2,'Principal_Name':e1.properties.principaln,'Principal_Phone_Number':e1.properties.principalo,'institute_stdcode':e1.properties.institutes,'Establisment_Year':e1.properties.institutee,'Website':e1.properties.institutew,'region':e1.properties.regionname,'district':e1.properties.districtna,'taluka':e1.properties.talukaname,'status':e1.properties.institut_3,'lettergrade':e1.properties.lettergrad,'Institue_Minority':e1.properties.institut_5,'Institue_Autonomy':e1.properties.institut_4,'girlshostelcapacitytotal':e1.properties.girlshoste,'boyshostelcapacitytotal':e1.properties.boyshostel,'nacc_status':e1.properties.naccstatus,
                   }
               }
-              marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
+              marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}<br><form method='POST' action='more'><input type='hidden' name='data' value='${e1.properties.institutec}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
               // marker.bindPopup(`<div>Institute Name: ${e1.properties.courseleve}<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>`)
               points.push(marker)
 
-            }
-          }
+            
+          
 
           }
   
             })
-          })
+          })*/
           
           
           // if(e.feature.properties.institutecode == ){}
         })
         console.log(points.length)
+        cl=false;
       }
       arr.shift()
-        document.getElementById('Course').selectedIndex='SelectState'
-    
-      
+        document.getElementById('Course').selectedIndex='SelectState'  
 
     }
 //new
@@ -1565,127 +1226,43 @@ function plotC(){
                   'lat':e.properties.latitude,'lng':e.properties.longitude,'Institute_Name':e.properties.instituten,'institutecode':e.properties.institutec,'address':e.properties.institutea,'pincode':e.properties.institutepi,'institute_emailid':e.properties.institut_2,'Principal_Name':e.properties.principaln,'Principal_Phone_Number':e.properties.principalo,'institute_stdcode':e.properties.institutes,'Establisment_Year':e.properties.institutee,'Website':e.properties.institutew,'region':e.properties.regionname,'district':e.properties.districtna,'taluka':e.properties.talukaname,'status':e.properties.institut_3,'lettergrade':e.properties.lettergrad,'Institue_Minority':e.properties.institut_5,'Institue_Autonomy':e.properties.institut_4,'girlshostelcapacitytotal':e.properties.girlshoste,'boyshostelcapacitytotal':e.properties.boyshostel,'nacc_status':e.properties.naccstatus,
                   }
               }
-              marker.bindPopup(`<div>Institute Name: ${e.properties.instituten}<br> institutecode: ${e.properties.institutec}<br> regionname: ${e.properties.regionname} <br>talukaname: ${e.properties.talukaname}<br>  districtname: ${e.properties.districtna}<br>institute_address: ${e.properties.institutea} <br> institute_pincode: ${e.properties.institutepi} <br>institute website: <a href="https://'{feature.properties.institutew}">${e.properties.institutew}</a> <br> institute mail: ${e.properties.institut_2} <br>principal name: ${e.properties.principaln} <br> principal number: ${e.properties.principalo} <br> institute_establishment_year: ${e.properties.institutee}<br>  longitude: ${e.properties.longitude} <br> latitude : ${e.properties.latitude} <br> boyshostelcapacitytotal: ${e.properties.boyshostel} <br> girlshostelcapacitytotal: ${e.properties.girlshoste} <br>institutestatus: ${e.properties.institut_3}<br>Institue_Autonomy: ${e.properties.institut_4} <br> Institue_Minority: ${e.properties.institut_5}<br> naacstatus: ${e.properties.naccstatus}<br>  lettergrad: ${e.properties.lettergrad}</div>`)
+              marker.bindPopup(`<div>Institute Name: ${e.properties.instituten}<br> institutecode: ${e.properties.institutec}<br> regionname: ${e.properties.regionname} <br>talukaname: ${e.properties.talukaname}<br>  districtname: ${e.properties.districtna}<br>institute_address: ${e.properties.institutea} <br> institute_pincode: ${e.properties.institutepi} <br>institute website: <a href="https://'{feature.properties.institutew}">${e.properties.institutew}</a> <br> institute mail: ${e.properties.institut_2} <br>principal name: ${e.properties.principaln} <br> principal number: ${e.properties.principalo} <br> institute_establishment_year: ${e.properties.institutee}<br>  longitude: ${e.properties.longitude} <br> latitude : ${e.properties.latitude} <br> boyshostelcapacitytotal: ${e.properties.boyshostel} <br> girlshostelcapacitytotal: ${e.properties.girlshoste} <br>institutestatus: ${e.properties.institut_3}<br>Institue_Autonomy: ${e.properties.institut_4} <br> Institue_Minority: ${e.properties.institut_5}<br> naacstatus: ${e.properties.naccstatus}<br>  lettergrad: ${e.properties.lettergrad}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e1.properties.institutec}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
               points.push(marker)
               
             }
           }
 
-            // console.log(e)
+           
           })
-          // collegeLayer = L.geoJson(output,{
-          //   onEachFeature: function(feature, layer){
-          //     layer.bindPopup(`<div>Institute Name: ${feature.properties.instituten}<br> institutecode: ${feature.properties.institutec}<br> regionname: ${feature.properties.regionname} <br>talukaname: ${feature.properties.talukaname}<br>  institute address: ${feature.properties.institutea} <br> institute pincode: ${feature.properties.institutep} <br>institute website: <a href="https://'{feature.properties.institutew}"> ${feature.properties.institutew}</a><br> institute mail: ${feature.properties.institut_1} <br>principal name: ${feature.properties.principaln} <br> principal number: ${feature.properties.principalo} <br> institute_establishment_year: ${feature.properties.institutee} <br>  longitude: ${feature.properties.longitude} <br> latitude : ${feature.properties.latitude} <br> boyshostel: ${feature.properties.boyshostel} <br> girlshostel: ${feature.properties.girlshoste} <br>institut_2: ${feature.properties.institut_2}<br>institut_3: ${feature.properties.institut_3} <br> institut_4: ${feature.properties.institut_4}<br> naacstatus: ${feature.properties.naacstatus}<br>  lettergrad: ${feature.properties.lettergrad}</div>`)
-          //   },
-          //   filter:function(feature,layer){
-          //     // console.log(`${feature.properties.talukanam}:${TalukaSelected}`)
-          //     properties=feature.properties;
-          //     return feature.properties.regionname == region;
-          //   }
-          // })
-          // console.log(collegeLayer)
-          // collegeLayer.addTo(mymap)
         })
+        document.getElementById('Program').selectedIndex='SelectState'
       
 
       }else{
-        // var l=points.slice(0);
-        // rePlot()
-        // console.log(`lsize:${l.length}`)
-        // l.forEach(e=>{
-        //   console.log(`${Program}`)
-        //   if(e.feature.properties.Program==Program){
-        //     console.log(e.feature.properties.district)
-        //     marker = L.marker([e.feature.properties.lat,e.feature.properties.lng])
-        //     marker.addTo(mymap)
-        //     marker.feature={
-        //       properties:{
-        //         'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutecode,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
-        //         }
-        //     }
-        //     marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
-        //     points.push(marker)
-        //   }
-        // })
-        // s=false;
-      //   var l = points.slice(0);
-      //   rePlot()
-      //   l.forEach(e=>{
-
-      //     fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Aprogram_name_mahaengg&outputFormat=application%2Fjson')
-      //     .then(result=>result.json())
-      //     .then((output)=>{
-      //       // console.log(output)
-      //       output.features.forEach(e1=>{
-      //         // console.log(e.feature.properties.institutecode)
-      //     if(e.feature.properties.institutecode == e1.properties.institutec){
-      //       // console.log(e.properties.courseleve==courselevel)
-      //       if(e1.properties.programnam==programm){
-      //         // console.log(e1.properties.courseleve==courselevel)
-      //       if(e1.properties.latitude!=null){
-      //         // console.log(e.properties.latitude)
-      //         marker = L.marker([e1.properties.latitude,e1.properties.longitude])
-      //         marker.addTo(mymap)
-      //         marker.feature={
-      //           properties:{
-      //             'lat':e1.properties.latitude,'lng':e1.properties.longitude,'Institute_Name':e1.properties.instituten,'institutecode':e1.properties.institutec,'address':e1.properties.institutea,'pincode':e1.properties.institutepi,'institute_emailid':e1.properties.institut_2,'Principal_Name':e1.properties.principaln,'Principal_Phone_Number':e1.properties.principalo,'institute_stdcode':e1.properties.institutes,'Establisment_Year':e1.properties.institutee,'Website':e1.properties.institutew,'region':e1.properties.regionname,'district':e1.properties.districtna,'taluka':e1.properties.talukaname,'status':e1.properties.institut_3,'lettergrade':e1.properties.lettergrad,'Institue_Minority':e1.properties.institut_5,'Institue_Autonomy':e1.properties.institut_4,'girlshostelcapacitytotal':e1.properties.girlshoste,'boyshostelcapacitytotal':e1.properties.boyshostel,'nacc_status':e1.properties.naccstatus,
-      //             }
-      //         }
-      //         marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
-      //         // marker.bindPopup(`<div>Institute Name: ${e1.properties.courseleve}<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>`)
-      //         points.push(marker)
-
-      //       }
-      //     }
-
-      //     }
-  
-      //       })
-      //     })
-          
-          
-      //     // if(e.feature.properties.institutecode == ){}
-      //   })
-      //   console.log(points.length)
+       
       var l = points.slice(0);
         rePlot()
         l.forEach(e=>{
 
-          fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Aprogram_name_mahaengg&outputFormat=application%2Fjson')
-          .then(result=>result.json())
-          .then((output)=>{
-            // console.log(output)
-            output.features.forEach(e1=>{
-              // console.log(e.feature.properties.institutecode)
-          if(e.feature.properties.institutecode == e1.properties.institutec){
-            // console.log(e.properties.courseleve==courselevel)
-            if(e1.properties.programnam==programm){
-              // console.log(e1.properties.courseleve==courselevel)
-            if(e1.properties.latitude!=null){
-              // console.log(e.properties.latitude)
-              marker = L.marker([e1.properties.latitude,e1.properties.longitude])
+          '{% for i in p %}'
+          if('{{ i.institutecode }}'==e.feature.properties.institutecode && programm=='{{ i.programname }}'){
+            marker = L.marker([e.feature.properties.lat,e.feature.properties.lng])
               marker.addTo(mymap)
               marker.feature={
                 properties:{
-                  'lat':e1.properties.latitude,'lng':e1.properties.longitude,'Institute_Name':e1.properties.instituten,'institutecode':e1.properties.institutec,'address':e1.properties.institutea,'pincode':e1.properties.institutepi,'institute_emailid':e1.properties.institut_2,'Principal_Name':e1.properties.principaln,'Principal_Phone_Number':e1.properties.principalo,'institute_stdcode':e1.properties.institutes,'Establisment_Year':e1.properties.institutee,'Website':e1.properties.institutew,'region':e1.properties.regionname,'district':e1.properties.districtna,'taluka':e1.properties.talukaname,'status':e1.properties.institut_3,'lettergrade':e1.properties.lettergrad,'Institue_Minority':e1.properties.institut_5,'Institue_Autonomy':e1.properties.institut_4,'girlshostelcapacitytotal':e1.properties.girlshoste,'boyshostelcapacitytotal':e1.properties.boyshostel,'nacc_status':e1.properties.naccstatus,
+                  'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutecode,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
                   }
               }
-              marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
-              // marker.bindPopup(`<div>Institute Name: ${e1.properties.courseleve}<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>`)
+              marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{ i.institutecode }}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
               points.push(marker)
-
-            }
           }
 
-          }
-  
-            })
-          })
+          '{% endfor %}'
           
           
-          // if(e.feature.properties.institutecode == ){}
         })
         console.log(points.length)
+        p=false;
       }
       
       arr.shift()
@@ -1695,13 +1272,15 @@ function plotC(){
     }
 
     if(cn){
+      
       if(points.length==0){
+        rePlot()
         fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Acourse_name_mahaengg&outputFormat=application%2Fjson')
         .then(result=>result.json())
         .then((output)=>{
           // console.log(output)
           output.features.forEach(e=>{
-            console.log(e.properties.coursename==coursename)
+            console.log(e.properties.regionname==region)
             if(e.properties.coursename==coursename){
             if(e.properties.latitude!=null){
               // console.log(e.properties.latitude)
@@ -1712,91 +1291,39 @@ function plotC(){
                   'lat':e.properties.latitude,'lng':e.properties.longitude,'Institute_Name':e.properties.instituten,'institutecode':e.properties.institutec,'address':e.properties.institutea,'pincode':e.properties.institutepi,'institute_emailid':e.properties.institut_2,'Principal_Name':e.properties.principaln,'Principal_Phone_Number':e.properties.principalo,'institute_stdcode':e.properties.institutes,'Establisment_Year':e.properties.institutee,'Website':e.properties.institutew,'region':e.properties.regionname,'district':e.properties.districtna,'taluka':e.properties.talukaname,'status':e.properties.institut_3,'lettergrade':e.properties.lettergrad,'Institue_Minority':e.properties.institut_5,'Institue_Autonomy':e.properties.institut_4,'girlshostelcapacitytotal':e.properties.girlshoste,'boyshostelcapacitytotal':e.properties.boyshostel,'nacc_status':e.properties.naccstatus,
                   }
               }
-              marker.bindPopup(`<div>Institute Name: ${e.properties.instituten}<br> institutecode: ${e.properties.institutec}<br> regionname: ${e.properties.regionname} <br>talukaname: ${e.properties.talukaname}<br>  districtname: ${e.properties.districtna}<br>institute_address: ${e.properties.institutea} <br> institute_pincode: ${e.properties.institutepi} <br>institute website: <a href="https://'{feature.properties.institutew}">${e.properties.institutew}</a> <br> institute mail: ${e.properties.institut_2} <br>principal name: ${e.properties.principaln} <br> principal number: ${e.properties.principalo} <br> institute_establishment_year: ${e.properties.institutee}<br>  longitude: ${e.properties.longitude} <br> latitude : ${e.properties.latitude} <br> boyshostelcapacitytotal: ${e.properties.boyshostel} <br> girlshostelcapacitytotal: ${e.properties.girlshoste} <br>institutestatus: ${e.properties.institut_3}<br>Institue_Autonomy: ${e.properties.institut_4} <br> Institue_Minority: ${e.properties.institut_5}<br> naacstatus: ${e.properties.naccstatus}<br>  lettergrad: ${e.properties.lettergrad}</div>`)
-              // marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>")
+              marker.bindPopup(`<div>Institute Name: ${e.properties.instituten}<br> institutecode: ${e.properties.institutec}<br> regionname: ${e.properties.regionname} <br>talukaname: ${e.properties.talukaname}<br>  districtname: ${e.properties.districtna}<br>institute_address: ${e.properties.institutea} <br> institute_pincode: ${e.properties.institutepi} <br>institute website: <a href="https://'{feature.properties.institutew}">${e.properties.institutew}</a> <br> institute mail: ${e.properties.institut_2} <br>principal name: ${e.properties.principaln} <br> principal number: ${e.properties.principalo} <br> institute_establishment_year: ${e.properties.institutee}<br>  longitude: ${e.properties.longitude} <br> latitude : ${e.properties.latitude} <br> boyshostelcapacitytotal: ${e.properties.boyshostel} <br> girlshostelcapacitytotal: ${e.properties.girlshoste} <br>institutestatus: ${e.properties.institut_3}<br>Institue_Autonomy: ${e.properties.institut_4} <br> Institue_Minority: ${e.properties.institut_5}<br> naacstatus: ${e.properties.naccstatus}<br>  lettergrad: ${e.properties.lettergrad}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e1.properties.institutec}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
               points.push(marker)
-
+              
             }
           }
 
-            // console.log(e)
           })
-          // collegeLayer = L.geoJson(output,{
-          //   onEachFeature: function(feature, layer){
-          //     layer.bindPopup(`<div>Institute Name: ${feature.properties.instituten}<br> institutecode: ${feature.properties.institutec}<br> regionname: ${feature.properties.regionname} <br>talukaname: ${feature.properties.talukaname}<br>  institute address: ${feature.properties.institutea} <br> institute pincode: ${feature.properties.institutep} <br>institute website: <a href="https://'{feature.properties.institutew}"> ${feature.properties.institutew}</a><br> institute mail: ${feature.properties.institut_1} <br>principal name: ${feature.properties.principaln} <br> principal number: ${feature.properties.principalo} <br> institute_establishment_year: ${feature.properties.institutee} <br>  longitude: ${feature.properties.longitude} <br> latitude : ${feature.properties.latitude} <br> boyshostel: ${feature.properties.boyshostel} <br> girlshostel: ${feature.properties.girlshoste} <br>institut_2: ${feature.properties.institut_2}<br>institut_3: ${feature.properties.institut_3} <br> institut_4: ${feature.properties.institut_4}<br> naacstatus: ${feature.properties.naacstatus}<br>  lettergrad: ${feature.properties.lettergrad}</div>`)
-          //   },
-          //   filter:function(feature,layer){
-          //     // console.log(`${feature.properties.talukanam}:${TalukaSelected}`)
-          //     properties=feature.properties;
-          //     return feature.properties.regionname == region;
-          //   }
-          // })
-          // console.log(collegeLayer)
-          // collegeLayer.addTo(mymap)
+
         })
-        
+      
 
       }else{
-        // var l=points.slice(0);
-        // rePlot()
-        // console.log(`lsize:${l.length}`)
-        // l.forEach(e=>{
-        //   console.log(`${CourseName}`)
-        //   if(e.feature.properties.coursename==coursename){
-        //     console.log(e.feature.properties.district)
-        //     marker = L.marker([e.feature.properties.lat,e.feature.properties.lng])
-        //     marker.addTo(mymap)
-        //     marker.feature={
-        //       properties:{
-        //         'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutecode,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
-        //         }
-        //     }
-        //     marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
-        //     points.push(marker)
-        //   }
-        // })
-        // s=false;
         var l = points.slice(0);
         rePlot()
         l.forEach(e=>{
+          var i=0;
+          '{% for i in cns %}'
 
-          fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Acourse_name_mahaengg&outputFormat=application%2Fjson')
-          .then(result=>result.json())
-          .then((output)=>{
-            // console.log(output)
-            output.features.forEach(e1=>{
-              // console.log(e.feature.properties.institutecode)
-          if(e.feature.properties.institutecode == e1.properties.institutec){
-            // console.log(e.properties.courseleve==courselevel)
-            if(e1.properties.coursename==coursename){
-              // console.log(e1.properties.courseleve==courselevel)
-            if(e1.properties.latitude!=null){
-              // console.log(e.properties.latitude)
-              marker = L.marker([e1.properties.latitude,e1.properties.longitude])
+            if(`{{ i.coursename }}`==coursename && '{{ i.institutecode }}'==e.feature.properties.institutecode){
+              console.log(`{{ i.coursename }}`==coursename)
+              marker = L.marker([e.feature.properties.lat,e.feature.properties.lng])
               marker.addTo(mymap)
               marker.feature={
                 properties:{
-                  'lat':e1.properties.latitude,'lng':e1.properties.longitude,'Institute_Name':e1.properties.instituten,'institutecode':e1.properties.institutec,'address':e1.properties.institutea,'pincode':e1.properties.institutepi,'institute_emailid':e1.properties.institut_2,'Principal_Name':e1.properties.principaln,'Principal_Phone_Number':e1.properties.principalo,'institute_stdcode':e1.properties.institutes,'Establisment_Year':e1.properties.institutee,'Website':e1.properties.institutew,'region':e1.properties.regionname,'district':e1.properties.districtna,'taluka':e1.properties.talukaname,'status':e1.properties.institut_3,'lettergrade':e1.properties.lettergrad,'Institue_Minority':e1.properties.institut_5,'Institue_Autonomy':e1.properties.institut_4,'girlshostelcapacitytotal':e1.properties.girlshoste,'boyshostelcapacitytotal':e1.properties.boyshostel,'nacc_status':e1.properties.naccstatus,
+                  'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutecode,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
                   }
               }
-              marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
-              // marker.bindPopup(`<div>Institute Name: ${e1.properties.courseleve}<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>`)
+              marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{ i.institutecode }}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
               points.push(marker)
-              
-
             }
-          }
-
-          }
-  
-            })
-          })
-          
-          
-          // if(e.feature.properties.institutecode == ){}
+          '{% endfor %}'
         })
-        console.log(points.length)
-      
+        cn=false;
       }
       arr.shift()
         document.getElementById('CourseName').selectedIndex='SelectState'
@@ -1829,163 +1356,25 @@ function rePlot(){
 
 
 
-function plotColleges(){
-
-console.log(TalukaSelected)
-  // collegeLayer = L.tileLayer.wms('https://geonode.communitygis.in/geoserver/geonode/wms',{
-  //   layers:'geonode:engineering_new',
-  //   format:'image/png',
-  //   transparent:'true',
-  //   cql_filter: `talukanam = "'Shegaon'"`,
-  // }).addTo(mymap)
-
-  fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Aengineering&outputFormat=application%2Fjson')
-    .then(result=>result.json())
-    .then((output)=>{
-      collegeLayer = L.geoJson(output,{
-        onEachFeature: function(feature, layer){
-          layer.bindPopup(`<div>Institute Name: ${feature.properties.instituten}<br> institutecode: ${feature.properties.institutec}<br> regionname: ${feature.properties.regionname} <br>talukaname: ${feature.properties.talukaname}<br>  institute address: ${feature.properties.institutea} <br> institute pincode: ${feature.properties.institutep} <br>institute website: <a href="https://'{feature.properties.institutew}"> ${feature.properties.institutew}</a><br> institute mail: ${feature.properties.institut_1} <br>principal name: ${feature.properties.principaln} <br> principal number: ${feature.properties.principalo} <br> institute_establishment_year: ${feature.properties.institutee} <br>  longitude: ${feature.properties.longitude} <br> latitude : ${feature.properties.latitude} <br> boyshostel: ${feature.properties.boyshostel} <br> girlshostel: ${feature.properties.girlshoste} <br>institut_2: ${feature.properties.institut_2}<br>institut_3: ${feature.properties.institut_3} <br> institut_4: ${feature.properties.institut_4}<br> naacstatus: ${feature.properties.naacstatus}<br>  lettergrad: ${feature.properties.lettergrad}</div>`)
-        },
-        filter:function(feature,layer){
-          // console.log(`${feature.properties.talukanam}:${TalukaSelected}`)
-          return feature.properties.talukaname == TalukaSelected;
-        }
-      })
-      collegeLayer.addTo(mymap)
-    })
-
-
-region = document.getElementById('inputRegion').value
-// console.log(region)
-district = document.getElementById('inputDistrict').value
-taluka = document.getElementById('inputTaluka').value
-autonomy = document.getElementById('Status').value
-minority = document.getElementById('Minority').value
-status = document.getElementById('InstituteStatus').value
-courselevel = document.getElementById('Course').value
-program = document.getElementById('Program').value
-coursename = document.getElementById('CourseName').value
-
-
-if(region!='SelectState'){
-  if(district=='SelectState' && autonomy=='SelectState' && minority=='SelectState' && status=='SelectState' && courselevel=='SelectState' && program=='SelectState' && coursename=='SelectState'){
-    console.log(`regioni:${region}`)
-    '{% for i in engg %}'
-    if(region=='{{ i.regionname }}'){
-      i=i+1
-      console.log(`{{ i.regionname }} +${i}`)
-      marker = L.marker([parseFloat('{{ i.latitude }}'),parseFloat('{{ i.longitude }}')])
-      marker.addTo(mymap)
-      points.push(marker);
-
-    }
-    '{% endfor %}'
-  }
-}
-
-if(district!='SelectState'){
-  if(region=='SelectState' && autonomy=='SelectState' && minority=='SelectState' && status=='SelectState' && courselevel=='SelectState' && program=='SelectState' && coursename=='SelectState'){
-
-    '{% for i in engg %}'
-    if(region=='{{ i.regionname }}'){
-      marker = L.marker([parseFloat('{{ i.latitude }}'),parseFloat('{{ i.longitude }}')])
-      marker.addTo(mymap)
-      points.push(marker);
-
-    }
-    '{% endfor %}'
-  }
-}
-
-if(taluka!='SelectState'){
-  if(region=='SelectState' && district=='choose' && autonomy=='SelectState' && minority=='SelectState' && status=='SelectState' && courselevel=='SelectState' && program=='SelectState' && coursename=='SelectState'){
-
-    '{% for i in engg %}'
-    if(taluka=='{{ i.talukaname }}'){
-      marker = L.marker([parseFloat('{{ i.latitude }}'),parseFloat('{{ i.longitude }}')])
-      marker.addTo(mymap)
-      // marker.bindPopup(`<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: ${feature.properties.regionname} <br>talukaname: ${feature.properties.talukaname}<br>  institute address: ${feature.properties.institutea} <br> institute pincode: ${feature.properties.institutep} <br>institute website: <a href="https://${feature.properties.institutew}"> ${feature.properties.institutew}</a><br> institute mail: ${feature.properties.institut_1} <br>principal name: ${feature.properties.principaln} <br> principal number: ${feature.properties.principalo} <br> institute_establishment_year: ${feature.properties.institutee} <br>  longitude: ${feature.properties.longitude} <br> latitude : ${feature.properties.latitude} <br> boyshostel: ${feature.properties.boyshostel} <br> girlshostel: ${feature.properties.girlshoste} <br>institut_2: ${feature.properties.institut_2}<br>institut_3: ${feature.properties.institut_3} <br> institut_4: ${feature.properties.institut_4}<br> naacstatus: ${feature.properties.naacstatus}<br>  lettergrad: ${feature.properties.lettergrad}</div>`)
-      points.push(marker);
-    }
-    '{% endfor %}'
-  }
-}
-
-if(autonomy!='SelectState'){
-  console.log(district)
-  if(region=='SelectState' && taluka=='SelectState' && district=='SelectState' && minority=='SelectState' && status=='SelectState' && courselevel=='SelectState' && program=='SelectState' && coursename=='SelectState'){
-    '{% for i in engg %}'
-    // console.log('{{ i.institutestatusautonomy }}')
-    if(autonomy=='{{ i.institutestatusautonomy }}'){
-      marker = L.marker([parseFloat('{{ i.latitude }}'),parseFloat('{{ i.longitude }}')])
-      marker.addTo(mymap)
-      // marker.bindPopup(`<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: ${feature.properties.regionname} <br>autonomy: ${feature.properties.talukaname}<br>  institute address: ${feature.properties.institutea} <br> institute pincode: ${feature.properties.institutep} <br>institute website: <a href="https://${feature.properties.institutew}"> ${feature.properties.institutew}</a><br> institute mail: ${feature.properties.institut_1} <br>principal name: ${feature.properties.principaln} <br> principal number: ${feature.properties.principalo} <br> institute_establishment_year: ${feature.properties.institutee} <br>  longitude: ${feature.properties.longitude} <br> latitude : ${feature.properties.latitude} <br> boyshostel: ${feature.properties.boyshostel} <br> girlshostel: ${feature.properties.girlshoste} <br>institut_2: ${feature.properties.institut_2}<br>institut_3: ${feature.properties.institut_3} <br> institut_4: ${feature.properties.institut_4}<br> naacstatus: ${feature.properties.naacstatus}<br>  lettergrad: ${feature.properties.lettergrad}</div>`)
-      points.push(marker);
-    }
-    '{% endfor %}'
-  }
-}
-
-if(minority!='SelectState'){
-  console.log(autonomy)
-  if(autonomy=='SelectState' && region=='SelectState' && taluka=='SelectState' && district=='SelectState' && status=='SelectState' && courselevel=='SelectState' && program=='SelectState' && coursename=='SelectState'){
-    '{% for i in engg %}'
-    if(minority=='{{ i.institutestatusminority }}'){
-      // console.log('{{ i.institutestatusautonomy }}')
-      marker = L.marker([parseFloat('{{ i.latitude }}'),parseFloat('{{ i.longitude }}')])
-      marker.addTo(mymap)
-      // marker.bindPopup(`<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: ${feature.properties.regionname} <br>autonomy: ${feature.properties.talukaname}<br>  institute address: ${feature.properties.institutea} <br> institute pincode: ${feature.properties.institutep} <br>institute website: <a href="https://${feature.properties.institutew}"> ${feature.properties.institutew}</a><br> institute mail: ${feature.properties.institut_1} <br>principal name: ${feature.properties.principaln} <br> principal number: ${feature.properties.principalo} <br> institute_establishment_year: ${feature.properties.institutee} <br>  longitude: ${feature.properties.longitude} <br> latitude : ${feature.properties.latitude} <br> boyshostel: ${feature.properties.boyshostel} <br> girlshostel: ${feature.properties.girlshoste} <br>institut_2: ${feature.properties.institut_2}<br>institut_3: ${feature.properties.institut_3} <br> institut_4: ${feature.properties.institut_4}<br> naacstatus: ${feature.properties.naacstatus}<br>  lettergrad: ${feature.properties.lettergrad}</div>`)
-      points.push(marker);
-    }
-    '{% endfor %}'
-  }
-}
-
-
-if(status!='SelectState'){
-  console.log(autonomy)
-  if(autonomy=='SelectState' && minority=='SelectState' && region=='SelectState' && taluka=='SelectState' && district=='SelectState' && courselevel=='SelectState' && program=='SelectState' && coursename=='SelectState'){
-    '{% for i in engg %}'
-    if(status=='{{ i.institutestatus }}'){
-      console.log('{{ i.institutestatus }}')
-      marker = L.marker([parseFloat('{{ i.latitude }}'),parseFloat('{{ i.longitude }}')])
-      marker.addTo(mymap)
-      // marker.bindPopup(`<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: ${feature.properties.regionname} <br>autonomy: ${feature.properties.talukaname}<br>  institute address: ${feature.properties.institutea} <br> institute pincode: ${feature.properties.institutep} <br>institute website: <a href="https://${feature.properties.institutew}"> ${feature.properties.institutew}</a><br> institute mail: ${feature.properties.institut_1} <br>principal name: ${feature.properties.principaln} <br> principal number: ${feature.properties.principalo} <br> institute_establishment_year: ${feature.properties.institutee} <br>  longitude: ${feature.properties.longitude} <br> latitude : ${feature.properties.latitude} <br> boyshostel: ${feature.properties.boyshostel} <br> girlshostel: ${feature.properties.girlshoste} <br>institut_2: ${feature.properties.institut_2}<br>institut_3: ${feature.properties.institut_3} <br> institut_4: ${feature.properties.institut_4}<br> naacstatus: ${feature.properties.naacstatus}<br>  lettergrad: ${feature.properties.lettergrad}</div>`)
-      points.push(marker);
-    }
-    '{% endfor %}'
-  }
-}
-
-if(courselevel!='SelectState'){
-  console.log(district)
-  if(autonomy=='SelectState' && minority=='SelectState' && region=='SelectState' && taluka=='SelectState' && district=='SelectState' && program=='SelectState' && coursename=='SelectState'){
-    '{% for i in cl %}'
-    if(courselevel=='{{ i.courselevel }}'){
-      console.log('{{ i.courselevel }}')
-      marker = L.marker([parseFloat('{{ i.latitude }}'),parseFloat('{{ i.longitude }}')])
-      marker.addTo(mymap)
-      // marker.bindPopup(`<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: ${feature.properties.regionname} <br>autonomy: ${feature.properties.talukaname}<br>  institute address: ${feature.properties.institutea} <br> institute pincode: ${feature.properties.institutep} <br>institute website: <a href="https://${feature.properties.institutew}"> ${feature.properties.institutew}</a><br> institute mail: ${feature.properties.institut_1} <br>principal name: ${feature.properties.principaln} <br> principal number: ${feature.properties.principalo} <br> institute_establishment_year: ${feature.properties.institutee} <br>  longitude: ${feature.properties.longitude} <br> latitude : ${feature.properties.latitude} <br> boyshostel: ${feature.properties.boyshostel} <br> girlshostel: ${feature.properties.girlshoste} <br>institut_2: ${feature.properties.institut_2}<br>institut_3: ${feature.properties.institut_3} <br> institut_4: ${feature.properties.institut_4}<br> naacstatus: ${feature.properties.naacstatus}<br>  lettergrad: ${feature.properties.lettergrad}</div>`)
-      points.push(marker);
-    }
-    '{% endfor %}'
-  }
-}
-
-
-}
 
 function clearMap(){
   mymap.setView([19.7515-1,75.7139-1], 4.2,  { animate: true } )
   if(wmsLayer) mymap.removeLayer(wmsLayer);
-  if(talukaLayer) mymap.removeLayer(talukaLayer);
+  if(talukaLayer) {
+    console.log("taluka")
+    mymap.removeLayer(talukaLayer);}
   if(districtLayer) mymap.removeLayer(districtLayer)
   if(collegeLayer) mymap.removeLayer(collegeLayer);
   if(regionlayer) mymap.removeLayer(regionlayer);
   
+  //document.getElementById('trickmarks').value=0
+  //circlec();
+
   points.forEach(element=>{
     mymap.removeLayer(element)
   })
+
+  points=[]
   if(c) mymap.removeLayer(c)
   if(myLoc) mymap.removeLayer(myLoc)
   region='SelectState'
@@ -1994,11 +1383,55 @@ function clearMap(){
   taluka='SelectState'
   minority='SelectState'
   status='SelectState'
+  course='SelectState'
+  programm='SelectState'
+  coursename='SelectState'
+
+
+  document.getElementById('inputRegion').selectedIndex='SelectState'
+  document.getElementById('inputDistrict').selectedIndex='choose'
+  document.getElementById('inputTaluka').selectedIndex='choose'
+  document.getElementById('Status').selectedIndex='SelectState'
+  document.getElementById('Minority').selectedIndex='SelectState'
+  document.getElementById('InstituteStatus').selectedIndex='SelectState'
+  document.getElementById('Course').selectedIndex='SelectState'
+  document.getElementById('Program').selectedIndex='SelectState'
+  document.getElementById('CourseName').selectedIndex='SelectState'
+
+  
+
   return;
   // if(DistrictSelected) mymap.removeLayer(DistrictSelected);
   // if(regionlayer) mymap.removeLayer(regionlayer);
 }
 
+var mang = false;
+var managementlayer; 
+function alll(){
+  if(!mang){
+    fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Aengg&outputFormat=application%2Fjson')
+    .then(result=>result.json())
+        .then((output)=>{
+          managementlayer = L.geoJson(output,{
+            onEachFeature: function(feature, layer){
+          layer.bindPopup(`<div>Institute Name: ${feature.properties.instituten}<br> institutecode: ${feature.properties.institutec}<br> regionname: ${feature.properties.regionname} <br>talukaname: ${feature.properties.talukaname}<br>  institute address: ${feature.properties.institutea} <br> institute pincode: ${feature.properties.institutep} <br>institute website: <a href="https://'{feature.properties.institutew}"> ${feature.properties.institutew}</a><br> institute mail: ${feature.properties.institut_1} <br>principal name: ${feature.properties.principaln} <br> principal number: ${feature.properties.principalo} <br> institute_establishment_year: ${feature.properties.institutee} <br>  longitude: ${feature.properties.longitude} <br> latitude : ${feature.properties.latitude} <br> boyshostel: ${feature.properties.boyshostel} <br> girlshostel: ${feature.properties.girlshoste} <br>institut_2: ${feature.properties.institut_2}<br>institut_3: ${feature.properties.institut_3} <br> institut_4: ${feature.properties.institut_4}<br> naacstatus: ${feature.properties.naccstatus}<br>  lettergrad: ${feature.properties.lettergrad}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${feature.properties.institutec}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+        },
+            // onEachFeature: function(feature, layer){
+            //   layer.bindPopup(`<div>Location of Observation: ${feature.properties.Location_o}<br>Model System: ${feature.properties.model_syst}<br>Flowering: ${feature.properties.details_2}</div>`)
+            // },
+          })
+          managementlayer.addTo(mymap)
+        })
+      console.log("hello")
+      mang = true;
+  }
+  else{
+    mymap.removeLayer(managementlayer);
+    mang = false;
+  }
+
+
+}
 var myLoc;
 var showL=false
 function getLocation() {
@@ -2024,10 +1457,10 @@ function getLocation() {
     document.getElementById('loc').innerHTML = 'Remove My Location';
     showL = true;
   }else{
-    mymap.removeLayer(marker)
+    mymap.removeLayer(myLoc)
     mymap.setView([19.076, 72.8777],5);
     document.getElementById('loc').innerHTML = 'Get My Location';
-    showL = false
+    showL = false;
   }
 
 
@@ -2071,6 +1504,7 @@ function getNearest(){
 })
 
 }
+
 
 </script>
 
