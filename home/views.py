@@ -1,4 +1,7 @@
 
+import code
+from secrets import choice
+from urllib.request import Request
 from django.shortcuts import render
 from .models import Combine,Coursename,Programname,Courselevel,EngineeringColleges4May,Engineering28May, master_course,master_institute
 from django.shortcuts import redirect
@@ -16,33 +19,19 @@ import csv
 cursor = connection.cursor()
 # Create your views here.
 def EnggIndia(request):
-    # coal = ProjectDetails.objects.all()
-    # enggdata=EngineeringColleges4May.objects.all()
     region = Engineering28May.objects.values('regionname').distinct()
     district = Engineering28May.objects.values('districtname').distinct()
     taluka = Engineering28May.objects.values('talukaname').distinct()
     minority = Engineering28May.objects.values('institutestatusminority').distinct()
     status = Engineering28May.objects.values('institutestatus').distinct()
     courselevel = master_course.objects.values('institutecode','courselevelname').distinct()
-    # print(courselevel)
+    cl = Courselevel.objects.all()
     program = master_course.objects.values('institutecode','programname').distinct()
+    p = Programname.objects.all()
     course = master_course.objects.values('institutecode','coursename').distinct()
-    
-    # combine= Combine.objects.values_list('institutecode','courselevelname','programname','coursename').distinct()
-    # print(courselevel)
-    # district = Engineering28May.objects.values('districtname').distinct()
-    # taluka = Engineering28May.objects.values('talukaname').distinct()
-    # print(colleges)
-    # s = Engineering28May.objects.raw('select * from engineering_28may')
-    # print(type(s))
-    # print(cursor.fetchall())
-    # return render(request, 'home/viewColleges.html',{'region':region,'district':district,'taluka':taluka})
+    cns = Coursename.objects.all()
     engg = Engineering28May.objects.all()
-    # courselevelengg = Courselevel.objects.all()
-    # programnameengg = Programname.objects.all()
-    # coursenameengg = Coursename.objects.all()
-    print(engg[0].institutewebaddress)
-    return render(request, 'home/viewColleges.html',{'district':district,'region':region,'engg':engg,'taluka':taluka,'minority':minority,'status':status, 'courselevel':courselevel,'program':program,'course':course})
+    return render(request, 'home/viewColleges.html',{'district':district,'region':region,'engg':engg,'taluka':taluka,'minority':minority,'status':status, 'courselevel':courselevel,'program':program,'course':course,'cl':cl,'p':p,'cns':cns})
 
 
 def engineering_colleges(request):
@@ -83,9 +72,18 @@ def college(request):
     if(request.method == 'POST'):
         t = request.POST["region"]
     district = Engineering28May.objects.filter(regionname=t).distinct('districtname')
-    queryset = Engineering28May.objects.all()
+    queryset = Engineering28May.objects.all().distinct()
 
     # print(queryset[0].institutecode.programname)
     # print(request.POST['region'])
     return render(request, 'home/viewColleges.html',{'region':region,'district':district,'t':queryset})
 
+@csrf_exempt
+def more(request):
+    print(request.POST['data'])
+    institutecode = (request.POST['data'])
+    code = Engineering28May.objects.values('institutecode').filter(institutecode=institutecode).distinct()
+    choice = master_course.objects.values('choicecode','coursename','coursedurationyear','programname','intakecurrentyear_aspergr').filter(institutecode=institutecode).distinct('coursename','programname','intakecurrentyear_aspergr','nbaaccreditation_status')
+    NBA = master_course.objects.values('nbaaccreditation_status').filter(institutecode=institutecode).distinct()
+    establishment = Engineering28May.objects.values('instituteestablishmentyear').filter(institutecode=institutecode).distinct()
+    return render(request, 'home/management.html',{'code':code,'choice':choice,'establishment':establishment,'NBA':NBA})
