@@ -12,6 +12,6 @@ urlpatterns = [
     # path('export/<int:proj_id>', views.export),
     # path('search',views.search, name='search')
     path('region',views.region,name = 'region'),
-    path('college',views.college,name = 'college')
-    
+    path('college',views.college,name = 'college'),
+    path('more',views.more,name='more')
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
