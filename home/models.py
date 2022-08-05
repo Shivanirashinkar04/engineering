@@ -17,6 +17,8 @@ class Engineering28May(models.Model):
     institutestdcode = models.CharField(max_length=254, blank=True, null=True)
     boyshostelcapacitytotal = models.BigIntegerField(blank=True, null=True)
     girlshostelcapacitytotal = models.BigIntegerField(blank=True, null=True)
+    instituteestablishmentyear =models.CharField(max_length=254,blank=True,null=True)
+    institutepin = models.CharField(max_length=254,blank=True,null=True)
     principalnameenglish = models.CharField(max_length=254, blank=True, null=True)
     principalofficephoneno = models.CharField(max_length=254, blank=True, null=True)
     institutestatus = models.CharField(max_length=254, blank=True, null=True)
@@ -196,6 +198,7 @@ class Programname(models.Model):
   
 # Create your models here.
 class Coursename(models.Model):
+    coursename=models.CharField(max_length=254)
     id = models.CharField(primary_key=True, max_length=20)
     geom = models.GeometryField(blank=True, null=True)
     institutecode = models.BigIntegerField(unique=True,blank=True, null=True)
@@ -218,8 +221,6 @@ class Coursename(models.Model):
     longitude = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     latitude = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     institutewebaddress = models.CharField(max_length=254)
-   
-    coursename=models.CharField(max_length=254)
 
     class Meta:
         managed = False
