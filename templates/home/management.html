@@ -1,0 +1,101 @@
+
+<!DOCTYPE html >
+<head>
+    <style>
+        table,th,td{
+            border: 2px solid white;
+            border-right: 2px solid white;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        th,td{
+            background-color: #96D4D4;
+            text-align: center;
+            font-size: 30px;
+        }
+       
+    </style>
+</head>
+<center><table border="1" >
+    
+        <tr>
+            
+            <th>
+                <h3>choicecode</h3> 
+            </th>
+            
+            <th>
+                <h3>coursename</h3>
+            </th>
+            <th>
+                <h3>coursedurationyear</h3>
+            </th>
+            <th>
+                <h3>programname</h3>
+            </th>
+            <th>
+               <h3>intake</h3> 
+            </th>       
+         
+        </tr>
+
+        
+        {% for i in choice %}
+        
+        <tr>
+            <td>
+                {{i.choicecode}}
+                
+            </td>
+            <td>
+                {{i.coursename}}
+                
+            </td>
+            <td>
+                {{i.coursedurationyear}}
+            </td>
+            <td>
+                {{i.programname}}
+            </td>
+            <td>
+                {{i.intakecurrentyear_aspergr}}
+            </td>
+            
+        </tr>
+           
+            {% endfor %}
+      
+
+    
+</table>
+   <br>
+   <br>   
+</center>
+<center>
+<table border="1">
+    <tr>
+        <th>
+            <h3>Establisment_Year</h3>
+        </th>
+        <th>
+            <h3>nbaaccreditation_status</h3>
+        </th>
+    
+    </tr>
+    {% for i in establishment %}
+    <tr>
+        <td>
+            {{i.instituteestablishmentyear}}
+        </td>
+        {% for i in NBA %}
+        <td>
+            {{i.nbaaccreditation_status}}
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+      
+</center>
+       
+    
