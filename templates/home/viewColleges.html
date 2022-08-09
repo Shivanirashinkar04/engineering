@@ -29,22 +29,10 @@
     width: 50%;
   }
 
-  .popupimage {
-    height: 200px;
-    width: 300px;
-    overflow: hidden;
-    border-radius: 50px;
-}
 #map_canvas {
     height: 100%;
     width: 100%;
     position: absolute
-}
-.leaflet-popup-content{
-    background: rgb(255 255 255 / 90%);
-    color: #000000;
-    width: auto;
-    font-size: 16px;
 }
 footer{
       position: relative;
@@ -59,8 +47,6 @@ footer{
 
 label{
     font-size: 15px;
-
-
 }
 .multiselect {
   width: 200px;
@@ -161,52 +147,6 @@ footer{
 #wardLdiv label {
   display: block;
 }
-.border {
-        padding: 6px 8px;
-        border-style: groove;
-        border-radius: 5px;
-        margin: 20px;
-
-    }
-
-
-    table,
-    th,
-    td {
-        border-bottom: 1px solid #ddd;
-        border-collapse: collapse;
-        padding: 2px 3px;
-        text-align: center;
-    }
-
-    th {
-        font-weight: bold;
-    }
-
-    tr:hover {
-        background-color: #c9dbe6;
-    }
-
-
-    .table {
-        border-collapse: collapse;
-        padding: 50px;
-        font-weight: bold;
-        /* background:rgba(191, 149, 233, 0.473); */
-    }
-    /* css to customize Leaflet default styles  */
-
-    .leaflet-popup-content-wrapper {
-        background: rgba(0, 0, 0, 0.4);
-        color: #ffffff;
-        width: auto;
-    }
-
-    .leaflet-popup-content {
-        font-weight: bold;
-        width: fit-content;
-        border: 2px;
-    }
 
     h6 {
         color: blue;
@@ -214,6 +154,11 @@ footer{
 /* For mobile phones: */
 [class*="col-"] {
   width: 100%;
+}
+
+tr{
+  border-bottom: 1px solid #dadada;
+  width: auto;
 }
 
 @media only screen and (min-width: 600px) {
@@ -278,25 +223,27 @@ footer{
 
     <div class="border">
 
-      <center><button type="button" class="btn btn-primary" onclick="alll()" style="background-color: #000009 ;align-content: center;z-index: auto;display: block;" >Maharashtra Colleges  </button></center>
+      <center><button type="button" class="btn btn-primary mt-2" onclick="alll()" style="background-color: #000009 ;align-content: center;z-index: auto;display: block;" >All Maharashtra Colleges  </button></center>
       <br>
       <div class="form-group col-md-5 multiselect">
         <label for="inputRegion">regionname</label>
         <select class="form-control" id="inputRegion" name="region" z-index="auto">
-                            <option value="SelectState">Select Region</option>
-                            
-                            {% for i in region %}
-                            <option value="{{i.regionname}}">{{i.regionname}}</option>
-                            {% endfor %}
+        <option value="SelectState">Select Region</option>
+        <option value="All">All</option>
+        
+        {% for i in region %}
+        <option value="{{i.regionname}}">{{i.regionname}}</option>
+        {% endfor %}
 
-
-                          </select>
+        </select>
       </div>
       <div class="form-group col-md-4 multiselect z-index:auto">
     <label for="inputDistrict">District</label>
     <select class="form-control" id="inputDistrict">
                         <option value="choose">Select District</option>
-                        <option value="Raigad">Raigad</option>
+                        <option value="All">All</option>
+
+                        <!--<option value="Raigad">Raigad</option>
                         <option value="Ratnagiri">Ratnagiri</option>
                         <option value="Sindhudurg">Sindhudurg</option>
                         <option value="mumbai_suburb">Mumbai Suburban District</option>
@@ -329,7 +276,7 @@ footer{
                         <option value="Pune">Pune</option>
                         <option value="Satara">Satara</option>
                         <option value="Sangli">Sangli</option>
-                        <option value="Kolhapur">Kolhapur</option>
+                        <option value="Kolhapur">Kolhapur</option>-->
                         {% for i in district %}
                         <option value="{{i.districtname}}">{{i.districtname}}</option>
                         {% endfor %}
@@ -343,6 +290,8 @@ footer{
       <label for="inputTaluka">Taluka</label>
       <select class="form-control" id="inputTaluka">
           <option value="choose">-- select one -- </option>
+          <option value="All">All</option>
+          
           {% for i in taluka %}
           <option value="{{i.talukaname}}">{{i.talukaname}}</option>
           {% endfor %}
@@ -498,6 +447,7 @@ var points = []
 var wmsLayer;
 var DistrictSelected;
 var regionlayer;
+var regionplot;
 var TalukaSelected;
 var collegeLayer;
 var talukaLayer;
@@ -516,10 +466,11 @@ $("#inputRegion").change(function(){
   //          cql_filter:`Region='${regionlayer}'`,
   //        });
   //        wmsLayer.addTo(mymap);
+  /*
         fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Amaharashtra_final_regions&outputFormat=application%2Fjson')
         .then(result=>result.json())
         .then((output)=>{
-          regionlayer = L.geoJson(output,{
+          regionplot = L.geoJson(output,{
             // onEachFeature: function(feature, layer){
             //   layer.bindPopup(`<div>Location of Observation: ${feature.properties.Location_o}<br>Model System: ${feature.properties.model_syst}<br>Flowering: ${feature.properties.details_2}</div>`)
             // },
@@ -527,9 +478,9 @@ $("#inputRegion").change(function(){
               return feature.properties.Region == regionlayer;
             }
           })
-          regionlayer.addTo(mymap)
-          mymap.fitBounds(regionlayer.getBounds())
-        })
+          regionplot.addTo(mymap)
+          mymap.fitBounds(regionplot.getBounds())
+        })*/
 
 
 
@@ -552,14 +503,18 @@ $("#inputRegion").change(function(){
     case "Nashik":
         optionsList = Nashik;
         break;
-
+    default:
+      optionsList = []
+      break;
 }
 
 
-  for(var i = 0; i < optionsList.length; i++){
-    htmlString = htmlString+"<option value='"+ optionsList[i] +"'>"+ optionsList[i] +"</option>";
+  if(optionsList.length!=0){
+    for(var i = 0; i < optionsList.length; i++){
+      htmlString = htmlString+"<option value='"+ optionsList[i] +"'>"+ optionsList[i] +"</option>";
+    }
+    $("#inputDistrict").html(htmlString);
   }
-  $("#inputDistrict").html(htmlString);
 
 });
 
@@ -744,14 +699,19 @@ $("#inputDistrict").change(function(){
     case "Kolhapur":
         optionsList = Kolhapur;
         break;
+    default:
+      optionsList = []
+      break;
 
 }
 
 // console.log(optionsList)
-  for(var i = 0; i < optionsList.length; i++){
+  if(optionsList.length!=0){
+    for(var i = 0; i < optionsList.length; i++){
     htmlString = htmlString+"<option value='"+ optionsList[i] +"'>"+ optionsList[i] +"</option>";
   }
   $("#inputTaluka").html(htmlString);
+}
 
 });
 
@@ -826,6 +786,8 @@ function plotC(){
   if(coursename!='SelectState') {
     cn=true;
     arr.push(coursename)
+  }if(region=='All' || districtt=='All' || taluka=='All'){
+    alll()
   }
 
   arr.forEach(e=>{
@@ -844,7 +806,8 @@ function plotC(){
                 }
             }
             // console.log('{{i}}')
-            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br> pincode: '{{i.institutepin}}'<br> districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}'  <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
+            //marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> Region: '{{i.regionname}}' <br>Taluka: '{{i.talukaname}}'<br> Pincode: '{{i.institutepin}}'<br> District: '{{i.districtname}}'<br>Address: '{{i.instituteaddressenglish}}'  <br>Institute Website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> Institute Mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
+            marker.bindPopup("<div><table><tr><th>Institute Name</th><td>{{i.institutenameenglish}}</td></tr><tr><th>Institute Code</th><td>{{i.institutecode}}</td></tr><tr><th>Region</th><td>{{i.regionname}}</td></tr><tr><th>District</th><td>{{i.districtname}}</td></tr><tr><th>Taluka</th><td>{{i.talukaname}}</td></tr><tr><th>Address</th><td>{{i.instituteaddressenglish}}</td></tr><tr><th>Pincode</th><td>{{i.institutepin}}</td></tr><tr><th>Website</th><td><a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a></td></tr><tr><th>Mail</th><td>{{i.instituteemailid}}</td></tr><tr><th>Status</th><td>{{i.institutestatus}}</td></tr><tr><th>Autonomy</th><td>{{i.institutestatusautonomy}}</td></tr><tr><th>Minority</th><td>{{i.institutestatusminority}}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
             points.push(marker)
             // points_data.push((parseFloat('{{i.latitude}}'),parseFloat('{{i.longitude}}')))
           }
@@ -858,20 +821,22 @@ function plotC(){
         l.forEach(e=>{
           // console.log(`dddd:${l.length}`)
           if(e.feature.properties.region==region){
-            console.log(e.feature.properties.lng)
             marker = L.marker([e.feature.properties.lat,e.feature.properties.lng])
+            console.log(e.feature.properties.lng)
             marker.addTo(mymap)
             marker.feature={
               properties:{
                 'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutepin,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
                 }
             }
-            marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.institutepin} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
+            marker.bindPopup(`<div><table><tr><th>Institute Name</th><td>${e.feature.properties.Institute_Name}</td></tr><tr><th>Institute Code</th><td>${e.feature.properties.institutecode}</td></tr><tr><th>Region</th><td>${e.feature.properties.region}</td></tr><tr><th>District</th><td>${e.feature.properties.district}</td></tr><tr><th>Taluka</th><td>${e.feature.properties.taluka}</td></tr><tr><th>Address</th><td>${e.feature.properties.address}</td></tr><tr><th>Pincode</th><td>${e.feature.properties.institutepin}</td></tr><tr><th>Website</th><td><a href='https://${e.feature.properties.Website}'>${e.feature.properties.Website}</a></td></tr><tr><th>Mail</th><td>${e.feature.properties.institute_emailid}</td></tr><tr><th>Status</th><td>${e.feature.properties.status}</td></tr><tr><th>Autonomy</th><td>${e.feature.properties.Institue_Autonomy}</td></tr><tr><th>Minority</th><td>${e.feature.properties.Institue_Minority}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.feature.properties.institutecode}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+            //marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> Institute Code: ${e.feature.properties.institutecode}<br> Region: ${e.feature.properties.region} <br>  District: ${e.feature.properties.district} <br>Taluka: ${e.feature.properties.taluka}<br>Address: ${e.feature.properties.address} <br> Pincode: ${e.feature.properties.institutepin} <br>Website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> Mail: ${e.feature.properties.institute_emailid} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.feature.properties.institutecode}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
             points.push(marker)
           }
         })
 
       }
+      r=false
     }
   
     if(d){
@@ -888,7 +853,8 @@ function plotC(){
                 'lat':parseFloat('{{i.latitude}}'),'lng':parseFloat('{{i.longitude}}'),'Institute_Name':'{{i.institutenameenglish}}','institutecode':'{{i.institutecode}}','address':'{{i.instituteaddressenglish}}','pincode':'{{i.institutepin}}','institute_emailid':'{{i.instituteemailid}}','Principal_Name':'{{i.principalnameenglish}}','Principal_Phone_Number':'{{i.principalofficephoneno}}','institute_stdcode':'{{i.institutestdcode}}','Establisment_Year':'{{i.instituteestablishmentyear}}','Website':'{{i.institutewebaddress}}','region':'{{i.regionname}}','district':'{{i.districtname}}','taluka':'{{i.talukaname}}','status':'{{i.institutestatus}}','lettergrade':'{{i.lettergrade}}','Institue_Minority':'{{i.institutestatusminority}}','Institue_Autonomy':'{{i.institutestatusautonomy}}','status':'{{i.institutestatus}}','girlshostelcapacitytotal':'{{i.girlshostelcapacitytotal}}','boyshostelcapacitytotal':'{{i.boyshostelcapacitytotal}}','nacc_status':'{{i.naccstatus}}',
                 }
             }
-            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
+            marker.bindPopup("<div><table><tr><th>Institute Name</th><td>{{i.institutenameenglish}}</td></tr><tr><th>Institute Code</th><td>{{i.institutecode}}</td></tr><tr><th>Region</th><td>{{i.regionname}}</td></tr><tr><th>District</th><td>{{i.districtname}}</td></tr><tr><th>Taluka</th><td>{{i.talukaname}}</td></tr><tr><th>Address</th><td>{{i.instituteaddressenglish}}</td></tr><tr><th>Pincode</th><td>{{i.institutepin}}</td></tr><tr><th>Website</th><td><a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a></td></tr><tr><th>Mail</th><td>{{i.instituteemailid}}</td></tr><tr><th>Status</th><td>{{i.institutestatus}}</td></tr><tr><th>Autonomy</th><td>{{i.institutestatusautonomy}}</td></tr><tr><th>Minority</th><td>{{i.institutestatusminority}}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
+            //marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
             points.push(marker)
   
           }
@@ -909,7 +875,8 @@ function plotC(){
                 'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutecode,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
                 }
             }
-            marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
+            marker.bindPopup(`<div><table><tr><th>Institute Name</th><td>${e.feature.properties.Institute_Name}</td></tr><tr><th>Institute Code</th><td>${e.feature.properties.institutecode}</td></tr><tr><th>Region</th><td>${e.feature.properties.region}</td></tr><tr><th>District</th><td>${e.feature.properties.district}</td></tr><tr><th>Taluka</th><td>${e.feature.properties.taluka}</td></tr><tr><th>Address</th><td>${e.feature.properties.address}</td></tr><tr><th>Pincode</th><td>${e.feature.properties.institutepin}</td></tr><tr><th>Website</th><td><a href='https://${e.feature.properties.Website}'>${e.feature.properties.Website}</a></td></tr><tr><th>Mail</th><td>${e.feature.properties.institute_emailid}</td></tr><tr><th>Status</th><td>${e.feature.properties.status}</td></tr><tr><th>Autonomy</th><td>${e.feature.properties.Institue_Autonomy}</td></tr><tr><th>Minority</th><td>${e.feature.properties.Institue_Minority}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.feature.properties.institutecode}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+            //marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
             points.push(marker)
           }
         })
@@ -931,7 +898,8 @@ function plotC(){
                 'lat':parseFloat('{{i.latitude}}'),'lng':parseFloat('{{i.longitude}}'),'Institute_Name':'{{i.institutenameenglish}}','institutecode':'{{i.institutecode}}','address':'{{i.instituteaddressenglish}}','pincode':'{{i.institutepin}}','institute_emailid':'{{i.instituteemailid}}','Principal_Name':'{{i.principalnameenglish}}','Principal_Phone_Number':'{{i.principalofficephoneno}}','institute_stdcode':'{{i.institutestdcode}}','Establisment_Year':'{{i.instituteestablishmentyear}}','Website':'{{i.institutewebaddress}}','region':'{{i.regionname}}','district':'{{i.districtname}}','taluka':'{{i.talukaname}}','status':'{{i.institutestatus}}','lettergrade':'{{i.lettergrade}}','Institue_Minority':'{{i.institutestatusminority}}','Institue_Autonomy':'{{i.institutestatusautonomy}}','status':'{{i.institutestatus}}','girlshostelcapacitytotal':'{{i.girlshostelcapacitytotal}}','boyshostelcapacitytotal':'{{i.boyshostelcapacitytotal}}','nacc_status':'{{i.naccstatus}}',
                 }
             }
-            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
+            marker.bindPopup("<div><table><tr><th>Institute Name</th><td>{{i.institutenameenglish}}</td></tr><tr><th>Institute Code</th><td>{{i.institutecode}}</td></tr><tr><th>Region</th><td>{{i.regionname}}</td></tr><tr><th>District</th><td>{{i.districtname}}</td></tr><tr><th>Taluka</th><td>{{i.talukaname}}</td></tr><tr><th>Address</th><td>{{i.instituteaddressenglish}}</td></tr><tr><th>Pincode</th><td>{{i.institutepin}}</td></tr><tr><th>Website</th><td><a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a></td></tr><tr><th>Mail</th><td>{{i.instituteemailid}}</td></tr><tr><th>Status</th><td>{{i.institutestatus}}</td></tr><tr><th>Autonomy</th><td>{{i.institutestatusautonomy}}</td></tr><tr><th>Minority</th><td>{{i.institutestatusminority}}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
+            //marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
           points.push(marker)
         }
         '{% endfor %}'
@@ -950,7 +918,8 @@ function plotC(){
                 'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutecode,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
                 }
             }
-            marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
+            marker.bindPopup(`<div><table><tr><th>Institute Name</th><td>${e.feature.properties.Institute_Name}</td></tr><tr><th>Institute Code</th><td>${e.feature.properties.institutecode}</td></tr><tr><th>Region</th><td>${e.feature.properties.region}</td></tr><tr><th>District</th><td>${e.feature.properties.district}</td></tr><tr><th>Taluka</th><td>${e.feature.properties.taluka}</td></tr><tr><th>Address</th><td>${e.feature.properties.address}</td></tr><tr><th>Pincode</th><td>${e.feature.properties.institutepin}</td></tr><tr><th>Website</th><td><a href='https://${e.feature.properties.Website}'>${e.feature.properties.Website}</a></td></tr><tr><th>Mail</th><td>${e.feature.properties.institute_emailid}</td></tr><tr><th>Status</th><td>${e.feature.properties.status}</td></tr><tr><th>Autonomy</th><td>${e.feature.properties.Institue_Autonomy}</td></tr><tr><th>Minority</th><td>${e.feature.properties.Institue_Minority}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.feature.properties.institutecode}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+            //marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
             points.push(marker)
           }
         })
@@ -961,15 +930,7 @@ function plotC(){
     }
 
     if(a){
-      // if(region=='SelectState' || districtt!='SelectState' || taluka!='SelectaState'){
-       
-        // points.forEach(
-        //   // if(){
 
-        //   // }
-        // )
-      // }else{
-        // console.log(points.length)
         if(points.length==0){
           rePlot()
         '{% for i in engg %}'
@@ -985,7 +946,8 @@ function plotC(){
             }
             
             marker.addTo(mymap)
-            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br> <form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
+            marker.bindPopup("<div><table><tr><th>Institute Name</th><td>{{i.institutenameenglish}}</td></tr><tr><th>Institute Code</th><td>{{i.institutecode}}</td></tr><tr><th>Region</th><td>{{i.regionname}}</td></tr><tr><th>District</th><td>{{i.districtname}}</td></tr><tr><th>Taluka</th><td>{{i.talukaname}}</td></tr><tr><th>Address</th><td>{{i.instituteaddressenglish}}</td></tr><tr><th>Pincode</th><td>{{i.institutepin}}</td></tr><tr><th>Website</th><td><a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a></td></tr><tr><th>Mail</th><td>{{i.instituteemailid}}</td></tr><tr><th>Status</th><td>{{i.institutestatus}}</td></tr><tr><th>Autonomy</th><td>{{i.institutestatusautonomy}}</td></tr><tr><th>Minority</th><td>{{i.institutestatusminority}}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
+            //marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br> <form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
             points.push(marker)
           }
         }
@@ -1006,7 +968,8 @@ function plotC(){
                 'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutecode,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
                 }
             }
-            marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
+            marker.bindPopup(`<div><table><tr><th>Institute Name</th><td>${e.feature.properties.Institute_Name}</td></tr><tr><th>Institute Code</th><td>${e.feature.properties.institutecode}</td></tr><tr><th>Region</th><td>${e.feature.properties.region}</td></tr><tr><th>District</th><td>${e.feature.properties.district}</td></tr><tr><th>Taluka</th><td>${e.feature.properties.taluka}</td></tr><tr><th>Address</th><td>${e.feature.properties.address}</td></tr><tr><th>Pincode</th><td>${e.feature.properties.institutepin}</td></tr><tr><th>Website</th><td><a href='https://${e.feature.properties.Website}'>${e.feature.properties.Website}</a></td></tr><tr><th>Mail</th><td>${e.feature.properties.institute_emailid}</td></tr><tr><th>Status</th><td>${e.feature.properties.status}</td></tr><tr><th>Autonomy</th><td>${e.feature.properties.Institue_Autonomy}</td></tr><tr><th>Minority</th><td>${e.feature.properties.Institue_Minority}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.feature.properties.institutecode}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+            //marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
             points.push(marker)
           }
         })
@@ -1034,7 +997,8 @@ function plotC(){
                 'lat':parseFloat('{{i.latitude}}'),'lng':parseFloat('{{i.longitude}}'),'Institute_Name':'{{i.institutenameenglish}}','institutecode':'{{i.institutecode}}','address':'{{i.instituteaddressenglish}}','pincode':'{{i.institutepin}}','institute_emailid':'{{i.instituteemailid}}','Principal_Name':'{{i.principalnameenglish}}','Principal_Phone_Number':'{{i.principalofficephoneno}}','institute_stdcode':'{{i.institutestdcode}}','Establisment_Year':'{{i.instituteestablishmentyear}}','Website':'{{i.institutewebaddress}}','region':'{{i.regionname}}','district':'{{i.districtname}}','taluka':'{{i.talukaname}}','status':'{{i.institutestatus}}','lettergrade':'{{i.lettergrade}}','Institue_Minority':'{{i.institutestatusminority}}','Institue_Autonomy':'{{i.institutestatusautonomy}}','status':'{{i.institutestatus}}','girlshostelcapacitytotal':'{{i.girlshostelcapacitytotal}}','boyshostelcapacitytotal':'{{i.boyshostelcapacitytotal}}','nacc_status':'{{i.naccstatus}}',
                 }
             }
-            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
+            marker.bindPopup("<div><table><tr><th>Institute Name</th><td>{{i.institutenameenglish}}</td></tr><tr><th>Institute Code</th><td>{{i.institutecode}}</td></tr><tr><th>Region</th><td>{{i.regionname}}</td></tr><tr><th>District</th><td>{{i.districtname}}</td></tr><tr><th>Taluka</th><td>{{i.talukaname}}</td></tr><tr><th>Address</th><td>{{i.instituteaddressenglish}}</td></tr><tr><th>Pincode</th><td>{{i.institutepin}}</td></tr><tr><th>Website</th><td><a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a></td></tr><tr><th>Mail</th><td>{{i.instituteemailid}}</td></tr><tr><th>Status</th><td>{{i.institutestatus}}</td></tr><tr><th>Autonomy</th><td>{{i.institutestatusautonomy}}</td></tr><tr><th>Minority</th><td>{{i.institutestatusminority}}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
+            //marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
             points.push(marker)
           }
         }
@@ -1057,7 +1021,8 @@ function plotC(){
                 'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutecode,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
                 }
             }
-            marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
+            marker.bindPopup(`<div><table><tr><th>Institute Name</th><td>${e.feature.properties.Institute_Name}</td></tr><tr><th>Institute Code</th><td>${e.feature.properties.institutecode}</td></tr><tr><th>Region</th><td>${e.feature.properties.region}</td></tr><tr><th>District</th><td>${e.feature.properties.district}</td></tr><tr><th>Taluka</th><td>${e.feature.properties.taluka}</td></tr><tr><th>Address</th><td>${e.feature.properties.address}</td></tr><tr><th>Pincode</th><td>${e.feature.properties.institutepin}</td></tr><tr><th>Website</th><td><a href='https://${e.feature.properties.Website}'>${e.feature.properties.Website}</a></td></tr><tr><th>Mail</th><td>${e.feature.properties.institute_emailid}</td></tr><tr><th>Status</th><td>${e.feature.properties.status}</td></tr><tr><th>Autonomy</th><td>${e.feature.properties.Institue_Autonomy}</td></tr><tr><th>Minority</th><td>${e.feature.properties.Institue_Minority}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.feature.properties.institutecode}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+            //marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
             points.push(marker)
           }
         })
@@ -1081,7 +1046,8 @@ function plotC(){
                 'lat':parseFloat('{{i.latitude}}'),'lng':parseFloat('{{i.longitude}}'),'Institute_Name':'{{i.institutenameenglish}}','institutecode':'{{i.institutecode}}','address':'{{i.instituteaddressenglish}}','pincode':'{{i.institutepin}}','institute_emailid':'{{i.instituteemailid}}','Principal_Name':'{{i.principalnameenglish}}','Principal_Phone_Number':'{{i.principalofficephoneno}}','institute_stdcode':'{{i.institutestdcode}}','Establisment_Year':'{{i.instituteestablishmentyear}}','Website':'{{i.institutewebaddress}}','region':'{{i.regionname}}','district':'{{i.districtname}}','taluka':'{{i.talukaname}}','status':'{{i.institutestatus}}','lettergrade':'{{i.lettergrade}}','Institue_Minority':'{{i.institutestatusminority}}','Institue_Autonomy':'{{i.institutestatusautonomy}}','status':'{{i.institutestatus}}','girlshostelcapacitytotal':'{{i.girlshostelcapacitytotal}}','boyshostelcapacitytotal':'{{i.boyshostelcapacitytotal}}','nacc_status':'{{i.naccstatus}}',
                 }
             }
-            marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
+            marker.bindPopup("<div><table><tr><th>Institute Name</th><td>{{i.institutenameenglish}}</td></tr><tr><th>Institute Code</th><td>{{i.institutecode}}</td></tr><tr><th>Region</th><td>{{i.regionname}}</td></tr><tr><th>District</th><td>{{i.districtname}}</td></tr><tr><th>Taluka</th><td>{{i.talukaname}}</td></tr><tr><th>Address</th><td>{{i.instituteaddressenglish}}</td></tr><tr><th>Pincode</th><td>{{i.institutepin}}</td></tr><tr><th>Website</th><td><a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a></td></tr><tr><th>Mail</th><td>{{i.instituteemailid}}</td></tr><tr><th>Status</th><td>{{i.institutestatus}}</td></tr><tr><th>Autonomy</th><td>{{i.institutestatusautonomy}}</td></tr><tr><th>Minority</th><td>{{i.institutestatusminority}}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
+            //marker.bindPopup("<div>Institute Name: '{{i.institutenameenglish}}'<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>")
             points.push(marker)
           }
         }
@@ -1103,7 +1069,8 @@ function plotC(){
                 'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutecode,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
                 }
             }
-            marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
+            marker.bindPopup(`<div><table><tr><th>Institute Name</th><td>${e.feature.properties.Institute_Name}</td></tr><tr><th>Institute Code</th><td>${e.feature.properties.institutecode}</td></tr><tr><th>Region</th><td>${e.feature.properties.region}</td></tr><tr><th>District</th><td>${e.feature.properties.district}</td></tr><tr><th>Taluka</th><td>${e.feature.properties.taluka}</td></tr><tr><th>Address</th><td>${e.feature.properties.address}</td></tr><tr><th>Pincode</th><td>${e.feature.properties.institutepin}</td></tr><tr><th>Website</th><td><a href='https://${e.feature.properties.Website}'>${e.feature.properties.Website}</a></td></tr><tr><th>Mail</th><td>${e.feature.properties.institute_emailid}</td></tr><tr><th>Status</th><td>${e.feature.properties.status}</td></tr><tr><th>Autonomy</th><td>${e.feature.properties.Institue_Autonomy}</td></tr><tr><th>Minority</th><td>${e.feature.properties.Institue_Minority}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.feature.properties.institutecode}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+            //marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}</div>`)
             points.push(marker)
           }
         })
@@ -1133,7 +1100,8 @@ function plotC(){
                   'lat':e.properties.latitude,'lng':e.properties.longitude,'Institute_Name':e.properties.instituten,'institutecode':e.properties.institutec,'address':e.properties.institutea,'pincode':e.properties.institutepi,'institute_emailid':e.properties.institut_2,'Principal_Name':e.properties.principaln,'Principal_Phone_Number':e.properties.principalo,'institute_stdcode':e.properties.institutes,'Establisment_Year':e.properties.institutee,'Website':e.properties.institutew,'region':e.properties.regionname,'district':e.properties.districtna,'taluka':e.properties.talukaname,'status':e.properties.institut_3,'lettergrade':e.properties.lettergrad,'Institue_Minority':e.properties.institut_5,'Institue_Autonomy':e.properties.institut_4,'girlshostelcapacitytotal':e.properties.girlshoste,'boyshostelcapacitytotal':e.properties.boyshostel,'nacc_status':e.properties.naccstatus,
                   }
               }
-              marker.bindPopup(`<div>Institute Name: ${e.properties.instituten}<br> institutecode: ${e.properties.institutec}<br> regionname: ${e.properties.regionname} <br>talukaname: ${e.properties.talukaname}<br>  districtname: ${e.properties.districtna}<br>institute_address: ${e.properties.institutea} <br> institute_pincode: ${e.properties.institutepi} <br>institute website: <a href="https://'{feature.properties.institutew}">${e.properties.institutew}</a> <br> institute mail: ${e.properties.institut_2} <br>principal name: ${e.properties.principaln} <br> principal number: ${e.properties.principalo} <br> institute_establishment_year: ${e.properties.institutee}<br>  longitude: ${e.properties.longitude} <br> latitude : ${e.properties.latitude} <br> boyshostelcapacitytotal: ${e.properties.boyshostel} <br> girlshostelcapacitytotal: ${e.properties.girlshoste} <br>institutestatus: ${e.properties.institut_3}<br>Institue_Autonomy: ${e.properties.institut_4} <br> Institue_Minority: ${e.properties.institut_5}<br> naacstatus: ${e.properties.naccstatus}<br>  lettergrad: ${e.properties.lettergrad}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{i.institutecode}}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+            marker.bindPopup(`<div><table><tr><th>Institute Name</th><td>${e.properties.instituten}</td></tr><tr><th>Institute Code</th><td>${e.properties.institutec}</td></tr><tr><th>Region</th><td>${e.properties.regionname}</td></tr><tr><th>District</th><td>${e.properties.districtna}</td></tr><tr><th>Taluka</th><td>${e.properties.talukaname}</td></tr><tr><th>Address</th><td>${e.properties.institutea}</td></tr><tr><th>Pincode</th><td>${e.properties.institutepi}</td></tr><tr><th>Website</th><td><a href='https://${e.properties.institutew}'>${e.properties.institutew}</a></td></tr><tr><th>Mail</th><td>${e.properties.institut_2}</td></tr><tr><th>Status</th><td>${e.properties.institut_3}</td></tr><tr><th>Autonomy</th><td>${e.properties.institut_4}</td></tr><tr><th>Minority</th><td>${e.properties.institut_5}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.properties.institutec}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+              //marker.bindPopup(`<div>Institute Name: ${e.properties.instituten}<br> institutecode: ${e.properties.institutec}<br> regionname: ${e.properties.regionname} <br>talukaname: ${e.properties.talukaname}<br>  districtname: ${e.properties.districtna}<br>institute_address: ${e.properties.institutea} <br> institute_pincode: ${e.properties.institutepi} <br>institute website: <a href="https://'{feature.properties.institutew}">${e.properties.institutew}</a> <br> institute mail: ${e.properties.institut_2} <br>principal name: ${e.properties.principaln} <br> principal number: <br> girlshostelcapacitytotal: ${e.properties.girlshoste} <br>institutestatus: ${e.properties.institut_3}<br>Institue_Autonomy: ${e.properties.institut_4} <br> Institue_Minority: ${e.properties.institut_5}<br> naacstatus: ${e.properties.naccstatus}<br>  lettergrad: ${e.properties.lettergrad}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.properties.institutec}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
               points.push(marker)
               
             }
@@ -1143,6 +1111,7 @@ function plotC(){
           })
 
         })
+        cl=false;
       
 
       }else{
@@ -1160,7 +1129,8 @@ function plotC(){
                   'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutecode,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
                   }
               }
-              marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{ i.institutecode }}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+            marker.bindPopup(`<div><table><tr><th>Institute Name</th><td>${e.feature.properties.Institute_Name}</td></tr><tr><th>Institute Code</th><td>${e.feature.properties.institutecode}</td></tr><tr><th>Region</th><td>${e.feature.properties.region}</td></tr><tr><th>District</th><td>${e.feature.properties.district}</td></tr><tr><th>Taluka</th><td>${e.feature.properties.taluka}</td></tr><tr><th>Address</th><td>${e.feature.properties.address}</td></tr><tr><th>Pincode</th><td>${e.feature.properties.institutepin}</td></tr><tr><th>Website</th><td><a href='https://${e.feature.properties.Website}'>${e.feature.properties.Website}</a></td></tr><tr><th>Mail</th><td>${e.feature.properties.institute_emailid}</td></tr><tr><th>Status</th><td>${e.feature.properties.status}</td></tr><tr><th>Autonomy</th><td>${e.feature.properties.Institue_Autonomy}</td></tr><tr><th>Minority</th><td>${e.feature.properties.Institue_Minority}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.feature.properties.institutecode}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+              //marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{ i.institutecode }}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
               // marker.bindPopup(`<div>Institute Name: ${e1.properties.courseleve}<br> institutecode: '{{i.institutecode}}'<br> regionname: '{{i.regionname}}' <br>talukaname: '{{i.talukaname}}'<br>  districtname: '{{i.districtname}}'<br>institute_address: '{{i.instituteaddressenglish}}' <br> institute_pincode: '{{i.institutepin}}' <br>institute website: <a href='https://{{i.institutewebaddress}}'>{{i.institutewebaddress}}</a> <br> institute mail: '{{i.instituteemailid}}' <br>principal name: '{{i.principalnameenglish}}' <br> principal number: '{{i.principalofficephoneno}}' <br> institute_establishment_year: '{{i.instituteestablishmentyear}}'<br>  longitude: '{{i.longitude}}' <br> latitude : '{{i.latitude}}' <br> boyshostelcapacitytotal: '{{i.boyshostelcapacitytotal}}' <br> girlshostelcapacitytotal: '{{i.girlshostelcapacitytotal}}' <br>institutestatus: '{{i.institutestatus}}'<br>Institue_Autonomy: '{{i.institutestatusautonomy}}' <br> Institue_Minority: '{{i.institutestatusminority}}'<br> naacstatus: '{{i.naccstatus}}'<br>  lettergrad: '{{i.lettergrade}}'</div>`)
               points.push(marker)
           }
@@ -1226,7 +1196,8 @@ function plotC(){
                   'lat':e.properties.latitude,'lng':e.properties.longitude,'Institute_Name':e.properties.instituten,'institutecode':e.properties.institutec,'address':e.properties.institutea,'pincode':e.properties.institutepi,'institute_emailid':e.properties.institut_2,'Principal_Name':e.properties.principaln,'Principal_Phone_Number':e.properties.principalo,'institute_stdcode':e.properties.institutes,'Establisment_Year':e.properties.institutee,'Website':e.properties.institutew,'region':e.properties.regionname,'district':e.properties.districtna,'taluka':e.properties.talukaname,'status':e.properties.institut_3,'lettergrade':e.properties.lettergrad,'Institue_Minority':e.properties.institut_5,'Institue_Autonomy':e.properties.institut_4,'girlshostelcapacitytotal':e.properties.girlshoste,'boyshostelcapacitytotal':e.properties.boyshostel,'nacc_status':e.properties.naccstatus,
                   }
               }
-              marker.bindPopup(`<div>Institute Name: ${e.properties.instituten}<br> institutecode: ${e.properties.institutec}<br> regionname: ${e.properties.regionname} <br>talukaname: ${e.properties.talukaname}<br>  districtname: ${e.properties.districtna}<br>institute_address: ${e.properties.institutea} <br> institute_pincode: ${e.properties.institutepi} <br>institute website: <a href="https://'{feature.properties.institutew}">${e.properties.institutew}</a> <br> institute mail: ${e.properties.institut_2} <br>principal name: ${e.properties.principaln} <br> principal number: ${e.properties.principalo} <br> institute_establishment_year: ${e.properties.institutee}<br>  longitude: ${e.properties.longitude} <br> latitude : ${e.properties.latitude} <br> boyshostelcapacitytotal: ${e.properties.boyshostel} <br> girlshostelcapacitytotal: ${e.properties.girlshoste} <br>institutestatus: ${e.properties.institut_3}<br>Institue_Autonomy: ${e.properties.institut_4} <br> Institue_Minority: ${e.properties.institut_5}<br> naacstatus: ${e.properties.naccstatus}<br>  lettergrad: ${e.properties.lettergrad}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e1.properties.institutec}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+            marker.bindPopup(`<div><table><tr><th>Institute Name</th><td>${e.properties.instituten}</td></tr><tr><th>Institute Code</th><td>${e.properties.institutec}</td></tr><tr><th>Region</th><td>${e.properties.regionname}</td></tr><tr><th>District</th><td>${e.properties.districtna}</td></tr><tr><th>Taluka</th><td>${e.properties.talukaname}</td></tr><tr><th>Address</th><td>${e.properties.institutea}</td></tr><tr><th>Pincode</th><td>${e.properties.institutepi}</td></tr><tr><th>Website</th><td><a href='https://${e.properties.institutew}'>${e.properties.institutew}</a></td></tr><tr><th>Mail</th><td>${e.properties.institut_2}</td></tr><tr><th>Status</th><td>${e.properties.institut_3}</td></tr><tr><th>Autonomy</th><td>${e.properties.institut_4}</td></tr><tr><th>Minority</th><td>${e.properties.institut_5}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.properties.institutec}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+              //marker.bindPopup(`<div>Institute Name: ${e.properties.instituten}<br> institutecode: ${e.properties.institutec}<br> regionname: ${e.properties.regionname} <br>talukaname: ${e.properties.talukaname}<br>  districtname: ${e.properties.districtna}<br>institute_address: ${e.properties.institutea} <br> institute_pincode: ${e.properties.institutepi} <br>institute website: <a href="https://'{feature.properties.institutew}">${e.properties.institutew}</a> <br> institute mail: ${e.properties.institut_2} <br>principal name: ${e.properties.principaln} <br> principal number: ${e.properties.principalo} <br> institute_establishment_year: ${e.properties.institutee}<br>  longitude: ${e.properties.longitude} <br> latitude : ${e.properties.latitude} <br> boyshostelcapacitytotal: ${e.properties.boyshostel} <br> girlshostelcapacitytotal: ${e.properties.girlshoste} <br>institutestatus: ${e.properties.institut_3}<br>Institue_Autonomy: ${e.properties.institut_4} <br> Institue_Minority: ${e.properties.institut_5}<br> naacstatus: ${e.properties.naccstatus}<br>  lettergrad: ${e.properties.lettergrad}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.properties.institutec}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
               points.push(marker)
               
             }
@@ -1236,7 +1207,7 @@ function plotC(){
           })
         })
         document.getElementById('Program').selectedIndex='SelectState'
-      
+      p=false;
 
       }else{
        
@@ -1253,7 +1224,8 @@ function plotC(){
                   'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutecode,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
                   }
               }
-              marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{ i.institutecode }}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+            marker.bindPopup(`<div><table><tr><th>Institute Name</th><td>${e.feature.properties.Institute_Name}</td></tr><tr><th>Institute Code</th><td>${e.feature.properties.institutecode}</td></tr><tr><th>Region</th><td>${e.feature.properties.region}</td></tr><tr><th>District</th><td>${e.feature.properties.district}</td></tr><tr><th>Taluka</th><td>${e.feature.properties.taluka}</td></tr><tr><th>Address</th><td>${e.feature.properties.address}</td></tr><tr><th>Pincode</th><td>${e.feature.properties.institutepin}</td></tr><tr><th>Website</th><td><a href='https://${e.feature.properties.Website}'>${e.feature.properties.Website}</a></td></tr><tr><th>Mail</th><td>${e.feature.properties.institute_emailid}</td></tr><tr><th>Status</th><td>${e.feature.properties.status}</td></tr><tr><th>Autonomy</th><td>${e.feature.properties.Institue_Autonomy}</td></tr><tr><th>Minority</th><td>${e.feature.properties.Institue_Minority}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.feature.properties.institutecode}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+              //marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{ i.institutecode }}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
               points.push(marker)
           }
 
@@ -1280,8 +1252,8 @@ function plotC(){
         .then((output)=>{
           // console.log(output)
           output.features.forEach(e=>{
-            console.log(e.properties.regionname==region)
-            if(e.properties.coursename==coursename){
+            console.log(coursename.includes(e.properties.coursename))
+            if(coursename.includes(e.properties.coursename)){
             if(e.properties.latitude!=null){
               // console.log(e.properties.latitude)
               marker = L.marker([e.properties.latitude,e.properties.longitude])
@@ -1291,7 +1263,8 @@ function plotC(){
                   'lat':e.properties.latitude,'lng':e.properties.longitude,'Institute_Name':e.properties.instituten,'institutecode':e.properties.institutec,'address':e.properties.institutea,'pincode':e.properties.institutepi,'institute_emailid':e.properties.institut_2,'Principal_Name':e.properties.principaln,'Principal_Phone_Number':e.properties.principalo,'institute_stdcode':e.properties.institutes,'Establisment_Year':e.properties.institutee,'Website':e.properties.institutew,'region':e.properties.regionname,'district':e.properties.districtna,'taluka':e.properties.talukaname,'status':e.properties.institut_3,'lettergrade':e.properties.lettergrad,'Institue_Minority':e.properties.institut_5,'Institue_Autonomy':e.properties.institut_4,'girlshostelcapacitytotal':e.properties.girlshoste,'boyshostelcapacitytotal':e.properties.boyshostel,'nacc_status':e.properties.naccstatus,
                   }
               }
-              marker.bindPopup(`<div>Institute Name: ${e.properties.instituten}<br> institutecode: ${e.properties.institutec}<br> regionname: ${e.properties.regionname} <br>talukaname: ${e.properties.talukaname}<br>  districtname: ${e.properties.districtna}<br>institute_address: ${e.properties.institutea} <br> institute_pincode: ${e.properties.institutepi} <br>institute website: <a href="https://'{feature.properties.institutew}">${e.properties.institutew}</a> <br> institute mail: ${e.properties.institut_2} <br>principal name: ${e.properties.principaln} <br> principal number: ${e.properties.principalo} <br> institute_establishment_year: ${e.properties.institutee}<br>  longitude: ${e.properties.longitude} <br> latitude : ${e.properties.latitude} <br> boyshostelcapacitytotal: ${e.properties.boyshostel} <br> girlshostelcapacitytotal: ${e.properties.girlshoste} <br>institutestatus: ${e.properties.institut_3}<br>Institue_Autonomy: ${e.properties.institut_4} <br> Institue_Minority: ${e.properties.institut_5}<br> naacstatus: ${e.properties.naccstatus}<br>  lettergrad: ${e.properties.lettergrad}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e1.properties.institutec}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+            marker.bindPopup(`<div><table><tr><th>Institute Name</th><td>${e.properties.instituten}</td></tr><tr><th>Institute Code</th><td>${e.properties.institutec}</td></tr><tr><th>Region</th><td>${e.properties.regionname}</td></tr><tr><th>District</th><td>${e.properties.districtna}</td></tr><tr><th>Taluka</th><td>${e.properties.talukaname}</td></tr><tr><th>Address</th><td>${e.properties.institutea}</td></tr><tr><th>Pincode</th><td>${e.properties.institutepi}</td></tr><tr><th>Website</th><td><a href='https://${e.properties.institutew}'>${e.properties.institutew}</a></td></tr><tr><th>Mail</th><td>${e.properties.institut_2}</td></tr><tr><th>Status</th><td>${e.properties.institut_3}</td></tr><tr><th>Autonomy</th><td>${e.properties.institut_4}</td></tr><tr><th>Minority</th><td>${e.properties.institut_5}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.properties.institutec}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+            //marker.bindPopup(`<div>Institute Name: ${e.properties.instituten}<br> institutecode: ${e.properties.institutec}<br> regionname: ${e.properties.regionname} <br>talukaname: ${e.properties.talukaname}<br>  districtname: ${e.properties.districtna}<br>institute_address: ${e.properties.institutea} <br> institute_pincode: ${e.properties.institutepi} <br>institute website: <a href="https://'{feature.properties.institutew}">${e.properties.institutew}</a> <br> institute mail: ${e.properties.institut_2} <br>principal name: ${e.properties.principaln} <br> principal number: ${e.properties.principalo} <br> institute_establishment_year: ${e.properties.institutee}<br>  longitude: ${e.properties.longitude} <br> latitude : ${e.properties.latitude} <br> boyshostelcapacitytotal: ${e.properties.boyshostel} <br> girlshostelcapacitytotal: ${e.properties.girlshoste} <br>institutestatus: ${e.properties.institut_3}<br>Institue_Autonomy: ${e.properties.institut_4} <br> Institue_Minority: ${e.properties.institut_5}<br> naacstatus: ${e.properties.naccstatus}<br>  lettergrad: ${e.properties.lettergrad}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.properties.institutec}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
               points.push(marker)
               
             }
@@ -1300,7 +1273,7 @@ function plotC(){
           })
 
         })
-      
+      cn=false;
 
       }else{
         var l = points.slice(0);
@@ -1318,7 +1291,8 @@ function plotC(){
                   'lat':e.feature.properties.lat,'lng':e.feature.properties.lng,'Institute_Name':e.feature.properties.Institute_Name,'institutecode':e.feature.properties.institutecode,'region':e.feature.properties.region,'Institue_Autonomy':e.feature.properties.Institue_Autonomy,'district':e.feature.properties.district,'taluka':e.feature.properties.taluka,'Institue_Minority':e.feature.properties.Institue_Minority,'status':e.feature.properties.status,'address':e.feature.properties.address,'nacc_status':e.feature.properties.nacc_status,'boyshostelcapacitytotal':e.feature.properties.boyshostelcapacitytotal,'girlshostelcapacitytotal':e.feature.properties.girlshostelcapacitytotal,'lettergrade':e.feature.properties.lettergrade,'Website':e.feature.properties.Website,'Establisment_Year':e.feature.properties.Establisment_Year,'pincode':e.feature.properties.pincode,'institute_stdcode':e.feature.properties.institute_stdcode,'Principal_Phone_Number':e.feature.properties.Principal_Phone_Number,'Principal_Name':e.feature.properties.Principal_Name,'institute_emailid':e.feature.properties.institute_emailid,'institutecode':e.feature.properties.institutecode,'Institute_Name':e.feature.properties.Institute_Name,
                   }
               }
-              marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{ i.institutecode }}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+            marker.bindPopup(`<div><table><tr><th>Institute Name</th><td>${e.feature.properties.Institute_Name}</td></tr><tr><th>Institute Code</th><td>${e.feature.properties.institutecode}</td></tr><tr><th>Region</th><td>${e.feature.properties.region}</td></tr><tr><th>District</th><td>${e.feature.properties.district}</td></tr><tr><th>Taluka</th><td>${e.feature.properties.taluka}</td></tr><tr><th>Address</th><td>${e.feature.properties.address}</td></tr><tr><th>Pincode</th><td>${e.feature.properties.institutepin}</td></tr><tr><th>Website</th><td><a href='https://${e.feature.properties.Website}'>${e.feature.properties.Website}</a></td></tr><tr><th>Mail</th><td>${e.feature.properties.institute_emailid}</td></tr><tr><th>Status</th><td>${e.feature.properties.status}</td></tr><tr><th>Autonomy</th><td>${e.feature.properties.Institue_Autonomy}</td></tr><tr><th>Minority</th><td>${e.feature.properties.Institue_Minority}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.feature.properties.institutecode}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+              //marker.bindPopup(`<div>Institute Name: ${e.feature.properties.Institute_Name}<br> institutecode: ${e.feature.properties.institutecode}<br> regionname: ${e.feature.properties.region} <br>talukaname: ${e.feature.properties.taluka}<br>  districtname: ${e.feature.properties.district}<br>institute_address: ${e.feature.properties.address} <br> institute_pincode: ${e.feature.properties.pincode} <br>institute website: <a href='https://{{i.institutewebaddress}}'>${e.feature.properties.Website}</a> <br> institute mail: ${e.feature.properties.institute_emailid} <br>principal name:${e.feature.properties.Principal_Name} <br> principal number: ${e.feature.properties.Principal_Phone_Number} <br> institute_establishment_year: ${e.feature.properties.Establisment_Year}<br> boyshostelcapacitytotal: ${e.feature.properties.boyshostelcapacitytotal} <br> girlshostelcapacitytotal: ${e.feature.properties.girlshostelcapacitytotal} <br>institutestatus: ${e.feature.properties.status}<br>Institue_Autonomy: ${e.feature.properties.Institue_Autonomy}<br> Institue_Minority: ${e.feature.properties.Institue_Minority}<br> naacstatus: ${e.feature.properties.nacc_status}<br>  lettergrad: ${e.feature.properties.lettergrade}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='{{ i.institutecode }}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
               points.push(marker)
             }
           '{% endfor %}'
@@ -1358,14 +1332,17 @@ function rePlot(){
 
 
 function clearMap(){
-  mymap.setView([19.7515-1,75.7139-1], 4.2,  { animate: true } )
+
+  document.getElementById('trickmarks').value=0;
+
+  mymap.setView([19.7515-1,75.7139-1], 4.5);
   if(wmsLayer) mymap.removeLayer(wmsLayer);
   if(talukaLayer) {
     console.log("taluka")
     mymap.removeLayer(talukaLayer);}
   if(districtLayer) mymap.removeLayer(districtLayer)
   if(collegeLayer) mymap.removeLayer(collegeLayer);
-  if(regionlayer) mymap.removeLayer(regionlayer);
+  if(regionplot) mymap.removeLayer(regionplot);
   
   //document.getElementById('trickmarks').value=0
   //circlec();
@@ -1398,7 +1375,23 @@ function clearMap(){
   document.getElementById('Program').selectedIndex='SelectState'
   document.getElementById('CourseName').selectedIndex='SelectState'
 
-  
+
+  htmlString = `<option value="choose">Select District</option>
+  <option value="choose">All</option>{% for i in district %}
+  <option value="{{i.districtname}}">{{i.districtname}}</option>
+  {% endfor %}`
+
+
+  $("#inputDistrict").html(htmlString);
+
+
+  htmlString = `<option value="choose">-- select one -- </option>
+  <option value="choose">All</option>
+  {% for i in taluka %}
+  <option value="{{i.talukaname}}">{{i.talukaname}}</option>
+  {% endfor %}`
+
+  $("#inputTaluka").html(htmlString);
 
   return;
   // if(DistrictSelected) mymap.removeLayer(DistrictSelected);
@@ -1412,21 +1405,27 @@ function alll(){
     fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Aengg&outputFormat=application%2Fjson')
     .then(result=>result.json())
         .then((output)=>{
-          managementlayer = L.geoJson(output,{
-            onEachFeature: function(feature, layer){
-          layer.bindPopup(`<div>Institute Name: ${feature.properties.instituten}<br> institutecode: ${feature.properties.institutec}<br> regionname: ${feature.properties.regionname} <br>talukaname: ${feature.properties.talukaname}<br>  institute address: ${feature.properties.institutea} <br> institute pincode: ${feature.properties.institutep} <br>institute website: <a href="https://'{feature.properties.institutew}"> ${feature.properties.institutew}</a><br> institute mail: ${feature.properties.institut_1} <br>principal name: ${feature.properties.principaln} <br> principal number: ${feature.properties.principalo} <br> institute_establishment_year: ${feature.properties.institutee} <br>  longitude: ${feature.properties.longitude} <br> latitude : ${feature.properties.latitude} <br> boyshostel: ${feature.properties.boyshostel} <br> girlshostel: ${feature.properties.girlshoste} <br>institut_2: ${feature.properties.institut_2}<br>institut_3: ${feature.properties.institut_3} <br> institut_4: ${feature.properties.institut_4}<br> naacstatus: ${feature.properties.naccstatus}<br>  lettergrad: ${feature.properties.lettergrad}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${feature.properties.institutec}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
-        },
-            // onEachFeature: function(feature, layer){
-            //   layer.bindPopup(`<div>Location of Observation: ${feature.properties.Location_o}<br>Model System: ${feature.properties.model_syst}<br>Flowering: ${feature.properties.details_2}</div>`)
-            // },
+          output.features.forEach(e=>{
+            if(e.properties.latitude!=null){
+              marker = L.marker([e.properties.latitude,e.properties.longitude])
+              marker.addTo(mymap)
+              marker.feature={
+                properties:{
+                  'lat':e.properties.latitude,'lng':e.properties.longitude,'Institute_Name':e.properties.instituten,'institutecode':e.properties.institutec,'address':e.properties.institutea,'pincode':e.properties.institutepi,'institute_emailid':e.properties.institut_2,'Principal_Name':e.properties.principaln,'Principal_Phone_Number':e.properties.principalo,'institute_stdcode':e.properties.institutes,'Establisment_Year':e.properties.institutee,'Website':e.properties.institutew,'region':e.properties.regionname,'district':e.properties.districtna,'taluka':e.properties.talukaname,'status':e.properties.institut_3,'lettergrade':e.properties.lettergrad,'Institue_Minority':e.properties.institut_5,'Institue_Autonomy':e.properties.institut_4,'girlshostelcapacitytotal':e.properties.girlshoste,'boyshostelcapacitytotal':e.properties.boyshostel,'nacc_status':e.properties.naccstatus,
+                  }
+              }
+              marker.bindPopup(`<div><table><tr><th>Institute Name</th><td>${e.properties.instituten}</td></tr><tr><th>Institute Code</th><td>${e.properties.institutec}</td></tr><tr><th>Region</th><td>${e.properties.regionname}</td></tr><tr><th>District</th><td>${e.properties.districtna}</td></tr><tr><th>Taluka</th><td>${e.properties.talukaname}</td></tr><tr><th>Address</th><td>${e.properties.institutea}</td></tr><tr><th>Pincode</th><td>${e.properties.institutepi}</td></tr><tr><th>Website</th><td><a href='https://${e.properties.institutew}'>${e.properties.institutew}</a></td></tr><tr><th>Mail</th><td>${e.properties.institut_2}</td></tr><tr><th>Status</th><td>${e.properties.institut_3}</td></tr><tr><th>Autonomy</th><td>${e.properties.institut_4}</td></tr><tr><th>Minority</th><td>${e.properties.institut_5}</td></tr></table><br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.properties.institutec}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+              //marker.bindPopup(`<div>Institute Name: ${e.properties.instituten}<br> institutecode: ${e.properties.institutec}<br> regionname: ${e.properties.regionname} <br>talukaname: ${e.properties.talukaname}<br>  districtname: ${e.properties.districtna}<br>institute_address: ${e.properties.institutea} <br> institute_pincode: ${e.properties.institutepi} <br>institute website: <a href="https://'{feature.properties.institutew}">${e.properties.institutew}</a> <br> institute mail: ${e.properties.institut_2} <br>principal name: ${e.properties.principaln} <br> principal number: ${e.properties.principalo} <br> institute_establishment_year: ${e.properties.institutee}<br>  longitude: ${e.properties.longitude} <br> latitude : ${e.properties.latitude} <br> boyshostelcapacitytotal: ${e.properties.boyshostel} <br> girlshostelcapacitytotal: ${e.properties.girlshoste} <br>institutestatus: ${e.properties.institut_3}<br>Institue_Autonomy: ${e.properties.institut_4} <br> Institue_Minority: ${e.properties.institut_5}<br> naacstatus: ${e.properties.naccstatus}<br>  lettergrad: ${e.properties.lettergrad}<br><form method='POST' target='_blank' action='more'><input type='hidden' name='data' value='${e.properties.institutec}'> </input><center><button class='btn btn-primary' type='submit'>View More</button> </form></center><br></div>`)
+              points.push(marker)
+            }
+
           })
-          managementlayer.addTo(mymap)
         })
       console.log("hello")
       mang = true;
   }
   else{
-    mymap.removeLayer(managementlayer);
+    clearMap()
     mang = false;
   }
 
