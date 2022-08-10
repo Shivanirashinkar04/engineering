@@ -420,6 +420,7 @@ tr{
 
   
 
+
   
 
       
@@ -466,21 +467,23 @@ $("#inputRegion").change(function(){
   //          cql_filter:`Region='${regionlayer}'`,
   //        });
   //        wmsLayer.addTo(mymap);
-  /*
-        fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Amaharashtra_final_regions&outputFormat=application%2Fjson')
-        .then(result=>result.json())
-        .then((output)=>{
-          regionplot = L.geoJson(output,{
-            // onEachFeature: function(feature, layer){
-            //   layer.bindPopup(`<div>Location of Observation: ${feature.properties.Location_o}<br>Model System: ${feature.properties.model_syst}<br>Flowering: ${feature.properties.details_2}</div>`)
-            // },
-            filter:function(feature,layer){
-              return feature.properties.Region == regionlayer;
-            }
+        if(regionlayer!='All'){
+
+          fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Amaharashtra_final_regions&outputFormat=application%2Fjson')
+          .then(result=>result.json())
+          .then((output)=>{
+            regionplot = L.geoJson(output,{
+              // onEachFeature: function(feature, layer){
+              //   layer.bindPopup(`<div>Location of Observation: ${feature.properties.Location_o}<br>Model System: ${feature.properties.model_syst}<br>Flowering: ${feature.properties.details_2}</div>`)
+              // },
+              filter:function(feature,layer){
+                return feature.properties.Region == regionlayer;
+              }
+            })
+            regionplot.addTo(mymap)
+            mymap.fitBounds(regionplot.getBounds())
           })
-          regionplot.addTo(mymap)
-          mymap.fitBounds(regionplot.getBounds())
-        })*/
+        }
 
 
 
@@ -572,22 +575,24 @@ $("#inputDistrict").change(function(){
   //       });
   //       districtLayer.addTo(mymap);
 
+    if(DistrictSelected!='All'){
 
-  fetch('http://geoserver2.communitygis.net/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Amaharashtra_districts&maxFeatures=10000000&outputFormat=application%2Fjson')
-    .then(result=>result.json())
-    .then((output)=>{
-      districtLayer = L.geoJson(output,{
-        onEachFeature: function(feature, layer){
-          layer.setStyle({fillColor :'#00ff00'}); 
-          // layer.bindPopup(`<div>Location of Observation: ${feature.properties.Location_o}<br>Model System: ${feature.properties.model_syst}<br>Flowering: ${feature.properties.details_2}</div>`)
-        },
-        filter:function(feature,layer){
-          return feature.properties.district == DistrictSelected;
-        }
-      })
-      districtLayer.addTo(mymap)
-      mymap.fitBounds(districtLayer.getBounds())
-    })
+      fetch('http://geoserver2.communitygis.net/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Amaharashtra_districts&maxFeatures=10000000&outputFormat=application%2Fjson')
+        .then(result=>result.json())
+        .then((output)=>{
+          districtLayer = L.geoJson(output,{
+            onEachFeature: function(feature, layer){
+              layer.setStyle({fillColor :'#00ff00'}); 
+              // layer.bindPopup(`<div>Location of Observation: ${feature.properties.Location_o}<br>Model System: ${feature.properties.model_syst}<br>Flowering: ${feature.properties.details_2}</div>`)
+            },
+            filter:function(feature,layer){
+              return feature.properties.district == DistrictSelected;
+            }
+          })
+          districtLayer.addTo(mymap)
+          //mymap.fitBounds(districtLayer.getBounds())
+        })
+    }
 
 
   switch (DistrictSelected) {
@@ -749,16 +754,16 @@ function plotC(){
   programm = document.getElementById('Program').value
   coursename = document.getElementById('CourseName').value
 
-  if(region!='SelectState') {
+  if(region!='SelectState' && region!='All') {
     r=true
     arr.push(region)
   }
-  if(districtt!='choose') {
+  if(districtt!='choose' && districtt!='All') {
     d=true
     arr.push(districtt)
     console.log(arr)
   }
-  if(taluka!='choose') {
+  if(taluka!='choose' && taluka!='All') {
     t=true
     arr.push(taluka)
     // console.log(arr)
@@ -787,7 +792,21 @@ function plotC(){
     cn=true;
     arr.push(coursename)
   }if(region=='All' || districtt=='All' || taluka=='All'){
-    alll()
+    if(r || d || t || a || m || s || cl || p || cn){
+      if(region=='All'){
+        region='SelectState';
+      }
+      if(districtt=='All'){
+        districtt='choose';
+      }
+      if(taluka=='All'){
+        taluka='choose';
+      }
+      
+    }else{
+      alll()
+    }
+    
   }
 
   arr.forEach(e=>{
