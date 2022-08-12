@@ -436,12 +436,12 @@ tr{
       // console.log(wms);
 
 
-var Amravati =['choose','Akola' ,'Amravati','Buldhana','Yavatmal','Washim']
-var Aurangabad=['choose','Aurangabad','Beed','Jalna','Osmanabad' , 'Nanded', 'Latur','Parbhani' ,'Hingoli']
-var Mumbai=['choose','Mumbai City','mumbai_suburb','Thane','Palghar','Raigad', 'Ratnagiri','Sindhudurg']
-var Nagpur=['choose','Bhandara','Chandrapur','Gadchiroli','Gondia','Nagpur',' Wardha']
-var Pune=['choose','Sangli','Satara','Solapur_North', 'Kolhapur' ,'Pune']
-var Nashik=['choose','Dhule','Jalgaon','Nandurbar', 'Nashik','Ahmednagar']
+var Amravati =['choose','All','Akola' ,'Amravati','Buldhana','Yavatmal','Washim']
+var Aurangabad=['choose','All','Aurangabad','Beed','Jalna','Osmanabad' , 'Nanded', 'Latur','Parbhani' ,'Hingoli']
+var Mumbai=['choose','All','Mumbai City','mumbai_suburb','Thane','Palghar','Raigad', 'Ratnagiri','Sindhudurg']
+var Nagpur=['choose','All','Bhandara','Chandrapur','Gadchiroli','Gondia','Nagpur',' Wardha']
+var Pune=['choose','All','Sangli','Satara','Solapur_North', 'Kolhapur' ,'Pune']
+var Nashik=['choose','All','Dhule','Jalgaon','Nandurbar', 'Nashik','Ahmednagar']
 
 var points = []
 
@@ -453,12 +453,14 @@ var TalukaSelected;
 var collegeLayer;
 var talukaLayer;
 var districtLayer;
+var mang = false;
 
 $("#inputRegion").change(function(){
   regionlayer = $(this).val();
   var optionsList;
   var htmlString = "";
-  
+  var oo="";
+  var ss = "";
 
   // wmsLayer = L.tileLayer.wms('https://geonode.communitygis.in/geoserver/geonode/wms', {
   //          layers: 'geonode:maharashtra_final_regions',
@@ -467,6 +469,7 @@ $("#inputRegion").change(function(){
   //          cql_filter:`Region='${regionlayer}'`,
   //        });
   //        wmsLayer.addTo(mymap);
+  if(regionplot) mymap.removeLayer(regionplot);
         if(regionlayer!='All'){
 
           fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Amaharashtra_final_regions&outputFormat=application%2Fjson')
@@ -512,52 +515,102 @@ $("#inputRegion").change(function(){
 }
 
 
+
+
   if(optionsList.length!=0){
     for(var i = 0; i < optionsList.length; i++){
       htmlString = htmlString+"<option value='"+ optionsList[i] +"'>"+ optionsList[i] +"</option>";
     }
     $("#inputDistrict").html(htmlString);
+
+    var filtered_courses=[]
+    var fc = new Set()
+    fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Acourse_name_mahaengg&outputFormat=application%2Fjson')
+        .then(result=>result.json())
+        .then((output)=>{
+          // console.log(output)
+          output.features.forEach(e=>{
+           if(e.properties.regionname==regionlayer){
+            fc.add(e.properties.coursename)
+            //console.log(e.properties.coursename)
+           }
+          })
+          //console.log(fc)
+          filtered_courses=Array.from(fc);
+          filtered_courses.sort();
+          oo="<option value='SelectState'>Select</option>";
+          for(var i = 0; i < filtered_courses.length; i++){
+            oo = oo+"<option value='"+ filtered_courses[i] +"'>"+ filtered_courses[i] +"</option>";
+          }
+          $("#CourseName").html(oo);
+        })
+
+
+    var filtered_prog=[]
+    var fp = new Set()
+    fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Aprogram_name_mahaengg&outputFormat=application%2Fjson')
+        .then(result=>result.json())
+        .then((output)=>{
+          // console.log(output)
+          output.features.forEach(e=>{
+           if(e.properties.regionname==regionlayer){
+            fp.add(e.properties.programnam)
+            //console.log(e.properties.coursename)
+           }
+          })
+          //console.log(fc)
+          filtered_prog=Array.from(fp);
+          filtered_prog.sort();
+          ss="<option value='SelectState'>Select</option>";
+          for(var i = 0; i < filtered_prog.length; i++){
+            ss = ss+"<option value='"+ filtered_prog[i] +"'>"+ filtered_prog[i] +"</option>";
+          }
+          $("#Program").html(ss);
+        })
   }
+
+  
+
 
 });
 
 
-var Raigad = [ 'choose', 'Pen','Alibag','Murud','Panvel','Uran','Karjat','Khalapur','Mangaon']
-var Ratnagiri = ['choose','Ratnagiri','Sangameshwar','Lanja','Rajapur ','Chiplun','Guhagar','Dapoli','Mandangad','Khed']
-var Sindhudurg = ['choose','Kankavli','Vaibhavwadi','Devgad','Malwan','Sawantwadi','Kudal','Vengurla','Dodamarg (Kasal)']
-var Palghar = ['choose','Palghar','Vasai','Dahanu','Talasari','Jawhar','Mokhada','Vada','Vikramgad']
-var nashik  = ['choose', 'Nashik','Igatpuri','Dindori','Peth','Trimbakeshwar','Kalwan','Deola','Surgana','Baglan(Satana)','Malegaon','Nandagaon','Chandwad','Niphad','Sinnar','Yeola']
-var Nandurbar = ['choose', 'Nandurbar','Navapur','Shahada','Talode','Akkalkuwa','Akrani(Dhadgaon)']
-var Dhule= ['choose', 'Dhule','Sakri','Sindkheda','Shirpur']
-var mumbai_suburb = ['choose','Kurla','Mulund','Andheri','Borivali']
-var Mumbai_City = ['choose','Mumbai']
-var Jalgaon = ['choose', 'Jalgaon','Jamner','Erandol','Dharangaon','Bhusawal','Raver','Muktainagar','Yawal','Amalner','Parola','Chopda','Pachora','Bhadgaon','Chalisgaon']
-var Buldhana = ['choose', 'Buldhana','Chikhli','Deulgaon','Jalgaon Jamod','Sangrampur','Malkapur','Motala','Nandura','Khamgaon','Shegaon','Mehkar','Sindkhed Raja','Lonar']
-var Akola = ['choose', 'Akola','Akot','Telhara','Patur','Murtajapur','Barshitakli']
-var Washim = ['choose', 'Wahim','Malegaon','Risod','Mangrulpir','Karanja','Manora']
-var Thane=['choose','Thane','Kalyan','Murbad','Bhiwandi','shahapur','Ulhasnagar','Ambarnath']
-var amravati = ['choose', 'Amravati','Bhatukali','Nandgaon Khandeshwar','Dharni (Amravati)','Chikhaldara','Achalpur','Chandurbazar','Morshi','Warud','Daryapur','Anjangaon-Surji','Chandur','Dhamangaon','Tiosa']
-var Wardha = ['choose', '	Wardha','Deoli','Seloo','Arvi','Ashti','Karanja','Hinganghat','Samudrapur']
-var nagpur = ['choose', 'Nagpur','Kamptee','Hingna','Katol','Narkhed','Savner','Kalameshwar','Ramtek','Mouda','Parseoni','Umred','Kuhi','Bhiwapur']
-var Bhandara = ['choose', 'Bhandara','Tumsar','Pauni','Mohadi','Sakoli','Lakhni','Lakhandur']
-var Gondia = ['choose', 'Gondia','Tiroda','Goregaon','Arjuni Morgaon','Amgaon','Salekasa','Sadak Arjuni ','Deori']
-var gadchiroli = ['choose', 'Gadchiroli','Dhanora','Chamorshi','Mulchera','Desaiganj (Vadasa)','Armori','Kurkheda','Korchi','Korchi','Bhamragad','Sironcha']
-var Chandrapur = ['choose', 'Chandrapur','Saoli','Mul','Ballarpur','Pombhurna','Gondpimpri','Warora','Chimur','Bhadravati','Bramhapuri','Nagbhid ','Sindewahi','Rajura','Korpana','Jivati']
-var Yavatmal = ['choose', 'Yavatmal','Arni','Babhulgaon','Kalamb','Darwha','Digras','Ner','Pusad','Umarkhed','Mahagaon','Kelapur (Pandharkawada)','Ralegaon','Ghatanji','Wani','Maregaon','Zari Jamani']
-var Nanded = ['choose', 'Nanded','Ardhapur','Mudkhed','Bhokar','Umri','Loha','Kandhar','Kinwat','Himayatnagar','Hadgaon','Mahur','Deglur','Mukhed','Dharmabad','Biloli','Naigaon (Khairgaon)']
-var Hingoli = ['choose', 'Hingoli','Sengaon','Kalamnuri','Basmath','Aundha Nagnath']
-var Parbhani = ['choose', 'Parbhani','Sonpeth','Gangakhed','Palam','Purna','Sailu','Jintur','Manwath','Pathri']
-var Jalna = ['choose', 'Jalna','Bhokardan','Jafrabad','Badnapur','Ambad','Ghansawangi','Partur','Mantha']
-var aurangabad = ['choose', 'Aurangabad','Kannad','Soegaon','Sillod','Phulambri','Khuldabad','Vaijapur','Gangapur','Paithan']
-var Beed= ['choose', 'Beed','Ashti','Patoda','Shirur-Kasar','Georai','Majalgaon','Wadwani','Kaij','Dharur','Parli','Ambejogai']
-var Latur = ['choose', 'Latur','Renapur','Ahmedpur','Jalkot','Chakur','Shirur Anantpal','Ausa','Nilanga','Deoni','	Udgir',]
-var Osmanabad = ['choose', 'Osmanabad','Tuljapur','Bhum','Paranda','Washi','Kalamb','Lohara','Umarga']
-var Solapur_North = ['choose', 'Solapur North','Barshi','Solapur South','Akkalkot','Madha','Karmala','Pandharpur','Mohol','Malshiras','Sangole','Mangalvedhe']
-var Ahmednagar = ['choose', 'nagar','Shevgaon','Pathardi','Parner','Sangamner','Kopargaon','Akole','Shrirampur','Nevasa','Rahata','Rahuri','Shrigonda ','Karjat','Jamkhed']
-var pune = ['choose', 'Pune City','Haveli','Haveli - PCMC, PCMC','Khed (Rajgurunagar)','Junnar','Ambegaon (Ghodegaon)','Maval (Vadgaon)','Mulshi (Paud)','Shirur','Purandhar (Saswad)','Velhe','Bhor','Baramati','Indapur','Daund']
-var Satara = ['choose', 'Satara','Jaoli','Koregaon','Wai','Mahabaleshwar','Khandala','Phaltan','Maan (Dahiwadi)','Khatav (Vaduj)','Patan','Karad']
-var Sangli = ['choose', 'Miraj','Kavathe-Mahankal','Tasgaon','Jat','Walwa (Islampur)','Shirala','Khanapur-Vita ','Atpadi','Palus','Kadegaon']
-var Kolhapur = ['choose', 'Karvir','Panhala','Shahuwadi','Kagal','Hatkanangale','Shirol','Radhanagari','Gaganbawada','Bhudargad','Gadhinglaj','Chandgad','Ajra']
+var Raigad = [ 'choose','All', 'Pen','Alibag','Murud','Panvel','Uran','Karjat','Khalapur','Mangaon']
+var Ratnagiri = ['choose','All','Ratnagiri','Sangameshwar','Lanja','Rajapur ','Chiplun','Guhagar','Dapoli','Mandangad','Khed']
+var Sindhudurg = ['choose','All','Kankavli','Vaibhavwadi','Devgad','Malwan','Sawantwadi','Kudal','Vengurla','Dodamarg (Kasal)']
+var Palghar = ['choose','All','Palghar','Vasai','Dahanu','Talasari','Jawhar','Mokhada','Vada','Vikramgad']
+var nashik  = ['choose','All', 'Nashik','Igatpuri','Dindori','Peth','Trimbakeshwar','Kalwan','Deola','Surgana','Baglan(Satana)','Malegaon','Nandagaon','Chandwad','Niphad','Sinnar','Yeola']
+var Nandurbar = ['choose','All', 'Nandurbar','Navapur','Shahada','Talode','Akkalkuwa','Akrani(Dhadgaon)']
+var Dhule= ['choose','All', 'Dhule','Sakri','Sindkheda','Shirpur']
+var mumbai_suburb = ['choose','All','Kurla','Mulund','Andheri','Borivali']
+var Mumbai_City = ['choose','All','Mumbai']
+var Jalgaon = ['choose','All', 'Jalgaon','Jamner','Erandol','Dharangaon','Bhusawal','Raver','Muktainagar','Yawal','Amalner','Parola','Chopda','Pachora','Bhadgaon','Chalisgaon']
+var Buldhana = ['choose','All', 'Buldhana','Chikhli','Deulgaon','Jalgaon Jamod','Sangrampur','Malkapur','Motala','Nandura','Khamgaon','Shegaon','Mehkar','Sindkhed Raja','Lonar']
+var Akola = ['choose','All', 'Akola','Akot','Telhara','Patur','Murtajapur','Barshitakli']
+var Washim = ['choose','All', 'Wahim','Malegaon','Risod','Mangrulpir','Karanja','Manora']
+var Thane=['choose','All','Thane','Kalyan','Murbad','Bhiwandi','shahapur','Ulhasnagar','Ambarnath']
+var amravati = ['choose','All', 'Amravati','Bhatukali','Nandgaon Khandeshwar','Dharni (Amravati)','Chikhaldara','Achalpur','Chandurbazar','Morshi','Warud','Daryapur','Anjangaon-Surji','Chandur','Dhamangaon','Tiosa']
+var Wardha = ['choose','All', '	Wardha','Deoli','Seloo','Arvi','Ashti','Karanja','Hinganghat','Samudrapur']
+var nagpur = ['choose','All', 'Nagpur','Kamptee','Hingna','Katol','Narkhed','Savner','Kalameshwar','Ramtek','Mouda','Parseoni','Umred','Kuhi','Bhiwapur']
+var Bhandara = ['choose','All', 'Bhandara','Tumsar','Pauni','Mohadi','Sakoli','Lakhni','Lakhandur']
+var Gondia = ['choose','All', 'Gondia','Tiroda','Goregaon','Arjuni Morgaon','Amgaon','Salekasa','Sadak Arjuni ','Deori']
+var gadchiroli = ['choose','All', 'Gadchiroli','Dhanora','Chamorshi','Mulchera','Desaiganj (Vadasa)','Armori','Kurkheda','Korchi','Korchi','Bhamragad','Sironcha']
+var Chandrapur = ['choose','All', 'Chandrapur','Saoli','Mul','Ballarpur','Pombhurna','Gondpimpri','Warora','Chimur','Bhadravati','Bramhapuri','Nagbhid ','Sindewahi','Rajura','Korpana','Jivati']
+var Yavatmal = ['choose','All', 'Yavatmal','Arni','Babhulgaon','Kalamb','Darwha','Digras','Ner','Pusad','Umarkhed','Mahagaon','Kelapur (Pandharkawada)','Ralegaon','Ghatanji','Wani','Maregaon','Zari Jamani']
+var Nanded = ['choose','All', 'Nanded','Ardhapur','Mudkhed','Bhokar','Umri','Loha','Kandhar','Kinwat','Himayatnagar','Hadgaon','Mahur','Deglur','Mukhed','Dharmabad','Biloli','Naigaon (Khairgaon)']
+var Hingoli = ['choose','All', 'Hingoli','Sengaon','Kalamnuri','Basmath','Aundha Nagnath']
+var Parbhani = ['choose','All', 'Parbhani','Sonpeth','Gangakhed','Palam','Purna','Sailu','Jintur','Manwath','Pathri']
+var Jalna = ['choose','All', 'Jalna','Bhokardan','Jafrabad','Badnapur','Ambad','Ghansawangi','Partur','Mantha']
+var aurangabad = ['choose','All', 'Aurangabad','Kannad','Soegaon','Sillod','Phulambri','Khuldabad','Vaijapur','Gangapur','Paithan']
+var Beed= ['choose','All', 'Beed','Ashti','Patoda','Shirur-Kasar','Georai','Majalgaon','Wadwani','Kaij','Dharur','Parli','Ambejogai']
+var Latur = ['choose','All', 'Latur','Renapur','Ahmedpur','Jalkot','Chakur','Shirur Anantpal','Ausa','Nilanga','Deoni','	Udgir',]
+var Osmanabad = ['choose','All', 'Osmanabad','Tuljapur','Bhum','Paranda','Washi','Kalamb','Lohara','Umarga']
+var Solapur_North = ['choose','All', 'Solapur North','Barshi','Solapur South','Akkalkot','Madha','Karmala','Pandharpur','Mohol','Malshiras','Sangole','Mangalvedhe']
+var Ahmednagar = ['choose','All', 'nagar','Shevgaon','Pathardi','Parner','Sangamner','Kopargaon','Akole','Shrirampur','Nevasa','Rahata','Rahuri','Shrigonda ','Karjat','Jamkhed']
+var pune = ['choose','All', 'Pune City','Haveli','Haveli - PCMC, PCMC','Khed (Rajgurunagar)','Junnar','Ambegaon (Ghodegaon)','Maval (Vadgaon)','Mulshi (Paud)','Shirur','Purandhar (Saswad)','Velhe','Bhor','Baramati','Indapur','Daund']
+var Satara = ['choose','All', 'Satara','Jaoli','Koregaon','Wai','Mahabaleshwar','Khandala','Phaltan','Maan (Dahiwadi)','Khatav (Vaduj)','Patan','Karad']
+var Sangli = ['choose','All', 'Miraj','Kavathe-Mahankal','Tasgaon','Jat','Walwa (Islampur)','Shirala','Khanapur-Vita ','Atpadi','Palus','Kadegaon']
+var Kolhapur = ['choose','All', 'Karvir','Panhala','Shahuwadi','Kagal','Hatkanangale','Shirol','Radhanagari','Gaganbawada','Bhudargad','Gadhinglaj','Chandgad','Ajra']
 
 
 
@@ -566,7 +619,9 @@ $("#inputDistrict").change(function(){
   DistrictSelected = $(this).val();
   var optionsList;
   var htmlString = "";
-  // if(districtLayer)mymap.removeLayer(districtLayer);
+  var oo = "";
+  var ss = "";
+  if(districtLayer)mymap.removeLayer(districtLayer);
   // districtLayer = L.tileLayer.wms('https://geoserver2.communitygis.net/geoserver/wms', {
   //         layers: '	geonode:maharashtra_districts',
   //         format: 'image/png',
@@ -577,7 +632,7 @@ $("#inputDistrict").change(function(){
 
     if(DistrictSelected!='All'){
 
-      fetch('http://geoserver2.communitygis.net/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Amaharashtra_districts&maxFeatures=10000000&outputFormat=application%2Fjson')
+      fetch('https://geoserver2.communitygis.net/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Amaharashtra_districts&outputFormat=application%2Fjson')
         .then(result=>result.json())
         .then((output)=>{
           districtLayer = L.geoJson(output,{
@@ -716,6 +771,51 @@ $("#inputDistrict").change(function(){
     htmlString = htmlString+"<option value='"+ optionsList[i] +"'>"+ optionsList[i] +"</option>";
   }
   $("#inputTaluka").html(htmlString);
+
+
+  var filtered_courses=[]
+  var fc = new Set()
+  fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Acourse_name_mahaengg&outputFormat=application%2Fjson')
+      .then(result=>result.json())
+      .then((output)=>{
+        // console.log(output)
+        output.features.forEach(e=>{
+          if(e.properties.districtna==DistrictSelected){
+          fc.add(e.properties.coursename)
+          //console.log(e.properties.coursename)
+          }
+        })
+        //console.log(fc)
+        filtered_courses=Array.from(fc)
+        oo="<option value='SelectState'>Select</option>";
+        for(var i = 0; i < filtered_courses.length; i++){
+          oo = oo+"<option value='"+ filtered_courses[i] +"'>"+ filtered_courses[i] +"</option>";
+        }
+        $("#CourseName").html(oo);
+      })
+
+
+    var filtered_prog=[]
+    var fp = new Set()
+    fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Aprogram_name_mahaengg&outputFormat=application%2Fjson')
+    .then(result=>result.json())
+    .then((output)=>{
+      // console.log(output)
+      output.features.forEach(e=>{
+        if(e.properties.districtna==DistrictSelected){
+        fp.add(e.properties.programnam)
+        //console.log(e.properties.coursename)
+        }
+      })
+      //console.log(fc)
+      filtered_prog=Array.from(fp);
+      filtered_prog.sort();
+      ss="<option value='SelectState'>Select</option>";
+      for(var i = 0; i < filtered_prog.length; i++){
+        ss = ss+"<option value='"+ filtered_prog[i] +"'>"+ filtered_prog[i] +"</option>";
+      }
+      $("#Program").html(ss);
+    })
 }
 
 });
@@ -723,6 +823,8 @@ $("#inputDistrict").change(function(){
 
 $("#inputTaluka").change(function(){
   TalukaSelected = $(this).val()
+  var oo="";
+  var ss="";
   console.log(TalukaSelected)
   if (talukaLayer)mymap.removeLayer(talukaLayer);
   talukaLayer = L.tileLayer.wms('https://geoserver2.communitygis.net/geoserver/wms', {
@@ -733,6 +835,53 @@ $("#inputTaluka").change(function(){
         });
         talukaLayer.addTo(mymap);
 
+
+        if(TalukaSelected!='All'){
+      
+        var filtered_courses=[]
+        var fc = new Set()
+        fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Acourse_name_mahaengg&outputFormat=application%2Fjson')
+            .then(result=>result.json())
+            .then((output)=>{
+              // console.log(output)
+              output.features.forEach(e=>{
+                if(e.properties.talukaname==TalukaSelected){
+                fc.add(e.properties.coursename)
+                //console.log(e.properties.coursename)
+                }
+              })
+              //console.log(fc)
+              filtered_courses=Array.from(fc)
+              oo="<option value='SelectState'>Select</option>";
+              for(var i = 0; i < filtered_courses.length; i++){
+                oo = oo+"<option value='"+ filtered_courses[i] +"'>"+ filtered_courses[i] +"</option>";
+              }
+              $("#CourseName").html(oo);
+            })
+      
+      
+          filtered_prog=[]
+          var fp = new Set()
+          fetch('https://geonode.communitygis.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3Aprogram_name_mahaengg&outputFormat=application%2Fjson')
+          .then(result=>result.json())
+          .then((output)=>{
+            // console.log(output)
+            output.features.forEach(e=>{
+              if(e.properties.talukaname==TalukaSelected){
+              fp.add(e.properties.programnam)
+              //console.log(e.properties.coursename)
+              }
+            })
+            //console.log(fc)
+            filtered_prog=Array.from(fp);
+            filtered_prog.sort();
+            ss="<option value='SelectState'>Select</option>";
+            for(var i = 0; i < filtered_prog.length; i++){
+              ss = ss+"<option value='"+ filtered_prog[i] +"'>"+ filtered_prog[i] +"</option>";
+            }
+            $("#Program").html(ss);
+          })
+      }
 
 })
 
@@ -804,6 +953,7 @@ function plotC(){
       }
       
     }else{
+      mang=false;
       alll()
     }
     
@@ -1352,6 +1502,8 @@ function rePlot(){
 
 function clearMap(){
 
+  mang=false;
+  
   document.getElementById('trickmarks').value=0;
 
   mymap.setView([19.7515-1,75.7139-1], 4.5);
@@ -1375,8 +1527,8 @@ function clearMap(){
   if(myLoc) mymap.removeLayer(myLoc)
   region='SelectState'
   autonomy='SelectState'
-  district='SelectState'
-  taluka='SelectState'
+  district='choose'
+  taluka='choose'
   minority='SelectState'
   status='SelectState'
   course='SelectState'
@@ -1396,7 +1548,7 @@ function clearMap(){
 
 
   htmlString = `<option value="choose">Select District</option>
-  <option value="choose">All</option>{% for i in district %}
+  <option value="All">All</option>{% for i in district %}
   <option value="{{i.districtname}}">{{i.districtname}}</option>
   {% endfor %}`
 
@@ -1405,19 +1557,34 @@ function clearMap(){
 
 
   htmlString = `<option value="choose">-- select one -- </option>
-  <option value="choose">All</option>
+  <option value="All">All</option>
   {% for i in taluka %}
   <option value="{{i.talukaname}}">{{i.talukaname}}</option>
   {% endfor %}`
 
   $("#inputTaluka").html(htmlString);
 
+  htmlString = `<option value="SelectState">Select</option>                      
+  {% for i in program %}
+  <option value="{{i.programname}}">{{i.programname}}</option>
+  {% endfor %}`
+  
+  $("#Program").html(htmlString);
+
+  htmlString = `<option value="SelectState">Select</option>           
+  {% for i in course %}
+  <option value="{{i.coursename}}">{{i.coursename}}</option>
+  {% endfor %}`
+  
+  $("#CourseName").html(htmlString);
+
+
+
   return;
   // if(DistrictSelected) mymap.removeLayer(DistrictSelected);
   // if(regionlayer) mymap.removeLayer(regionlayer);
 }
 
-var mang = false;
 var managementlayer; 
 function alll(){
   if(!mang){
