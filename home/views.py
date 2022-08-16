@@ -82,7 +82,7 @@ def more(request):
     print(request.POST['data'])
     institutecode = (request.POST['data'])
     code = Engineering28May.objects.values('institutecode').filter(institutecode=institutecode).distinct()
-    choice = master_course.objects.values('choicecode','coursename','coursedurationyear','programname','intakecurrentyear_aspergr','courselevelname').filter(institutecode=institutecode).distinct('coursename','programname','intakecurrentyear_aspergr','nbaaccreditation_status')
+    choice = master_course.objects.values('choicecode','coursename','coursedurationyear','programname','intakecurrentyear_aspergr','courselevelname','nbaaccreditation_status').filter(institutecode=institutecode).distinct('coursename','programname','intakecurrentyear_aspergr','nbaaccreditation_status')
     NBA = master_course.objects.values('nbaaccreditation_status').filter(institutecode=institutecode).distinct()
     data = Engineering28May.objects.all().filter(institutecode=institutecode).distinct()
     return render(request, 'home/management.html',{'code':code,'choice':choice,'data':data,'NBA':NBA})
