@@ -37,16 +37,16 @@
                             <th>Minority</th>
                             <th>NACC</th>
                             <th>Letter Grade</th>
-                            <th>NBA</th>
                         </tr>
+                        {% for i in data %}
                         <tr>
-                            <td>Government</td>
-                            <td>Autonomous</td>
-                            <td>Hindu</td>
-                            <td>Accreditation</td>
-                            <td>None</td>
-                            <td>Nonekjhkjkjjkhjhk</td>
+                            <td>{{i.institutestatus}}</td>
+                            <td>{{i.institutestatusautonomy}}</td>
+                            <td>{{i.institutestatusminority}}</td>
+                            <td>{{i.naccstatus}}</td>
+                            <td>{{i.lettergrade}}</td>
                         </tr>
+                        {% endfor %}
                     </table>
         
                 
@@ -73,6 +73,9 @@
                             </th>
                             <th>
                                Intake Capacity
+                            </th>
+                            <th>
+                                NBA Accreditation
                             </th>
                                    
                          
@@ -101,6 +104,9 @@
                             </td>
                             <td>
                                 {{i.intakecurrentyear_aspergr}}
+                            </td>
+                            <td>
+                                {{i.nbaaccreditation_status}}
                             </td>
                             
                         </tr>
